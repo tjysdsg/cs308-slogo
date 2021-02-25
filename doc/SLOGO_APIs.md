@@ -7,7 +7,10 @@ Martha Aboagye (mfa23)
 Joshua Petitma
 Jiyang Tang (jt304)
 
+Questions
 1. Oliver: exact seperation of view from backend/controller.
+    1. How does the file structure for the view look like 
+    2. How does the file structure for the controller look like
 
 ### Planning Questions
 **General Structure**

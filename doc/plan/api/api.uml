@@ -1,0 +1,134 @@
+@startuml
+package Events {
+	note top of TrackableTurtle
+		The trackable interface will
+		define a class internal to the
+		model which represents a turtle.
+		This interface defines how a view
+		can observe the changes.
+	end note
+
+	interface TrackableTurtle {
+		+ setOnTurtleUpdate(UpdateTurtle callback);
+		+ setOnVariableUpdate(UpdateVariable callback);
+		+ setOnCommandUpdate(UpdateCommands callback);
+		+ parseCommand(String command) : double
+		+ parseCommand(File command) : double
+	}
+
+	note bottom of TrackableTurtle
+		One possible change is to create a single
+		interface that has all the callbacks.
+	end note
+
+	interface UpdateTurtle {
+		+ execute(TurtleInfo e)
+	}
+
+	interface UpdateCommands {
+		+ execute(CommandsInfo e)
+	}
+
+	interface UpdateVariables {
+		+ execute(VariablesInfo e)
+	}
+
+	interface VariablesInfo {
+		+ getVariables() : Map<String, String>
+	}
+
+	interface CommandsInfo {
+		+ getCommands() : Map<String, String>
+	}
+
+	interface TurtleInfo {
+		+ getX() : int
+		+ getY() : int
+		+ getRotation() : double
+	}
+}
+
+package View {
+	class View {
+		+ View(Controller controller, TrackableTurtle model)
+	}
+
+
+	note top of TurtleSandbox
+		where the turtle's displayed :)
+		Probably extends some kind of Pane
+	end note
+	class TurtleSandbox {
+
+	}
+
+	note top of ViewController
+		Set aspects of the view
+		such as language and stuff. Nested
+		class implements this in view and is
+		passed to classes that manipulate
+		how the view looks.
+	end note
+	interface ViewController {
+		+ setBackground(String color)
+		+ setLanguage(String englishSucksAmirite)
+		+ otherStyleMethods()
+	}
+
+	note top of ModelController
+		This contains methods needed
+		to talk to the model from the view.
+	end note
+	class ModelController {
+		+ sendCommand(String command)
+		+ sendCommand(File command)
+		+ setLanguage(String lang)
+	}
+}
+
+ModelController --> "1" View
+ViewController --> "1" View
+TurtleSandbox --> "1" View
+
+package Model {
+	class ModelThing implements TrackableTurtle {
+		# notifyTurtleUpdate()
+		# notifyCommandUpdate()
+		# notifyVariableUpdate()
+	}
+
+	note top of TurtleFactory
+		Just a static class that
+		creates a trackable turtle.
+		Which will be ModelThing.
+	end note
+	class TurtleFactory {
+		{static} createTurtle() : TrackableTurtle
+	}
+
+	class Turtle {
+		- x
+		- y
+		- rotation
+	}
+
+	class VariableEnvironment {
+		- variables : Map<String, Double>
+	}
+
+	note top of Executioner
+		The parse command methods
+		can throw exceptions
+	end note
+	interface Executioner {
+		+ parseCommand(String command) : double
+		+ parseCommand(File file) : double
+	}
+}
+
+Executioner --> "1" ModelThing 
+Turtle --> "1" ModelThing
+VariableEnvironment --> "1" ModelThing
+
+Model -[hidden]--> Events
+@enduml

@@ -1,25 +1,5 @@
 @startuml
 package Events {
-	note top of TrackableTurtle
-		The trackable interface will
-		define a class internal to the
-		model which represents a turtle.
-		This interface defines how a view
-		can observe the changes.
-	end note
-
-	interface TrackableTurtle {
-		+ setOnTurtleUpdate(UpdateTurtle callback);
-		+ setOnVariableUpdate(UpdateVariable callback);
-		+ setOnCommandUpdate(UpdateCommands callback);
-		+ parseCommand(String command) : double
-		+ parseCommand(File command) : double
-	}
-
-	note bottom of TrackableTurtle
-		One possible change is to create a single
-		interface that has all the callbacks.
-	end note
 
 	interface UpdateTurtle {
 		+ execute(TurtleInfo e)
@@ -33,15 +13,15 @@ package Events {
 		+ execute(VariablesInfo e)
 	}
 
-	interface VariablesInfo {
+	class VariablesInfo {
 		+ getVariables() : Map<String, String>
 	}
 
-	interface CommandsInfo {
+	class CommandsInfo {
 		+ getCommands() : Map<String, String>
 	}
 
-	interface TurtleInfo {
+	class TurtleInfo {
 		+ getX() : int
 		+ getY() : int
 		+ getRotation() : double
@@ -50,7 +30,7 @@ package Events {
 
 package View {
 	class View {
-		+ View(Controller controller, TrackableTurtle model)
+		+ View(Controller controller, TrackableEnvironment model)
 	}
 
 
@@ -84,51 +64,106 @@ package View {
 		+ sendCommand(File command)
 		+ setLanguage(String lang)
 	}
+
+	note top of SettingsScene
+		Extens the Scene class.
+	end note
+	class SettingsScene {
+		- controller : ViewController
+	}
 }
 
+SettingsScene --> "1" View
 ModelController --> "1" View
 ViewController --> "1" View
 TurtleSandbox --> "1" View
 
 package Model {
-	class ModelThing implements TrackableTurtle {
-		# notifyTurtleUpdate()
-		# notifyCommandUpdate()
-		# notifyVariableUpdate()
-	}
-
-	note top of TurtleFactory
-		Just a static class that
-		creates a trackable turtle.
-		Which will be ModelThing.
+	note top of TrackableEnvironment
+		The trackable interface will
+		define a class internal to the
+		model which represents a turtle.
+		This interface defines how a view
+		can observe the changes.
 	end note
-	class TurtleFactory {
-		{static} createTurtle() : TrackableTurtle
+	interface TrackableEnvironment {
+		+ setOnTurtleUpdate(UpdateTurtle callback);
+		+ setOnVariableUpdate(UpdateVariable callback);
+		+ setOnCommandUpdate(UpdateCommands callback);
+		+ runCommand(String command) : double
 	}
 
+	note bottom of TrackableEnvironment
+		One possible change is to create a single
+		interface that has all the callbacks.
+	end note
+	class Environment implements TrackableEnvironment {
+		- Parser : Parser
+		# notifyTurtleUpdate(TurtleInfo info)
+		# notifyCommandUpdate(CommandInfo info)
+		# notifyVariableUpdate()
+		+ runCommand(String command) : double
+	}
+
+	note left of ExecutionBundle
+		This is a private nested class 
+		within the Environment. It is passed
+		to ASTs and the Turtle to give them
+		access to needed commands.
+	end note
+	class ExecutionBundle implements InfoBundle {
+	}
+
+	interface InfoBundle {
+		# getTurtle() : Turtle
+		# getLookupTable() : Map<String, AST>
+		# notifyTurtleUpdate(TurtleInfo info)
+	}
+
+	note left of EnvironmentFactory
+		Just a static class that
+		creates an Environment.
+	end note
+	class EnvironmentFactory {
+		{static} createEnvironment() : TrackableEnvironment
+	}
+
+	note bottom of Turtle
+		When move or rotate is called
+		it notifies the environment
+	end note
 	class Turtle {
 		- x
 		- y
 		- rotation
+		- Environment
+		# setXY(double x, double y)
+		# rotate(double rotation)
+		# move (double x);
 	}
 
-	class VariableEnvironment {
-		- variables : Map<String, Double>
+	interface Parser {
+		+ parseCommand(String Command) : AST
 	}
 
-	note top of Executioner
-		The parse command methods
-		can throw exceptions
+	note top of ASTNode
+		A variable or function that
+		forms of tree of evaluatable
+		ASTs
 	end note
-	interface Executioner {
-		+ parseCommand(String command) : double
-		+ parseCommand(File file) : double
+	abstract class ASTNode {
+		- children: List<ASTNode>
+		+ evaluate(InfoBundle env) : double
+	}
+
+	class Command extends ASTNode {
+	}
+
+	class Variables extends ASTNode {
 	}
 }
+ExecutionBundle --> "1" Environment
+Turtle --> "1" Environment
 
-Executioner --> "1" ModelThing 
-Turtle --> "1" ModelThing
-VariableEnvironment --> "1" ModelThing
-
-Model -[hidden]--> Events
+'Model -[hidden]--> Events
 @enduml

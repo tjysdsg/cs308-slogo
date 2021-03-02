@@ -18,7 +18,7 @@ package Events {
 	}
 
 	class CommandsInfo {
-		+ getCommands() : Map<String, String>
+		+ getCommands() : Map<SDisplayableCommand>
 	}
 
 	class TurtleInfo {
@@ -29,7 +29,12 @@ package Events {
 
 	interface DisplayableVariable {
 		+ getName() : String
-		+ getValue() : String
+		+ getValue() : double
+	}
+
+	interface DisplayableCommand {
+		+ getName() : String
+		+ getSignature() : String
 	}
 }
 

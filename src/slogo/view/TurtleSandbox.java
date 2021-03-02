@@ -3,6 +3,9 @@ import javafx.scene.layout.Pane;
 import slogo.events.TurtleInfo;
 
 /**
+ * @author marthaaboagye
+ * @author Joshua Pettima
+ *
  * This class creates the  window
  * where the turtle moves. It extends the Pane class
  * so that the turtle box and the status bar

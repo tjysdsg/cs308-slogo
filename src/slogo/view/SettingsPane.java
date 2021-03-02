@@ -3,6 +3,8 @@ package slogo.view;
 import javafx.scene.layout.Pane;
 
 /**
+ * @author marthaaboagye
+ * @author Joshua Pettima
  *This class creates all the elements of the Gui that can be customized by the
  * user. It sets up the status bar where users can maninpulate aspects of the
  * the gui such as the display language, the turtle image, the color of the pen 

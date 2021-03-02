@@ -1,21 +1,21 @@
 package slogo;
+import javafx.application.Application;
+import slogo.view.ModelController;
+import slogo.view.View;
 
+import javafx.stage.Stage;
 
-/**
- * Feel free to completely change this code or delete it entirely. 
- */
-public class Main {
-    /**
-     * A method to test (and a joke :).
-     */
-    public double getVersion () {
-        return 0.001;
-    }
+public class Main extends Application {
 
-    /**
-     * Start of the program.
-     */
-    public static void main (String[] args) {
-        System.out.println("Hello world");
-    }
+  public void start(Stage primaryStage) {
+      ModelController con = new ModelController();
+      View view = new View(primaryStage, con);
+  }
+
+  public double getVersion () {
+    return 0.001;
+  }
+  public static void main(String[] args) {
+    launch(args);
+  }
 }

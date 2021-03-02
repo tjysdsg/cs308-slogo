@@ -1,0 +1,20 @@
+package slogo.view;
+
+/**
+ * A controller to manipulate
+ * the current view.
+ */
+public interface ViewController {
+
+  /**
+   * Sets the background color of the view.
+   * @param color - The color to set the background to.
+   */
+  void setBackground(String color);
+
+  /**
+   * Sets the language used within the environment.
+   * @param lang - The language locale to use.
+   */
+  void setLanguage(String lang);
+}

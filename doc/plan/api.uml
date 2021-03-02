@@ -14,7 +14,7 @@ package Events {
 	}
 
 	class VariablesInfo {
-		+ getVariables() : Map<String, String>
+		+ getVariables() : List<DisplayableVariable>
 	}
 
 	class CommandsInfo {
@@ -25,6 +25,11 @@ package Events {
 		+ getX() : int
 		+ getY() : int
 		+ getRotation() : double
+	}
+
+	interface DisplayableVariable {
+		+ getName() : String
+		+ getValue() : String
 	}
 }
 

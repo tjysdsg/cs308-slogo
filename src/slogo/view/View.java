@@ -1,5 +1,8 @@
 package slogo.view;
 
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
@@ -14,9 +17,16 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
+  public static final int SIZE = 700;
 	ModelController modelCon;
 	TrackableEnvironment environment;
 	ViewController viewCon;
+	EnvironmentPane environmentPane;
+	HelpPane helpPane;
+	TurtleSandbox turtleSandbox;
+	Pane settingsPane;
+	Pane commandPane;
+	Scene scene;
 
 	/**
 	 * This is teh constructor for the View class.
@@ -31,7 +41,33 @@ public class View {
 		this.environment = EnvironmentFactory.createEnvironment();
 		viewCon = new ViewBundle();
 		modelCon.setController(viewCon);
+		scene = createScene();
+		stage.setScene(scene);
+
 	}
+
+	public Scene createScene() {
+		environmentPane = new EnvironmentPane();
+		helpPane = new HelpPane();
+		turtleSandbox = new TurtleSandbox();
+		commandPane = makeBottomPane();
+		settingsPane = new SettingsPane(viewCon);
+		BorderPane borderPane = new BorderPane();
+		Scene newScene = new Scene(borderPane, SIZE, SIZE);
+
+		borderPane.setTop(settingsPane);
+		borderPane.setBottom(commandPane);
+		borderPane.setLeft(environmentPane);
+		borderPane.setRight(helpPane);
+		return newScene;
+	}
+
+	public Pane makeBottomPane(){
+		Pane pane = new Pane();
+
+		return pane;
+	}
+
 
 	/**
 	 * This class implements the ViewController class. It

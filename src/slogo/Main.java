@@ -10,6 +10,7 @@ public class Main extends Application {
   public void start(Stage primaryStage) {
       ModelController con = new ModelController();
       View view = new View(primaryStage, con);
+      primaryStage.show();
   }
 
   public double getVersion () {

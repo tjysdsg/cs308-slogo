@@ -5,7 +5,7 @@ package slogo.events;
  */
 public record DisplayCommand(String name,String signature){
   public static final String NAME = "name";
-  public static final String SIGNATURE = "value";
+  public static final String SIGNATURE = "signature";
 
   public String getName() {
     return name;

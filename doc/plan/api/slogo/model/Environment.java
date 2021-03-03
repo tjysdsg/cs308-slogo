@@ -1,6 +1,7 @@
 package slogo.model;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
@@ -22,6 +23,11 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void runCommand(String command) {
+  }
+
+  @Override
+  public void setBundle(ResourceBundle bundle) {
+
   }
 
   private class ExecutionEnvironment implements InfoBundle {

@@ -1,5 +1,6 @@
 package slogo.model;
 
+import java.util.ResourceBundle;
 import slogo.events.UpdateCommands;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
@@ -40,4 +41,10 @@ public interface TrackableEnvironment {
    * @param command - The command to parse and execute.
    */
   void runCommand(String command);
+
+  /**
+   * Sets the bundle to use for translating commands
+   * @param bundle - The bundle to use.
+   */
+  void setBundle(ResourceBundle bundle);
 }

@@ -70,6 +70,15 @@ public class ModelController {
     }
   }
 
+  /**
+   * Sets the language to translate exceptions
+   * and commands to and from.
+   * @param language - The language to use
+   */
+  public void setLanguage(String language) {
+
+  }
+
   private String buildException(ModelException e) {
     return e.buildException(exceptions.getString(e.getMessage()));
   }

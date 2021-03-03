@@ -19,3 +19,4 @@ public interface DisplayableCommand {
    */
   String getSignature();
 }
+

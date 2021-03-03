@@ -1,7 +1,8 @@
 package slogo.view;
 
+import java.util.ResourceBundle;
 import slogo.model.TrackableEnvironment;
-
+import slogo.exceptions.ModelException;
 /**
  * @author Joshua Pettima
  * @author Martha Aboagye
@@ -19,14 +20,22 @@ import slogo.model.TrackableEnvironment;
  */
 
 public class ModelController {
+  ViewController vc;
   TrackableEnvironment env;
+  ResourceBundle exceptions;
+  ResourceBundle translation;
 
   /**
    * This is the constryctor for the model controller class
    * As of now, it doesn't meed to be initialized with any
    * specific obkects. It is an empty method
    */
-  public ModelController() {}
+  public ModelController() {
+  }
+
+  public void setController(ViewController vc) {
+    this.vc = vc;
+  }
 
   /**
    * This method initializes a trackable environment object which
@@ -48,11 +57,20 @@ public class ModelController {
    * @param command
    * @throws Exception
    */
-  public void sendCommand(String command) throws Exception {
+  public void sendCommand(String command) {
     if (env != null) {
-      env.runCommand(command);
+      try {
+        env.runCommand(command);
+      } catch(ModelException e) {
+        String excp = buildException(e);
+        vc.sendAlert("Error", excp);
+      }
     } else {
-      throw new Exception("NO CODING ENVIRONMENT HERE DUEEHUDWQHFQWFCQWF");
+
     }
+  }
+
+  private String buildException(ModelException e) {
+    return e.buildException(exceptions.getString(e.getMessage()));
   }
 }

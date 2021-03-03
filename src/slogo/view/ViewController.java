@@ -17,4 +17,6 @@ public interface ViewController {
    * @param lang - The language locale to use.
    */
   void setLanguage(String lang);
+
+  void sendAlert(String title, String message);
 }

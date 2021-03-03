@@ -1,6 +1,6 @@
 package slogo.view;
 import javafx.scene.layout.Pane;
-import slogo.events.TurtleInfo;
+import slogo.events.TurtleRecord;
 
 /**
  * @author marthaaboagye
@@ -27,7 +27,6 @@ public class TurtleSandbox extends Pane {
    * @param info
    */
 
-  public void updateTurtle(TurtleInfo info) {
-
+  public void updateTurtle(TurtleRecord info) {
   }
 }

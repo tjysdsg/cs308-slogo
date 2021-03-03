@@ -11,5 +11,5 @@ public interface UpdateTurtle {
    *
    * @param e - The information describing the updated turtle's position.
    */
-  public void execute(TurtleInfo e);
+  public void execute(TurtleRecord e);
 }

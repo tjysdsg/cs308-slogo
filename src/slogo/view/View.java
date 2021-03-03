@@ -16,6 +16,7 @@ import slogo.model.TrackableEnvironment;
 public class View {
 	ModelController modelCon;
 	TrackableEnvironment environment;
+	ViewController viewCon;
 
 	/**
 	 * This is teh constructor for the View class.
@@ -28,6 +29,8 @@ public class View {
 	public View(Stage stage, ModelController modelCon) {
 		this.modelCon = modelCon;
 		this.environment = EnvironmentFactory.createEnvironment();
+		viewCon = new ViewBundle();
+		modelCon.setController(viewCon);
 	}
 
 	/**
@@ -52,8 +55,11 @@ public class View {
 		 * input.
 		 * @param lang - The language locale to use.
 		 */
-
 		public void setLanguage(String lang) {
+
+		}
+
+		public void sendAlert(String title, String message) {
 
 		}
 	}

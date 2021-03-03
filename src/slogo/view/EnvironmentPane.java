@@ -2,10 +2,10 @@ package slogo.view;
 
 
 import java.util.List;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import slogo.events.DisplayCommand;
@@ -36,9 +36,9 @@ public class EnvironmentPane extends Pane {
     TableColumn<DisplayCommand, String> comNameCol = new TableColumn<>("Name");
     TableColumn<DisplayCommand, String> comValueCol = new TableColumn<>("Command");
 
-    // The factory uses reflection to set the column names
-    comNameCol.setCellValueFactory(new PropertyValueFactory<>(DisplayCommand.NAME));
-    comValueCol.setCellValueFactory(new PropertyValueFactory<>(DisplayCommand.SIGNATURE));
+    // Wrap fields as read only to allow it to be used in listview
+    comNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
+    comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
     comCol.getColumns().addAll(
         comNameCol, comValueCol
     );
@@ -50,8 +50,9 @@ public class EnvironmentPane extends Pane {
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
     varCol.getColumns().addAll(varNameCol, varValueCol);
-    varNameCol.setCellValueFactory(new PropertyValueFactory<>(DisplayVariable.NAME));
-    varValueCol.setCellValueFactory(new PropertyValueFactory<>(DisplayVariable.VALUE));
+
+    varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
+    varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
 
     variablesTable.getColumns().addAll(varCol);
     variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

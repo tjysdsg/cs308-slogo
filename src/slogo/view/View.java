@@ -39,7 +39,7 @@ public class View {
 	private class ViewBundle implements ViewController {
 
 		/**
-		 * This method sets the background clor to what the
+		 * This method sets the background color to what the
 		 * user picked from the display window.
 		 * @param color - The color to set the background to.
 		 */
@@ -54,6 +54,23 @@ public class View {
 		 */
 
 		public void setLanguage(String lang) {
+
+		}
+
+		/**
+		 * This method sets the color of turtle's pen to the
+		 * the color the user picked from the display window
+		 * @param color - the color to set the background to.
+		 */
+		public void setPenColor(String color) {
+
+		}
+
+		/**
+		 * This method sets the turtle logo to be displayed.
+		 * @param turtleLogo - the turtle logo the user picked.
+		 */
+		public void setTurtleLogo(String turtleLogo) {
 
 		}
 	}

@@ -1,13 +1,12 @@
 package slogo.model;
 
-import java.lang.ProcessHandle.Info;
 import java.util.Map;
-import slogo.events.CommandsInfo;
-import slogo.events.TurtleInfo;
+import slogo.events.CommandsRecord;
+import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
-import slogo.events.VariablesInfo;
+import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
 
 public class Environment implements TrackableEnvironment {
@@ -37,13 +36,13 @@ public class Environment implements TrackableEnvironment {
       return null;
     }
 
-    public void notifyTurtleUpdate(TurtleInfo info) {
+    public void notifyTurtleUpdate(TurtleRecord info) {
     }
 
-    public void notifyCommandUpdate(CommandsInfo info) {
+    public void notifyCommandUpdate(CommandsRecord info) {
     }
 
-    public void notifyVariableUpdate(VariablesInfo info) {
+    public void notifyVariableUpdate(VariablesRecord info) {
     }
   }
 }

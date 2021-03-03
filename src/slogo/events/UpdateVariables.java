@@ -11,5 +11,5 @@ public interface UpdateVariables {
    *
    * @param e - The information describing this event.
    */
-  public void execute(VariablesInfo e);
+  public void execute(VariablesRecord e);
 }

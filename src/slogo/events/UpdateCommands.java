@@ -11,5 +11,5 @@ public interface UpdateCommands {
    *
    * @param e - The information describing this event.
    */
-  public void execute(CommandsInfo e);
+  public void execute(CommandsRecord e);
 }

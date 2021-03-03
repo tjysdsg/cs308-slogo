@@ -1,6 +1,9 @@
 package slogo.model;
 
 import java.util.Map;
+import slogo.events.CommandsRecord;
+import slogo.events.TurtleRecord;
+import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
 
 /**
@@ -18,21 +21,21 @@ public interface InfoBundle {
    *
    * @param info - The information to pass to listeners
    */
-  void notifyTurtleUpdate(TurtleInfo info);
+  void notifyTurtleUpdate(TurtleRecord info);
 
   /**
    * Notifies the listener of an update to the user-defined commands.
    *
    * @param info - The information to pass to listeners
    */
-  void notifyCommandUpdate(CommandsInfo info);
+  void notifyCommandUpdate(CommandsRecord info);
 
   /**
    * Notifies the listener of an update to the variables within the environment.
    *
    * @param info - The information to pass to listeners
    */
-  void notifyVariableUpdate(VariablesInfo info);
+  void notifyVariableUpdate(VariablesRecord info);
 
   /**
    * Returns the mapping of names to AST trees.

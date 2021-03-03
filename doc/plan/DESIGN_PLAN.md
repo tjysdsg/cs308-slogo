@@ -14,7 +14,7 @@ Oliver Rodas (oar5)
 
 Jiyang Tang (jt304)
 
-## Introduction - Oliver
+## Introduction
 
 The team is trying to create a set of APIs that together implement a coding environment that uses
 Simple Logo commands. The team's goal is to create APIs that are clear and extensive, enabling the
@@ -36,7 +36,7 @@ The controller will use the model's external API to change the internal state of
 the model finishes updating, it will send data to the view so that it can update its visual
 representation.
 
-## Overview - Josh
+## Overview
 
 General Packages:
 
@@ -91,7 +91,7 @@ there is a text window where a user can type their commands and run it
 
 ![](https://i.imgur.com/K9GV71I.png)
 
-## Design Details - together
+## Design Details
 
 Frontend External.
 
@@ -288,44 +288,68 @@ textbox or variable table display.
 * Team Member #1 Jiyang Tang - Backend
 
 * Team Member #2 Oliver Rodas - Backend
+Oliver will be responsible for creating the parser and the resulting ASTNodes.  
 
 * Team Member #3 Martha Aboagye - Frontend
 
 * Team Member #4 Josh - Frontend
 
-## Use Cases
+[comment]: <> (## Use Cases)
 
-* The user types '50 fd' in the command window and sees an error message that the command was not
-  formatted correctly.
+[comment]: <> (* The user types '50 fd' in the command window and sees an error message that the command was not)
 
-The command would be displayed to the user. When the user presses the run button, the controller
-will send the command text to the Environment class using the trackable environment interface. The
-command environment will send text to the parser class. Inside the parser class, the parser will
-remove all whitespaces and place every token in a list. The parser will check the first token for a
-command. When the parser does not see a command (it sees 50), it throws an INVALID SYNTAX error. The
-environment will catch the error and call a listener on the view so that the error can be displayed.
+[comment]: <> (  formatted correctly.)
 
-* The user types fd :varName without first defining the variable name and sees an error displayed.
+[comment]: <> (The command would be displayed to the user. When the user presses the run button, the controller)
 
-The command would be displayed to the user. When the user presses the run button, the controller
-will send the command text to the Environment class using the trackable environment interface. The
-command environment will send text to the parser class. Inside the parser class, the parser will
-remove all whitespaces and place every token in a list. The parser will create an AST tree rooted at
-a forward command whose child is a lookup command for "varName". The AST tree is returned by the
-parser and the environment tell the tree to execute itself and passes the tree the lookup table and
-the information it needs. The environment calls evaluate at the root of the which begins by
-evaluating its children. When the lookup command is evaluated, it will obtain the lookup table from
-its parameters. The command will check the lookup table for "varName" and when it is not found, it
-will throw an Variable Not Found error. The Environment will catch the error and call a listener on
-the view to display it.
+[comment]: <> (will send the command text to the Environment class using the trackable environment interface. The)
 
-* The user sets a variable's value and sees it updated in the UI's Variable view.
+[comment]: <> (command environment will send text to the parser class. Inside the parser class, the parser will)
 
-The user types in the command to set a variable and presses enter which sends the command to the
-environment through the controller. Once within the controller the command String is parsed by the
-Parser and returned as an AST that will create a variable. The AST is returned from the parser to
-the environment which calls it's `varname.evaluate(env)` method. After evaluating it will use the
-environment variable passed to it to retrieve the map of variables and add the variable name and
-value as a key value pair. After this the "notify variable update"
-method is called on the variable with the event object containing the new variables. the view
-receives this in the callback and updates the component to have the list of strings.
+[comment]: <> (remove all whitespaces and place every token in a list. The parser will check the first token for a)
+
+[comment]: <> (command. When the parser does not see a command &#40;it sees 50&#41;, it throws an INVALID SYNTAX error. The)
+
+[comment]: <> (environment will catch the error and call a listener on the view so that the error can be displayed.)
+
+[comment]: <> (* The user types fd :varName without first defining the variable name and sees an error displayed.)
+
+[comment]: <> (The command would be displayed to the user. When the user presses the run button, the controller)
+
+[comment]: <> (will send the command text to the Environment class using the trackable environment interface. The)
+
+[comment]: <> (command environment will send text to the parser class. Inside the parser class, the parser will)
+
+[comment]: <> (remove all whitespaces and place every token in a list. The parser will create an AST tree rooted at)
+
+[comment]: <> (a forward command whose child is a lookup command for "varName". The AST tree is returned by the)
+
+[comment]: <> (parser and the environment tell the tree to execute itself and passes the tree the lookup table and)
+
+[comment]: <> (the information it needs. The environment calls evaluate at the root of the which begins by)
+
+[comment]: <> (evaluating its children. When the lookup command is evaluated, it will obtain the lookup table from)
+
+[comment]: <> (its parameters. The command will check the lookup table for "varName" and when it is not found, it)
+
+[comment]: <> (will throw an Variable Not Found error. The Environment will catch the error and call a listener on)
+
+[comment]: <> (the view to display it.)
+
+[comment]: <> (* The user sets a variable's value and sees it updated in the UI's Variable view.)
+
+[comment]: <> (The user types in the command to set a variable and presses enter which sends the command to the)
+
+[comment]: <> (environment through the controller. Once within the controller the command String is parsed by the)
+
+[comment]: <> (Parser and returned as an AST that will create a variable. The AST is returned from the parser to)
+
+[comment]: <> (the environment which calls it's `varname.evaluate&#40;env&#41;` method. After evaluating it will use the)
+
+[comment]: <> (environment variable passed to it to retrieve the map of variables and add the variable name and)
+
+[comment]: <> (value as a key value pair. After this the "notify variable update")
+
+[comment]: <> (method is called on the variable with the event object containing the new variables. the view)
+
+[comment]: <> (receives this in the callback and updates the component to have the list of strings.)

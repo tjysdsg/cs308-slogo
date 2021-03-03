@@ -190,10 +190,14 @@ package Exceptions {
 
 	class UnknownCommandException {
 	}
+
+	class IncorrectParameterCountException {
+	}
 }
 
 InvalidSyntaxException --> "1" ModelException
 UnknownCommandException --> "1" ModelException
+IncorrectParameterCountException --> "1" ModelException
 
 'Model -[hidden]--> Events
 @enduml

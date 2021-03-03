@@ -38,29 +38,37 @@ representation.
 
 ## Overview
 
-General Packages:
+UML diagram:
 
-![](https://i.imgur.com/DidBCsz.png)
+![](uml.svg)
+
+### Model Package
+
+[comment]: <> (![]&#40;https://i.imgur.com/DidBCsz.png&#41;)
 
 The model package exposes a "Trackable Environment" class which the view will be able to used to get
 updates on the model's state. Internally, the model uses an Abstract syntax tree to resolve
 commands.
 
-![](https://i.imgur.com/4Irlp8b.png)
+### Events Package
+
+[comment]: <> (![]&#40;https://i.imgur.com/4Irlp8b.png&#41;)
 
 The events package contains all the info on update events that occur within the model and the
 handlers for those events. The event objects (.\*Info}) are passed through the functional
 interfaces (Update.\*)from the model to the view.
 
-![](https://i.imgur.com/w3cVVwX.png)
+### View Package
+
+[comment]: <> (![]&#40;https://i.imgur.com/w3cVVwX.png&#41;)
 
 The view package contains all the classes for the userinterface and observing the model (
 TrackableEnvironment). It also includes the model controller which is responsible for translating
 commands from whatever local into english for the model.
 
 Within the view the ViewController will be used to set the background color of the view, change the
-locale, or other things related to the interface. If needed, this viewcontroller can be passed to
-the modelcontroller so that if a certain functionality needs to be enabled or disabled that can be
+locale, or other things related to the interface. If needed, this ViewController can be passed to
+the ModelController so that if a certain functionality needs to be enabled or disabled that can be
 facilitated.
 
 This is how we would start and initiate the application.

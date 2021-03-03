@@ -2,6 +2,7 @@ package slogo.view;
 
 
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,7 +13,8 @@ import slogo.events.DisplayVariable;
 import slogo.events.VariablesRecord;
 
 public class EnvironmentPane extends Pane {
-  public static final int TABLE_SIZE = 200;
+
+  public static final int TABLE_SIZE = View.SIZE / 2 - 20;
   TableView<DisplayCommand> commandsTable;
   TableView<DisplayVariable> variablesTable;
 
@@ -23,8 +25,10 @@ public class EnvironmentPane extends Pane {
     createTableViews();
     vbox.getChildren().add(variablesTable);
     vbox.getChildren().add(commandsTable);
+    vbox.setAlignment(Pos.CENTER_LEFT);
     getChildren().add(vbox);
 
+    createMockData();
   }
 
   public void createTableViews() {
@@ -33,8 +37,8 @@ public class EnvironmentPane extends Pane {
     TableColumn<DisplayCommand, String> comValueCol = new TableColumn<>("Command");
 
     // The factory uses reflection to set the column names
-    comNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    comValueCol.setCellValueFactory(new PropertyValueFactory<>("signature"));
+    comNameCol.setCellValueFactory(new PropertyValueFactory<>(DisplayCommand.NAME));
+    comValueCol.setCellValueFactory(new PropertyValueFactory<>(DisplayCommand.SIGNATURE));
     comCol.getColumns().addAll(
         comNameCol, comValueCol
     );
@@ -46,8 +50,8 @@ public class EnvironmentPane extends Pane {
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
     varCol.getColumns().addAll(varNameCol, varValueCol);
-    varNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    varValueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+    varNameCol.setCellValueFactory(new PropertyValueFactory<>(DisplayVariable.NAME));
+    varValueCol.setCellValueFactory(new PropertyValueFactory<>(DisplayVariable.VALUE));
 
     variablesTable.getColumns().addAll(varCol);
     variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -58,11 +62,14 @@ public class EnvironmentPane extends Pane {
   private void createMockData() {
     commandsTable.getItems().addAll(
         new DisplayCommand("name", "signature"),
-        new DisplayCommand("name1", "signature1")
+        new DisplayCommand("name1", "signature1"),
+        new DisplayCommand("name2", "signature2")
     );
     variablesTable.getItems().addAll(
         new DisplayVariable("name", "value"),
-        new DisplayVariable("name1", "value1")
+        new DisplayVariable("name1", "value1"),
+        new DisplayVariable("name2", "value2"),
+        new DisplayVariable("name3", "value3")
     );
   }
 

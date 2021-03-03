@@ -2,39 +2,40 @@
 package Events {
 
 	interface UpdateTurtle {
-		+ execute(TurtleInfo e)
+		+ execute(TurtleRecord e)
 	}
 
 	interface UpdateCommands {
-		+ execute(CommandsInfo e)
+		+ execute(CommandsRecord e)
 	}
 
 	interface UpdateVariables {
-		+ execute(VariablesInfo e)
+		+ execute(VariablesRecord e)
 	}
 
-	class VariablesInfo {
-		+ getVariables() : List<DisplayableVariable>
+	class VariablesRecord {
+		+ variables: List<DisplayVariable>
 	}
 
-	class CommandsInfo {
-		+ getCommands() : Map<SDisplayableCommand>
+	class CommandsRecord {
+		+ commands: List<DisplayCommand>
 	}
 
-	class TurtleInfo {
-		+ getX() : int
-		+ getY() : int
-		+ getRotation() : double
+	class TurtleRecord {
+		+ id: int
+		+ xCoord: double
+		+ yCoord : double
+		+ rotation: double
 	}
 
-	interface DisplayableVariable {
-		+ getName() : String
-		+ getValue() : double
+	class DisplayVariable {
+		+ name: String
+		+ value: double
 	}
 
-	interface DisplayableCommand {
-		+ getName() : String
-		+ getSignature() : String
+	class DisplayCommand {
+		+ name: String
+		+ signature: String
 	}
 }
 
@@ -172,8 +173,27 @@ package Model {
 	class Variables extends ASTNode {
 	}
 }
+
 ExecutionBundle --> "1" Environment
 Turtle --> "1" Environment
+
+package Exceptions {
+	note bottom of ModelException
+		ModelException extends java's RuntimeException
+	end note
+	class ModelException {
+		buildException(String format) : String
+	}
+
+	class InvalidSyntaxException {
+	}
+
+	class UnknownCommandException {
+	}
+}
+
+InvalidSyntaxException --> "1" ModelException
+UnknownCommandException --> "1" ModelException
 
 'Model -[hidden]--> Events
 @enduml

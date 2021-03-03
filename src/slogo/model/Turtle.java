@@ -10,7 +10,7 @@ public class Turtle {
   private double x;
   private double y;
   private double rotation;
-  private Environment env;
+  private InfoBundle env;
 
   /**
    * Set coordinate of the turtle.

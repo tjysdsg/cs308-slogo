@@ -44,7 +44,7 @@ UML diagram:
 
 ### Model Package
 
-[comment]: <> (![]&#40;https://i.imgur.com/DidBCsz.png&#41;)
+![](modelPackage.png)
 
 The model package exposes a "Trackable Environment" class which the view will be able to used to get
 updates on the model's state. Internally, the model uses an Abstract syntax tree to resolve
@@ -52,13 +52,15 @@ commands.
 
 ### Events Package
 
-[comment]: <> (![]&#40;https://i.imgur.com/4Irlp8b.png&#41;)
+![](eventsPackage.png)
 
 The events package contains all the info on update events that occur within the model and the
 handlers for those events. The event objects (.\*Info}) are passed through the functional
 interfaces (Update.\*)from the model to the view.
 
 ### View Package
+
+![](viewPackage.png)
 
 [comment]: <> (![]&#40;https://i.imgur.com/w3cVVwX.png&#41;)
 
@@ -87,6 +89,8 @@ public View(Stage stage, Controller con) {
     model.setOnUpdate( (e) -> ...)
 }
 ```
+
+![](exceptionsPackage.png)
 
 ## User Interface
 

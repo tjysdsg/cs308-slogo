@@ -76,15 +76,15 @@ package View {
 		+ setLanguage(String lang)
 	}
 
-	note top of SettingsScene
-		Extens the Scene class.
+	note top of SettingsPane
+		Extens the Pane class.
 	end note
-	class SettingsScene {
+	class SettingsPane {
 		- controller : ViewController
 	}
 }
 
-SettingsScene --> "1" View
+SettingsPane --> "1" View
 ModelController --> "1" View
 ViewController --> "1" View
 TurtleSandbox --> "1" View
@@ -101,7 +101,8 @@ package Model {
 		+ setOnTurtleUpdate(UpdateTurtle callback);
 		+ setOnVariableUpdate(UpdateVariable callback);
 		+ setOnCommandUpdate(UpdateCommands callback);
-		+ runCommand(String command) : double
+		+ runCommand(String command)
+		+ setBundle(ResourceBundle bundle)
 	}
 
 	note bottom of TrackableEnvironment
@@ -113,7 +114,6 @@ package Model {
 		# notifyTurtleUpdate(TurtleInfo info)
 		# notifyCommandUpdate(CommandInfo info)
 		# notifyVariableUpdate()
-		+ runCommand(String command) : double
 	}
 
 	note left of ExecutionBundle
@@ -178,26 +178,23 @@ ExecutionBundle --> "1" Environment
 Turtle --> "1" Environment
 
 package Exceptions {
-	note bottom of ModelException
+	note top of ModelException
 		ModelException extends java's RuntimeException
 	end note
 	class ModelException {
 		buildException(String format) : String
 	}
 
-	class InvalidSyntaxException {
+	class InvalidSyntaxException extends ModelException {
 	}
 
-	class UnknownCommandException {
+	class UnknownCommandException extends ModelException {
 	}
 
-	class IncorrectParameterCountException {
+	class IncorrectParameterCountException extends ModelException {
 	}
 }
 
-InvalidSyntaxException --> "1" ModelException
-UnknownCommandException --> "1" ModelException
-IncorrectParameterCountException --> "1" ModelException
 
 'Model -[hidden]--> Events
 @enduml

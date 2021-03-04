@@ -12,7 +12,7 @@ public class Turtle {
   private double x;
   private double y;
   private double rotation;
-  private InfoBundle env;
+  private InfoBundle env; // FIXME: turtle probably shouldn't have this - Jiyang
 
   /**
    * Set coordinate of the turtle.
@@ -41,6 +41,14 @@ public class Turtle {
    * Set absolute rotation.
    */
   public void setRotation(double rotation) {
+  }
+
+  /**
+   * Set absolute position.
+   */
+  public void setPosition(double x, double y) {
+    this.x = x;
+    this.y = y;
   }
 
   /**

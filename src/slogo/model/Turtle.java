@@ -9,9 +9,10 @@ package slogo.model;
  */
 public class Turtle {
 
-  private double x;
-  private double y;
-  private double rotation;
+  private double x = 0;
+  private double y = 0;
+  private boolean visible = true;
+  private double rotation = 0;
   private InfoBundle env; // FIXME: turtle probably shouldn't have this - Jiyang
 
   /**
@@ -64,5 +65,13 @@ public class Turtle {
 
   public double getY() {
     return y;
+  }
+
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
   }
 }

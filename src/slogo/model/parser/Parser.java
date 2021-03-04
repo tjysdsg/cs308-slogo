@@ -1,4 +1,4 @@
-package slogo.model;
+package slogo.model.parser;
 import slogo.model.ASTNodes.*;
 import slogo.exceptions.*;
 
@@ -16,7 +16,7 @@ public interface Parser {
    * @throws InvalidSyntaxException
    * @throws IncorrectParameterCountException
    */
-  public static ASTNode parseCommand(String command) throws UnknownCommandException, InvalidSyntaxException, IncorrectParameterCountException {
-    return null;
-  }
+  public ASTNode parseCommand(String command) throws UnknownCommandException, InvalidSyntaxException, IncorrectParameterCountException;
+
+  public void changeLanguage(String language);
 }

@@ -25,8 +25,22 @@ public abstract class ASTNode {
     children = new ArrayList<>();
   }
 
+  public int getNumParams() {
+    return 0;
+  }
+
+  /**
+   * Set the original string we parsed from to create this node
+   */
   public void setToken(String token) {
     this.token = token;
+  }
+
+  /**
+   * Get the original string we parsed from to create this node
+   */
+  public String getToken() {
+    return token;
   }
 
   /**

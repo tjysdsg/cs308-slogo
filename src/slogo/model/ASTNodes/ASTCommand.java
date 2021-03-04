@@ -16,6 +16,11 @@ public abstract class ASTCommand extends ASTNamed {
   }
 
   @Override
+  public int getNumParams() {
+    return numParams;
+  }
+
+  @Override
   protected void preEvaluate(InfoBundle info) {
     int size = children.size();
     if (size > numParams) {

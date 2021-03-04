@@ -29,7 +29,7 @@ public class TurtleSandbox extends StackPane {
     Image image = new Image(file.toURI().toString());
     turtle = new ImageView(image);
     animationQueue = new LinkedList<>();
-    setStyle("-fx-background-color: #03A9F4");
+    setSandboxColor("#03A9F4");
     getChildren().add(turtle);
 
     createMockData();
@@ -38,29 +38,9 @@ public class TurtleSandbox extends StackPane {
   private void addTurtle() {}
 
   private void createMockData() {
-    TranslateTransition moveTurtle = new TranslateTransition();
-    moveTurtle.setDuration(Duration.seconds(2));
-    moveTurtle.setToX(200);
-    moveTurtle.setToY(200);
-    moveTurtle.setNode(turtle);
-    addAnimation(moveTurtle);
-
-    moveTurtle = new TranslateTransition();
-    moveTurtle.setDuration(Duration.seconds(2));
-    moveTurtle.setNode(turtle);
-    moveTurtle.setToX(-100);
-    moveTurtle.setToY(-100);
-    addAnimation(moveTurtle);
-
-    RotateTransition rt = new RotateTransition(Duration.seconds(1), turtle);
-    rt.setByAngle(180);
-    addAnimation(rt);
-
-    moveTurtle = new TranslateTransition();
-    moveTurtle.setDuration(Duration.seconds(2));
-    moveTurtle.setNode(turtle);
-    moveTurtle.setToY(100);
-    addAnimation(moveTurtle);
+    updateTurtle(new TurtleRecord(0, 0, 0, 180));
+    updateTurtle(new TurtleRecord(0, 0, -100, 0));
+    updateTurtle(new TurtleRecord(0, 100, 0, 90));
   }
 
   private void addAnimation(Animation an) {
@@ -79,10 +59,36 @@ public class TurtleSandbox extends StackPane {
     }
   }
 
+  public void setSandboxColor(String color) {
+    setStyle("-fx-background-color: " + color);
+  }
+
   /**
    * This method updates turtles position after the user command is executed on the backend.
    *
    * @param info
    */
-  public void updateTurtle(TurtleRecord info) {}
+  public void updateTurtle(TurtleRecord info) {
+    if (turtle.getRotate() != info.rotation()) {
+      RotateTransition rt = new RotateTransition(Duration.seconds(1), turtle);
+      rt.setByAngle(info.rotation() - turtle.getRotate());
+      addAnimation(rt);
+    }
+    double tx = turtle.getTranslateX();
+    double ty = turtle.getTranslateY();
+
+    if (tx != info.xCoord() || ty != info.yCoord()) {
+      TranslateTransition moveTurtle = new TranslateTransition();
+      moveTurtle.setDuration(Duration.seconds(2));
+
+    if (tx != info.xCoord()) {
+      moveTurtle.setToX(tx - info.xCoord());
+    } else {
+      moveTurtle.setToY(ty - info.yCoord());
+    }
+
+    moveTurtle.setNode(turtle);
+    addAnimation(moveTurtle);
+    }
+  }
 }

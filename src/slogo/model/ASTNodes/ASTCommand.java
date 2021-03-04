@@ -37,4 +37,8 @@ public abstract class ASTCommand extends ASTNamed {
     children.add(newChild);
     return size + 1;
   }
+
+  public boolean isDone() {
+    return numParams == children.size();
+  }
 }

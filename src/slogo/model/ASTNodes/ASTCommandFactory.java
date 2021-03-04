@@ -1,12 +1,61 @@
 package slogo.model.ASTNodes;
 
+import java.io.File;
+import java.lang.reflect.Field;
+
 public class ASTCommandFactory {
-  public ASTCommandFactory(String language) {
+  public static final String packagePath = ASTCommandFactory.class.getPackageName() + ".";
+  public static final String dirPath = "src/" + packagePath.replace(".", "/") + "/";
+
+  public ASTCommandFactory() {
     //TODO: Set languages to get the commands
   }
 
   public ASTCommand getCommand(String command) {
     //TODO: get the commands
+    Class[] availNodes = getNodes();
+    for (Class node : availNodes) {
+
+      if (node.getSuperclass() != ASTCommand.class)
+        continue;
+
+      String name = "";
+      try {
+        Field nameField = node.getDeclaredField("NAME");
+        nameField.setAccessible(true);
+        name = (String) nameField.get(nameField);
+      } catch (NoSuchFieldException | IllegalAccessException e) {
+        System.out.printf("%s needs the private field NAME\n", node.getName());
+        continue;
+      }
+
+      if (name.equalsIgnoreCase(command)) {
+        try {
+          return (ASTCommand) node.getConstructor().newInstance();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
     return null;
+  }
+
+  private Class[] getNodes() {
+    File myPackage = new File(dirPath);
+    assert(myPackage.isDirectory());
+
+    File[] files = myPackage.listFiles();
+    Class[] nodes = new Class[files.length];
+
+    int index = 0;
+    for (File currClass : files) {
+      try {
+        nodes[index] = Class.forName(packagePath + currClass.getName().replace(".java", ""));
+        index++;
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+    return nodes;
   }
 }

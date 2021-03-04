@@ -7,14 +7,13 @@ import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
 
 public class ProgramParser implements Parser {
-  private final ASTCommandFactory factory;
+  private final ASTCommandFactory factory = new ASTCommandFactory();
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
 
   public ProgramParser(String language) {
     cc = new CommandClassifier(language);
-    factory = new ASTCommandFactory(language);
   }
 
   //TODO: Add Expression Handling and Logic for Errors
@@ -26,35 +25,41 @@ public class ProgramParser implements Parser {
     Stack<ASTCommand> nodeStack = new Stack<>();
     int expLevel = 0;
 
-    for (String line : lines) {
-      if (line.trim().length() > 0) {
-        type = tc.getSymbol(line);
+    for (String token : lines) {
+      if (token.trim().length() > 0) {
+        type = tc.getSymbol(token);
+        System.out.printf("Token:%s, Type:%s\n", token, type);
 
         //TODO: Must refactor to become better designed and avoid duplication
         switch(type) {
           case "Constant" -> {
-            nodeStack.peek().addChild(new ASTNumberLiteral(Double.parseDouble(line)));
+            nodeStack.peek().addChild(new ASTNumberLiteral(Double.parseDouble(token)));
           }
 
           case "Command" -> {
-            nodeStack.push(factory.getCommand(line));
+            String commandName = cc.getSymbol(token);
+            ASTCommand newCommand = factory.getCommand(commandName);
+            if (!nodeStack.isEmpty())
+              nodeStack.peek().addChild(newCommand);
+            nodeStack.push(newCommand);
           }
 
           case "Variable" -> {
-            nodeStack.peek().addChild(new ASTVariable(line));
+            nodeStack.peek().addChild(new ASTVariable(token));
           }
 
           case "ListStart" -> { expLevel++; }
           case"ListEnd" -> { expLevel--; }
 
-          default -> throw new InvalidSyntaxException(line, command);
+          default -> throw new InvalidSyntaxException(token, command);
         }
 
         collapse(nodeStack);
+        System.out.println(nodeStack.toString());
       }
     }
 
-    if (nodeStack.capacity() != 1) {
+    if (nodeStack.size() != 1) {
       throw new IncorrectParameterCountException(4, 3, "blorp");
     }
 
@@ -62,10 +67,17 @@ public class ProgramParser implements Parser {
   }
 
   private void collapse(Stack<ASTCommand> myStack) {
-
+    while (myStack.size() > 1 && myStack.peek().isDone()) {
+      myStack.pop();
+    }
   }
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
+  }
+
+  public static void main(String[] args) {
+    Parser myParser = new ProgramParser("English");
+    ASTNode res = myParser.parseCommand("fd fd fd 50");
   }
 }

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 */
 public class TokenParser {
   // where to find resources specifically for this class
-  private static final String RESOURCES_PACKAGE = TokenParser.class.getPackageName() + ".resources.";
+  private static final String RESOURCES_PACKAGE = "resources.";
   // "types" and the regular expression patterns that recognize those types
   // note, it is a list because order matters (some patterns may be more generic)
   private List<Entry<String, Pattern>> mySymbols;

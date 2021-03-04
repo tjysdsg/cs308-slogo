@@ -9,4 +9,6 @@ public abstract class ASTNamed extends ASTNode {
     super();
     this.name = name;
   }
+
+
 }

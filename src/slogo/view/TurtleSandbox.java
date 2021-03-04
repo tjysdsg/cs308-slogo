@@ -40,7 +40,8 @@ public class TurtleSandbox extends StackPane {
   private void createMockData() {
     updateTurtle(new TurtleRecord(0, 0, 0, 180));
     updateTurtle(new TurtleRecord(0, 0, -100, 0));
-    updateTurtle(new TurtleRecord(0, 100, 0, 90));
+    updateTurtle(new TurtleRecord(0, 0 , 0, -90));
+    updateTurtle(new TurtleRecord(0, 200, 0, 0));
   }
 
   private void addAnimation(Animation an) {
@@ -71,15 +72,14 @@ public class TurtleSandbox extends StackPane {
   public void updateTurtle(TurtleRecord info) {
     if (turtle.getRotate() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.seconds(1), turtle);
-      rt.setByAngle(info.rotation() - turtle.getRotate());
+      rt.setByAngle(turtle.getRotate() - info.rotation());
       addAnimation(rt);
     }
     double tx = turtle.getTranslateX();
     double ty = turtle.getTranslateY();
-
     if (tx != info.xCoord() || ty != info.yCoord()) {
       TranslateTransition moveTurtle = new TranslateTransition();
-      moveTurtle.setDuration(Duration.seconds(2));
+      moveTurtle.setDuration(Duration.seconds(1));
 
     if (tx != info.xCoord()) {
       moveTurtle.setToX(tx - info.xCoord());

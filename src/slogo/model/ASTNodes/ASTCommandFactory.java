@@ -2,6 +2,7 @@ package slogo.model.ASTNodes;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class ASTCommandFactory {
   public static final String packagePath = ASTCommandFactory.class.getPackageName() + ".";
@@ -16,7 +17,7 @@ public class ASTCommandFactory {
     Class[] availNodes = getNodes();
     for (Class node : availNodes) {
 
-      if (node.getSuperclass() != ASTCommand.class)
+      if (isNotCommand(node) | isAbstract(node))
         continue;
 
       String name = "";
@@ -57,5 +58,18 @@ public class ASTCommandFactory {
       }
     }
     return nodes;
+  }
+
+  private boolean isNotCommand(Class node) {
+    Class ancestor = node.getSuperclass();
+    if (ancestor == null)
+      return true;
+    if (ancestor == ASTCommand.class)
+      return false;
+    return isNotCommand(ancestor);
+  }
+
+  private boolean isAbstract(Class node) {
+    return Modifier.isAbstract(node.getModifiers());
   }
 }

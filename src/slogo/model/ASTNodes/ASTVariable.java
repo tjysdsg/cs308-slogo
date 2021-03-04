@@ -7,9 +7,9 @@ import slogo.model.InfoBundle;
  */
 public class ASTVariable extends ASTNamed {
 
-  double value = 0.0;
+  private double value = 0.0;
 
-  ASTVariable(String name) {
+  public ASTVariable(String name) {
     super(name);
   }
 

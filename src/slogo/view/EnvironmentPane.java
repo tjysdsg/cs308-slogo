@@ -12,6 +12,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
+import slogo.events.CommandsRecord;
 import slogo.events.VariablesRecord;
 
 public class EnvironmentPane extends Pane {
@@ -77,7 +78,7 @@ public class EnvironmentPane extends Pane {
             new DisplayVariable("name1", "value1"),
             new DisplayVariable("name2", "value2"),
             new DisplayVariable("name3", "value3"));
-    for (int i = 0; i < 4; i++) previousCommands.getItems().add(new Label("Item " + i));
+    for (int i = 0; i < 4; i++) addPreviousCommand("Prev command " + i);
   }
 
   public void updateVariables(VariablesRecord records) {
@@ -85,8 +86,12 @@ public class EnvironmentPane extends Pane {
     variablesTable.getItems().addAll(records.variables());
   }
 
-  public void updateVariables(List<DisplayVariable> records) {
-    variablesTable.getItems().removeAll();
-    variablesTable.getItems().addAll(records);
+  public void updateCommands(CommandsRecord records) {
+    commandsTable.getItems().removeAll();
+    commandsTable.getItems().addAll(records.commands());
+  }
+
+  public void addPreviousCommand(String command) {
+    previousCommands.getItems().add(new Label(command));
   }
 }

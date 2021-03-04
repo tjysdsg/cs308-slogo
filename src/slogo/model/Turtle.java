@@ -4,6 +4,8 @@ package slogo.model;
  * Contains the information of the turtle, such as position and orientation.
  * <p>
  * NOTE: when the following functions are called, they should notifies the environment
+ * <p>
+ * NOTE: the x-coordinate used is pointing RIGHT, and the y-coordinate is pointing UP
  */
 public class Turtle {
 
@@ -15,7 +17,8 @@ public class Turtle {
   /**
    * Set coordinate of the turtle.
    */
-  public void setXY(double x, double y) {}
+  public void setXY(double x, double y) {
+  }
 
   /**
    * Rotate the turtle.
@@ -23,13 +26,35 @@ public class Turtle {
    * @param rotation Rotation in degrees. Rotates clockwise if positive, otherwise
    *                 counter-clockwise
    */
-  public void rotate(double rotation) {}
+  public void rotate(double rotation) {
+  }
 
   /**
    * Move the turtle towards its the current orientation.
    *
    * @param x Number of pixels to move.
    */
-  public void move(double x) {}
+  public void move(double x) {
+  }
 
+  /**
+   * Set absolute rotation.
+   */
+  public void setRotation(double rotation) {
+  }
+
+  /**
+   * Get current absolute rotation.
+   */
+  public double getRotation() {
+    return this.rotation;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
 }

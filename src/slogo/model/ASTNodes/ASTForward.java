@@ -2,7 +2,6 @@ package slogo.model.ASTNodes;
 
 import slogo.model.InfoBundle;
 
-// TODO: load name from language resource file
 public class ASTForward extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
@@ -16,6 +15,6 @@ public class ASTForward extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     double delta = children.get(0).evaluate(info);
     info.getTurtle().move(delta);
-    return 0;
+    return delta;
   }
 }

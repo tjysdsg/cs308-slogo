@@ -25,6 +25,10 @@ public abstract class ASTNode {
     children = new ArrayList<>();
   }
 
+  public int getNumParams() {
+    return 0;
+  }
+
   /**
    * Set the original string we parsed from to create this node
    */

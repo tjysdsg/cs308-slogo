@@ -55,7 +55,7 @@ public class ProgramParser implements Parser {
         }
 
         collapse(nodeStack);
-        System.out.println(nodeStack.toString());
+        printStack(nodeStack);
       }
     }
 
@@ -78,6 +78,12 @@ public class ProgramParser implements Parser {
 
   public static void main(String[] args) {
     Parser myParser = new ProgramParser("English");
-    ASTNode res = myParser.parseCommand("fd fd fd 50");
+    ASTNode res = myParser.parseCommand("fd fd fd 50 fd fd fd fd 50");
+  }
+
+  public void printStack(Stack<ASTCommand> myStack) {
+    for (ASTCommand item : myStack) {
+      System.out.println(item.getClass().getName());
+    }
   }
 }

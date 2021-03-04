@@ -4,12 +4,12 @@ import slogo.model.InfoBundle;
 
 public class ASTNumberLiteral extends ASTNode {
 
-  protected int value;
+  protected double value;
 
   /**
    * Creates a new ASTNode instance that contains the name and the number of parameters
    */
-  public ASTNumberLiteral(int value) {
+  public ASTNumberLiteral(double value) {
     super();
     this.value = value;
   }

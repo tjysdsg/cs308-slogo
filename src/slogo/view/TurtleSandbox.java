@@ -60,7 +60,8 @@ public class TurtleSandbox extends StackPane {
     demos.add(new TurtleRecord(0, 200, 200, -180)); // Flip
     demos.add(new TurtleRecord(0, 200, 100, -180)); // Flip
     demos.add(new TurtleRecord(0, 200, 0, -180));
-    demos.add(new TurtleRecord(0, 0, 0, -180));
+    demos.add(new TurtleRecord(0, 200, 0, -90));
+    demos.add(new TurtleRecord(0, 0, 0, 90));
     Button button = new Button("DEMO");
     button.setOnAction( (e) -> { 
       if (demos.size() > 0) {

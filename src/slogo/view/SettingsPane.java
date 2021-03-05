@@ -37,7 +37,7 @@ public class SettingsPane extends Pane {
   ViewController vcon;
 
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
+  //public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
 
   /**
    * This method intializes a viewController object which defines method
@@ -46,7 +46,7 @@ public class SettingsPane extends Pane {
    *
    * @param vcon
    */
-  public SettingsPane(ViewController vcon) {
+  public  SettingsPane(ViewController vcon) {
     this.vcon = vcon;
 }
 
@@ -67,7 +67,6 @@ public class SettingsPane extends Pane {
     displayLabels("English");
     hbox.setSpacing(20);
     hbox.setId("settingsPane");
-    //hbox.setMinSize(SIZE, SIZE);
 
   }
 
@@ -76,12 +75,15 @@ public class SettingsPane extends Pane {
     penColorLabel = new Label();
     penColorLabel.setId("penColorText");
     penColorPicker = new ColorPicker();
+    penColorPicker.setOnAction(e-> {
+      vcon.setBackground(backgroundColorPicker.getValue().toString());
+
+    });
 
     penPane.add(penColorLabel, 0, 0);
     penPane.add(penColorPicker, 1,0);
     penPane.setHgap(10);
     backgroundColorLabel =  new Label();
-    backgroundColorLabel.setId("backgroundText");
     backgroundColorPicker = new ColorPicker();
 
     backgroundColorPicker.setOnAction( e -> {
@@ -92,7 +94,6 @@ public class SettingsPane extends Pane {
     backgroundPane.add(backgroundColorLabel, 0, 0);
     backgroundPane.add(backgroundColorPicker, 1, 0);
     backgroundPane.setHgap(10);
-    vcon.setBackground(backgroundColorPicker);
 
   }
 
@@ -100,6 +101,9 @@ public class SettingsPane extends Pane {
     List<String> turtles =  Arrays.asList("Happy", "Sad", "Angry", "Rainbow", "White");
     turtleList.getItems().addAll(turtles);
     turtleList.setValue("TurtleLogo");
+    turtleList.setOnAction((e->{
+      vcon.setTurtleLogo(turtleList.getValue().toString());
+    }));
   }
 
   private  void createLanguageList(){
@@ -107,14 +111,21 @@ public class SettingsPane extends Pane {
         "Italian", "Portuguese", "Russian", "Spanish", "Urdu");
     languageList.getItems().addAll(languages);
     languageList.setValue("English");
-    vcon.setLanguage(languageList);
+    languageList.setOnAction(e->{
+      displayLabels(languageList.getValue().toString());
+      vcon.setLanguage(languageList.getValue().toString());
+
+
+    });
+
   }
 
-  protected void displayLabels(String language){
+  private void displayLabels(String language){
     resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
     title.setText(resources.getString("title"));
     penColorLabel.setText(resources.getString("penColorLabel"));
     backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));
+
   }
 
 

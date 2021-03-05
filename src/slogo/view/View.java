@@ -4,16 +4,12 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
@@ -37,7 +33,7 @@ public class View {
 	EnvironmentPane environmentPane;
 	HelpPane helpPane;
 	TurtleSandbox turtleSandbox;
-	SettingsPane settingsPane;
+	Pane settingsPane;
 	Pane commandPane;
 	Scene scene;
 	BorderPane borderPane;
@@ -71,12 +67,11 @@ public class View {
 		helpPane = new HelpPane();
 		turtleSandbox = new TurtleSandbox();
 		commandPane = makeBottomPane();
-		settingsPane = new SettingsPane(viewCon);
-		Pane topPane =  settingsPane.createSettingsPane();
+		settingsPane = new SettingsPane(viewCon).createSettingsPane();
 		borderPane = new BorderPane();
 		Scene newScene = new Scene(borderPane, SIZE, SIZE);
 
-		borderPane.setTop(topPane);
+		borderPane.setTop(settingsPane);
 		borderPane.setBottom(commandPane);
 		borderPane.setLeft(environmentPane);
 		borderPane.setRight(helpPane);
@@ -122,44 +117,26 @@ public class View {
 		/**
 		 * This method sets the background color to what the
 		 * user picked from the display window.
-		 * @param colorPicker - The color to set the background to.
+		 * @param color - The color to set the background to.
 		 */
-		public void setBackground(ColorPicker colorPicker) {
-			EventHandler<ActionEvent> pickBackgroundColor = new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent e)
-				{
-					Color c = colorPicker.getValue();
-					//do something with this depending on what Josh
-					//is doing with turtle sandbox.
-				}
-			};
-			colorPicker.setOnAction(pickBackgroundColor);
+		public void setBackground(String color) {
 
 		}
 
 		/**
 		 * This method sets the display language to the user's
 		 * input.
-		 * @param choiceBox - The language locale to use.
+		 * @param language - The language locale to use.
 		 */
-		public void setLanguage(ChoiceBox choiceBox) {
-			EventHandler<ActionEvent> pickLanguage = new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent e)
-				{
-					String language = "" + choiceBox.getValue();
-					settingsPane.displayLabels(language);
+		public void setLanguage(String language) {
 					changeTextInstruction(language);
-				}
-			};
-			choiceBox.setOnAction(pickLanguage);
-
 		}
 
 
 		/**
 		 * This method sets the color of turtle's pen to the
 		 * the color the user picked from the display window
-		 * @param colorPicker - the color to set the background to.
+		 * @param color - the color to set the background to.
 		 */
 		public void setPenColor(String color) {
 			System.out.println(color);

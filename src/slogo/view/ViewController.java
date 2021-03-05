@@ -1,8 +1,5 @@
 package slogo.view;
 
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-
 /**
  * A controller to manipulate
  * the current view.
@@ -11,20 +8,20 @@ public interface ViewController {
 
   /**
    * Sets the background color of the view.
-   * @param colorPicker - The color to set the background to.
+   * @param color - The color to set the background to.
    */
-  void setBackground(ColorPicker colorPicker);
+  void setBackground(String color);
 
   /**
    * Sets the language used within the environment.
-   * @param choiceBox - The language locale to use.
+   * @param language - The language locale to use.
    */
-  void setLanguage(ChoiceBox choiceBox);
+  void setLanguage(String language);
 
 
   /**
    * Set the turtle pen color for the view.
-   * @param colorPicker - The color to set pen to.
+   * @param color - The color to set pen to.
    */
   void setPenColor(String color);
 

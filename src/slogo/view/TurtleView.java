@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Group;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
 
@@ -36,12 +37,22 @@ public class TurtleView extends Group {
     setupContextMenu();
   }
 
+  public TurtleView() {
+    this(new Image(new File("data/images/logo.png").toURI().toString()));
+  }
+
   public void setupContextMenu() {
     ContextMenu menu = new ContextMenu();
     MenuItem setPen = new MenuItem("Set Pen Color");
     MenuItem setImage = new MenuItem("Set Turtle Image");
     menu.getItems().addAll(setPen, setImage);
     ColorPicker picker = new ColorPicker();
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(
+        new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+        new ExtensionFilter("All Files", "*.*")
+        );
+
     picker.setVisible(false);
     getChildren().add(picker);
     picker.setOnAction(
@@ -57,12 +68,14 @@ public class TurtleView extends Group {
           picker.setVisible(true);
           picker.show();
         });
+    setImage.setOnAction(
+        e -> {
+          File file = fileChooser.showOpenDialog(getScene().getWindow());
+          if (file != null) {
+            turtleImage.setImage(new Image(file.toURI().toString()));
+          }
+        });
   }
-
-  public TurtleView() {
-    this(new Image(new File("data/images/logo.png").toURI().toString()));
-  }
-
   public double getCurrX() {
     return this.currX;
   }

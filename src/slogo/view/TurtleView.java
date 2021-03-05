@@ -17,12 +17,14 @@ public class TurtleView extends ImageView {
   private double currY;
   private double rotation;
   private Queue<Animation> animationQueue;
+  private String penColor;
 
   protected TurtleView(Image image) {
     super(image);
     this.currX = 0;
     this.currY = 0;
     this.animationQueue = new LinkedList<>();
+    this.penColor = "#009624";
   }
 
   public TurtleView() {
@@ -39,6 +41,14 @@ public class TurtleView extends ImageView {
 
   public double getCurrY() {
     return this.currY;
+  }
+
+  public String getPenColor() {
+    return this.penColor;
+  }
+
+  public void setPenColor(String penColor) {
+    this.penColor = penColor;
   }
 
   public void update(TurtleRecord info) {

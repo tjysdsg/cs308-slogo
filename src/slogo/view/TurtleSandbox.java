@@ -68,7 +68,7 @@ public class TurtleSandbox extends StackPane {
   }
 
   public void setPenColor(String color) {
-    penStyle = color;
+    turtles.get(0).setPenColor(color);
   }
 
   /**
@@ -82,7 +82,7 @@ public class TurtleSandbox extends StackPane {
     double ty = turtle.getCurrY();
     if (tx != info.xCoord() || ty != info.yCoord()) {
       Line line = new Line();
-      line.setStyle("-fx-stroke:" + penStyle);
+      line.setStyle("-fx-stroke:" + turtle.getPenColor());
       line.setTranslateX(-1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {

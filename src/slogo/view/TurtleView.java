@@ -3,12 +3,14 @@ package slogo.view;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Optional;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -17,6 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
+import javafx.scene.control.TextInputDialog;
 
 public class TurtleView extends Group {
   private double currX;
@@ -26,12 +29,15 @@ public class TurtleView extends Group {
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
+  private Label name;
 
   protected TurtleView(Image image) {
     turtleImage = new ImageView(image);
     getChildren().addAll(turtleImage);
     this.currX = 0;
     this.currY = 0;
+    this.name = new Label("Turtle :)");
+    getChildren().add(name);
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
     setupContextMenu();
@@ -45,7 +51,8 @@ public class TurtleView extends Group {
     ContextMenu menu = new ContextMenu();
     MenuItem setPen = new MenuItem("Set Pen Color");
     MenuItem setImage = new MenuItem("Set Turtle Image");
-    menu.getItems().addAll(setPen, setImage);
+    MenuItem setName = new MenuItem("Set Turtle Name");
+    menu.getItems().addAll(setPen, setImage, setName);
     ColorPicker picker = new ColorPicker();
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().addAll(
@@ -72,9 +79,18 @@ public class TurtleView extends Group {
         e -> {
           File file = fileChooser.showOpenDialog(getScene().getWindow());
           if (file != null) {
-            turtleImage.setImage(new Image(file.toURI().toString()));
+            turtleImage.setImage(new Image(file.toURI().toString(), 200, 160, false, false));
           }
         });
+    setName.setOnAction( e -> {
+      TextInputDialog nameDialog = new TextInputDialog();
+      nameDialog.setTitle("Turtle Name");
+      nameDialog.setHeaderText("Enter Turtle Name");
+      Optional<String> res = nameDialog.showAndWait();
+      if (res.isPresent()) {
+        name.setText(res.get());
+      }
+    });
   }
   public double getCurrX() {
     return this.currX;

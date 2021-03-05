@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import slogo.events.TurtleRecord;
 
@@ -13,26 +16,41 @@ import slogo.events.TurtleRecord;
  *     <p>This class creates the window where the turtle moves. It extends the Pane class so that
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
-public class TurtleSandbox extends StackPane {
+public class TurtleSandbox extends BorderPane {
   private List<TurtleView> turtles;
   private StackPane lines;
+  private StackPane sandbox;
+  private HBox controls;
   private String penStyle = "#009624";
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox() {
     turtles = new ArrayList<>();
     lines = new StackPane();
-    getChildren().addAll(lines);
+    sandbox = new StackPane();
+    sandbox.getChildren().add(lines);
     addTurtle();
+    //getChildren().addAll(sandbox);
+    setCenter(sandbox);
     setSandboxColor("#03A9F4");
+    createControls();
     createMockData();
+  }
+
+  private void createControls() {
+    controls = new HBox();
+    Button button = new Button("Add Turtle");
+    button.setOnAction( e -> {
+      addTurtle();
+    });
+    controls.getChildren().add(button);
+    setBottom(controls);
   }
 
   private void addTurtle() {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
-    getChildren().addAll(turtle);
-
+    sandbox.getChildren().addAll(turtle);
   }
 
   private void createMockData() {
@@ -41,6 +59,13 @@ public class TurtleSandbox extends StackPane {
     demos.add(new TurtleRecord(0, 0, 100, -120)); // Flip Left
     demos.add(new TurtleRecord(0, 0, 130, -120)); // Flip Left
     demos.add(new TurtleRecord(0, 50, 150, -140)); // Flip Left
+
+    demos.add(new TurtleRecord(1, 0, 0, -180));
+    demos.add(new TurtleRecord(1, 0, -100, -180));
+    demos.add(new TurtleRecord(1, 0, -200, -180));
+    demos.add(new TurtleRecord(1, 0, -200, -90));
+    demos.add(new TurtleRecord(1, 100, -200, -90));
+
     demos.add(new TurtleRecord(0, 100, 100, -90)); // Left 100
     demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Up
     demos.add(new TurtleRecord(0, 100, 200, 0)); // Up 100
@@ -51,6 +76,7 @@ public class TurtleSandbox extends StackPane {
     demos.add(new TurtleRecord(0, 200, 100, 90));
     demos.add(new TurtleRecord(0, 100, 100, 90));
     demos.add(new TurtleRecord(0, 300, 400, 90));
+
     Button button = new Button("DEMO");
     button.setOnAction(
         (e) -> {
@@ -58,7 +84,7 @@ public class TurtleSandbox extends StackPane {
             updateTurtle(demos.remove(0));
           }
         });
-    getChildren().addAll(button);
+    controls.getChildren().addAll(button);
   }
 
   public void setSandboxColor(String color) {

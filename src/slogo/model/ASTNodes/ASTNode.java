@@ -54,6 +54,13 @@ public abstract class ASTNode {
   }
 
   /**
+   * Get current number of children of this node
+   */
+  public int getNumChildren() {
+    return children.size();
+  }
+
+  /**
    * This method evaluates a command and returns in value most ASTNodes will call this method on
    * their children as well.
    *

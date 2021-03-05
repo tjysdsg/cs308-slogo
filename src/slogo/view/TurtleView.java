@@ -12,11 +12,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.Group;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
 
-public class TurtleView extends StackPane {
+public class TurtleView extends Group {
   private double currX;
   public static double ANIMATION_SPEED = 200;
   private double currY;

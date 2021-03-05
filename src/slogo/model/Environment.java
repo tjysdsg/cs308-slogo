@@ -28,7 +28,7 @@ public class Environment implements TrackableEnvironment {
     lookupTable = new HashMap<>();
 
     turtles = new ArrayList<>();
-    turtles.add(new Turtle(executionEnvironment));
+    turtles.add(new Turtle(currTurtle, executionEnvironment));
     currTurtle = 0;
   }
 
@@ -57,9 +57,10 @@ public class Environment implements TrackableEnvironment {
    * Add a new turtle and switch to it
    */
   public void addTurtle() {
-    Turtle turtle = new Turtle(executionEnvironment);
+    int size = turtles.size();
+    Turtle turtle = new Turtle(size, executionEnvironment);
     turtles.add(turtle);
-    currTurtle = turtles.size() - 1;
+    currTurtle = size;
   }
 
   public void setCurrTurtle(int currTurtle) {

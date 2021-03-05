@@ -1,5 +1,7 @@
 package slogo.model;
 
+import slogo.events.TurtleRecord;
+
 /**
  * Contains the information of the turtle, such as position and orientation.
  * <p>
@@ -9,20 +11,22 @@ package slogo.model;
  */
 public class Turtle {
 
+  private int id;
   private double x = 0;
   private double y = 0;
   private boolean visible = true;
   private double rotation = 0;
+  private boolean penDown = true;
   private InfoBundle env;
 
-  public Turtle(InfoBundle infoBundle) {
+  public Turtle(int id, InfoBundle infoBundle) {
     env = infoBundle;
+    this.id = id;
   }
 
-  /**
-   * Set coordinate of the turtle.
-   */
-  public void setXY(double x, double y) {
+  private void sendUpdate() {
+    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
+    env.notifyTurtleUpdate(record);
   }
 
   /**
@@ -32,20 +36,37 @@ public class Turtle {
    *                 counter-clockwise
    */
   public void rotate(double rotation) {
+    this.rotation = rotation;
+    sendUpdate();
   }
 
   /**
    * Move the turtle towards its the current orientation.
    *
-   * @param x Number of pixels to move.
+   * @param delta Number of pixels to move.
    */
-  public void move(double x) {
+  public void move(double delta) {
+    // TODO: test this
+    double deltaX = delta * Math.sin(rotation);
+    double deltaY = delta * Math.cos(rotation);
+
+    if (rotation > 90.0 && rotation < 270.0) {
+      deltaY = -deltaY;
+    }
+    if (rotation > 180.0) {
+      deltaX = -deltaX;
+    }
+    this.x += deltaX;
+    this.y += deltaY;
+    sendUpdate();
   }
 
   /**
    * Set absolute rotation.
    */
   public void setRotation(double rotation) {
+    this.rotation = rotation;
+    sendUpdate();
   }
 
   /**
@@ -54,6 +75,7 @@ public class Turtle {
   public void setPosition(double x, double y) {
     this.x = x;
     this.y = y;
+    sendUpdate();
   }
 
   /**
@@ -77,5 +99,15 @@ public class Turtle {
 
   public void setVisible(boolean visible) {
     this.visible = visible;
+    sendUpdate();
+  }
+
+  public void setPenDown(boolean penDown) {
+    this.penDown = penDown;
+    sendUpdate();
+  }
+
+  public boolean isPenDown() {
+    return this.penDown;
   }
 }

@@ -7,29 +7,25 @@ import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
-import javafx.application.Platform;
 
-public class Turtle extends ImageView {
+public class TurtleView extends ImageView {
   private double currX;
   public static double ANIMATION_SPEED = 200;
   private double currY;
   private double rotation;
   private Queue<Animation> animationQueue;
 
-  protected Turtle(Image image) {
+  protected TurtleView(Image image) {
     super(image);
     this.currX = 0;
     this.currY = 0;
     this.animationQueue = new LinkedList<>();
   }
 
-  public Turtle() {
+  public TurtleView() {
     this(new Image(new File("data/images/logo.png").toURI().toString()));
   }
 

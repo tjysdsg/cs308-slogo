@@ -15,7 +15,7 @@ import slogo.events.TurtleRecord;
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
 public class TurtleSandbox extends StackPane {
-  private List<Turtle> turtles;
+  private List<TurtleView> turtles;
   private StackPane lines;
   private String penStyle = "#009624";
 
@@ -32,7 +32,7 @@ public class TurtleSandbox extends StackPane {
   }
 
   private void addTurtle() {
-    Turtle turtle = new Turtle();
+    TurtleView turtle = new TurtleView();
     turtles.add(turtle);
     getChildren().addAll(turtle);
   }
@@ -42,16 +42,17 @@ public class TurtleSandbox extends StackPane {
     demos.add(new TurtleRecord(0, 0, 100, 0)); // Up 100
     demos.add(new TurtleRecord(0, 0, 100, -120)); // Flip Left
     demos.add(new TurtleRecord(0, 0, 130, -120)); // Flip Left
-    demos.add(new TurtleRecord(0, 0, 150, -140)); // Flip Left
+    demos.add(new TurtleRecord(0, 50, 150, -140)); // Flip Left
     demos.add(new TurtleRecord(0, 100, 100, -90)); // Left 100
     demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Up
     demos.add(new TurtleRecord(0, 100, 200, 0)); // Up 100
-    demos.add(new TurtleRecord(0, 100, 200, 0)); // Flip
+    demos.add(new TurtleRecord(0, 100, 200, 0));
     demos.add(new TurtleRecord(0, 200, 200, -90)); // Rotate Left
     demos.add(new TurtleRecord(0, 200, 200, -180)); // Rotate down
-    demos.add(new TurtleRecord(0, 200, 100, -180)); // Flip
-    demos.add(new TurtleRecord(0, 200, 100, 90)); // Flip
-    demos.add(new TurtleRecord(0, 100, 100, 90)); // Flip
+    demos.add(new TurtleRecord(0, 200, 100, -180));
+    demos.add(new TurtleRecord(0, 200, 100, 90)); 
+    demos.add(new TurtleRecord(0, 100, 100, 90));
+    demos.add(new TurtleRecord(0, 300, 400, 90)); 
     Button button = new Button("DEMO");
     button.setOnAction(
         (e) -> {
@@ -76,7 +77,7 @@ public class TurtleSandbox extends StackPane {
    * @param info
    */
   public void updateTurtle(TurtleRecord info) {
-    Turtle turtle = turtles.get(info.id());
+    TurtleView turtle = turtles.get(info.id());
     double tx = turtle.getCurrX();
     double ty = turtle.getCurrY();
     if (tx != info.xCoord() || ty != info.yCoord()) {

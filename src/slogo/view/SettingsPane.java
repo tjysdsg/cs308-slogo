@@ -1,5 +1,13 @@
 package slogo.view;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -12,8 +20,24 @@ import javafx.scene.layout.Pane;
  */
 
 public class SettingsPane extends Pane {
+  public static final int SIZE = 700;
+  private final ChoiceBox<String> languageList = new ChoiceBox();
+  private final ChoiceBox<String> turtleList = new ChoiceBox();
+
+  private HBox hbox;
+  private ColorPicker backgroundColorPicker;
+  private ColorPicker penColorPicker;
+  private Label penColorLabel;
+  private Label backgroundColorLabel;
+  private Label title;
+  GridPane penPane;
+  GridPane backgroundPane;
+  ResourceBundle resources;
 
   ViewController vcon;
+
+  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
+  public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
 
   /**
    * This method intializes a viewController object which defines method
@@ -24,7 +48,72 @@ public class SettingsPane extends Pane {
    */
   public SettingsPane(ViewController vcon) {
     this.vcon = vcon;
-  }
 }
+
+  public Pane createSettingsPane() {
+    createHbox();
+    return hbox;
+
+  }
+
+  private void createHbox(){
+    title = new Label();
+    title.setId("guiname");
+    createLanguageList();
+    createPenAndBackground();
+    createTurtleOptions();
+    hbox = new HBox(title, languageList,  turtleList, penPane,
+            backgroundPane);
+    displayLabels("English");
+    hbox.setSpacing(20);
+    hbox.setId("settingsPane");
+    //hbox.setMinSize(SIZE, SIZE);
+
+  }
+
+  private void createPenAndBackground() {
+    penPane = new GridPane();
+    penColorLabel = new Label();
+    penColorLabel.setId("penColorText");
+    penColorPicker = new ColorPicker();
+    vcon.setPenColor(penColorPicker);
+
+    penPane.add(penColorLabel, 0, 0);
+    penPane.add(penColorPicker, 1,0);
+    penPane.setHgap(10);
+    backgroundColorLabel =  new Label();
+    backgroundColorLabel.setId("backgroundText");
+    backgroundColorPicker = new ColorPicker();
+    backgroundPane = new GridPane();
+    backgroundPane.add(backgroundColorLabel, 0, 0);
+    backgroundPane.add(backgroundColorPicker, 1, 0);
+    backgroundPane.setHgap(10);
+    vcon.setBackground(backgroundColorPicker);
+
+  }
+
+  private void createTurtleOptions() {
+    List<String> turtles =  Arrays.asList("Happy", "Sad", "Angry", "Rainbow", "White");
+    turtleList.getItems().addAll(turtles);
+    turtleList.setValue("TurtleLogo");
+  }
+
+  private  void createLanguageList(){
+    List<String> languages =  Arrays.asList("English", "Chinese", "French", "German",
+        "Italian", "Portuguese", "Russian", "Spanish", "Urdu");
+    languageList.getItems().addAll(languages);
+    languageList.setValue("English");
+    vcon.setLanguage(languageList);
+  }
+
+  protected void displayLabels(String language){
+    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+    title.setText(resources.getString("title"));
+    penColorLabel.setText(resources.getString("penColorLabel"));
+    backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));
+  }
+
+
+  }
   
 

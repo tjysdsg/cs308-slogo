@@ -22,23 +22,23 @@ public abstract class ASTCommand extends ASTNamed {
 
   @Override
   protected void preEvaluate(InfoBundle info) {
-    int size = children.size();
+    int size = getNumChildren();
     if (size > numParams) {
-      throw new IncorrectParameterCountException(numParams, size, token);
+      throw new IncorrectParameterCountException(numParams, size, getToken());
     }
   }
 
   @Override
   public int addChild(ASTNode newChild) throws IncorrectParameterCountException {
-    int size = children.size();
+    int size = getNumChildren();
     if (size + 1 > numParams) {
-      throw new IncorrectParameterCountException(numParams, size, token);
+      throw new IncorrectParameterCountException(numParams, size, getToken());
     }
-    children.add(newChild);
+    super.addChild(newChild);
     return size + 1;
   }
 
   public boolean isDone() {
-    return numParams == children.size();
+    return numParams == getNumChildren();
   }
 }

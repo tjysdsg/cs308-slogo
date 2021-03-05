@@ -12,6 +12,6 @@ public abstract class ASTUnaryOperator extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    return calculate(children.get(0).evaluate(info));
+    return calculate(getChildAt(0).evaluate(info));
   }
 }

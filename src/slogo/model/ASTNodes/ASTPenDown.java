@@ -13,7 +13,7 @@ public class ASTPenDown extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    // TODO: make the pen down
+    info.getTurtle().setPenDown(true);
     return 1;
   }
 }

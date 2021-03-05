@@ -11,12 +11,12 @@ import slogo.model.InfoBundle;
  */
 public abstract class ASTNode {
 
-  protected List<ASTNode> children;
+  private List<ASTNode> children;
 
   /**
    * The original string we parsed from to create this node
    */
-  protected String token = "";
+  private String token = "";
 
   /**
    * Constructor

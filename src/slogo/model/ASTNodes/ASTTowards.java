@@ -15,8 +15,8 @@ public class ASTTowards extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    double x = children.get(0).evaluate(info);
-    double y = children.get(1).evaluate(info);
+    double x = getChildAt(0).evaluate(info);
+    double y = getChildAt(1).evaluate(info);
 
     Turtle turtle = info.getTurtle();
 

@@ -7,10 +7,13 @@ import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
+import javafx.application.Platform;
 
 /**
  * @author marthaaboagye
@@ -20,7 +23,13 @@ import slogo.events.TurtleRecord;
  */
 public class TurtleSandbox extends StackPane {
   private Queue<Animation> animationQueue;
+  private int ANIMATION_SPEED = 1;
   private ImageView turtle;
+  private StackPane lines;
+  // temp until moved to record
+  private double tx;
+  private double ty;
+  private double rot;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox() {
@@ -29,8 +38,9 @@ public class TurtleSandbox extends StackPane {
     Image image = new Image(file.toURI().toString());
     turtle = new ImageView(image);
     animationQueue = new LinkedList<>();
+    lines = new StackPane();
     setSandboxColor("#03A9F4");
-    getChildren().add(turtle);
+    getChildren().addAll(lines, turtle);
 
     createMockData();
   }
@@ -38,10 +48,26 @@ public class TurtleSandbox extends StackPane {
   private void addTurtle() {}
 
   private void createMockData() {
-    updateTurtle(new TurtleRecord(0, 0, 0, 180));
-    updateTurtle(new TurtleRecord(0, 0, -100, 0));
-    updateTurtle(new TurtleRecord(0, 0 , 0, -90));
-    updateTurtle(new TurtleRecord(0, 200, 0, 0));
+    LinkedList<TurtleRecord> demos = new LinkedList<>(); // lol cuz it's already imported
+    demos.add(new TurtleRecord(0, 0, 100, 0)); // Down 100
+    demos.add(new TurtleRecord(0, 0, 100, -90)); // Flip
+    demos.add(new TurtleRecord(0, 100, 100, -90)); // Right 100
+    demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Forward
+    demos.add(new TurtleRecord(0, 100, 200, 0)); // Up 100
+    demos.add(new TurtleRecord(0, 100, 200, 0)); // Flip
+    demos.add(new TurtleRecord(0, 200, 200, -90)); // Flip
+    demos.add(new TurtleRecord(0, 100, 200, -180)); // Flip
+    demos.add(new TurtleRecord(0, 200, 200, -180)); // Flip
+    demos.add(new TurtleRecord(0, 200, 100, -180)); // Flip
+    demos.add(new TurtleRecord(0, 200, 0, -180));
+    demos.add(new TurtleRecord(0, 0, 0, -180));
+    Button button = new Button("DEMO");
+    button.setOnAction( (e) -> { 
+      if (demos.size() > 0) {
+        updateTurtle(demos.remove(0));
+      }
+    });
+    getChildren().addAll(button);
   }
 
   private void addAnimation(Animation an) {
@@ -70,25 +96,39 @@ public class TurtleSandbox extends StackPane {
    * @param info
    */
   public void updateTurtle(TurtleRecord info) {
-    if (turtle.getRotate() != info.rotation()) {
-      RotateTransition rt = new RotateTransition(Duration.seconds(1), turtle);
-      rt.setByAngle(turtle.getRotate() - info.rotation());
+    if (rot != info.rotation()) {
+      RotateTransition rt = new RotateTransition(Duration.seconds(ANIMATION_SPEED), turtle);
+      rt.setByAngle(rot - info.rotation());
+      rot = info.rotation();
       addAnimation(rt);
     }
-    double tx = turtle.getTranslateX();
-    double ty = turtle.getTranslateY();
     if (tx != info.xCoord() || ty != info.yCoord()) {
       TranslateTransition moveTurtle = new TranslateTransition();
-      moveTurtle.setDuration(Duration.seconds(1));
+      moveTurtle.setDuration(Duration.seconds(ANIMATION_SPEED));
 
-    if (tx != info.xCoord()) {
-      moveTurtle.setToX(tx - info.xCoord());
-    } else {
-      moveTurtle.setToY(ty - info.yCoord());
-    }
+      Line line = new Line();
+      if (tx != info.xCoord()) {
+        moveTurtle.setToX(info.xCoord());
+        line.setTranslateX(tx / 2 + info.xCoord() / 2);
+        line.setTranslateY(-1 * info.yCoord());
+      } else if (ty != info.yCoord()) {
+        moveTurtle.setToY(-info.yCoord());
+        line.setTranslateX(tx);
+        line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);
+      }
+      line.setStartX(tx);
+      line.setStartY(ty);
+      line.setEndX(info.xCoord());
+      line.setEndY(info.yCoord());
 
-    moveTurtle.setNode(turtle);
-    addAnimation(moveTurtle);
+      line.setStrokeWidth(7);
+
+      lines.getChildren().addAll(line);
+
+      moveTurtle.setNode(turtle);
+      addAnimation(moveTurtle);
+      tx = info.xCoord();
+      ty = info.yCoord();
     }
   }
 }

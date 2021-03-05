@@ -1,10 +1,8 @@
 package slogo.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
-import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.events.CommandsRecord;
@@ -57,6 +55,15 @@ public class TurtleTest {
     testRotateAndMoveHelper(120.0, 100.0, 50 * Math.sqrt(3.0), -50.0);
     testRotateAndMoveHelper(240.0, 100.0, -50 * Math.sqrt(3.0), -50.0);
     testRotateAndMoveHelper(330.0, 100.0, -50.0, 50 * Math.sqrt(3.0));
+  }
+
+  @Test
+  void testMoveAndMove() {
+    turtle.move(10.0);
+    turtle.move(-10.0);
+    TurtleRecord record = infoBundle.getInfo();
+    assertEquals(0.0, record.xCoord());
+    assertEquals(0.0, record.yCoord());
   }
 
   class TestBundle implements InfoBundle {

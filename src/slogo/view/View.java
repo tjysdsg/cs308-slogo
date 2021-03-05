@@ -161,19 +161,8 @@ public class View {
 		 * the color the user picked from the display window
 		 * @param colorPicker - the color to set the background to.
 		 */
-		public void setPenColor(ColorPicker colorPicker) {
-
-			EventHandler<ActionEvent> pickPenColor = new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent e)
-				{
-					Color c = colorPicker.getValue();
-
-					// do something with the color.
-					System.out.println("Red = " + c.getRed() + ", Green = " + c.getGreen()
-							+ ", Blue = " + c.getBlue());
-				}
-			};
-			colorPicker.setOnAction(pickPenColor);
+		public void setPenColor(String color) {
+			System.out.println(color);
 		}
 
 		/**
@@ -189,22 +178,14 @@ public class View {
 		}
 
 		public void sendUserText(){
-			EventHandler<ActionEvent> sendUser = new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent e)
-				{
-					if (userText.getText()!=null) {
-						//send out string to the user.
-						System.out.print(userText.getText());
-					}
-					else{
-						//send error!
-					}
-
-
+			run.setOnAction(e -> {
+				if (userText.getText()!=null) {
+					modelCon.sendCommand(userText.getText());
 				}
-
-			};
-			run.setOnAction(sendUser);
+				else{
+					viewCon.sendAlert("Error", "STOSAPSGI");
+				}
+			});
 
 		}
 	}

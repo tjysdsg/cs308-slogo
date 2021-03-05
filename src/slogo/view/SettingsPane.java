@@ -76,7 +76,6 @@ public class SettingsPane extends Pane {
     penColorLabel = new Label();
     penColorLabel.setId("penColorText");
     penColorPicker = new ColorPicker();
-    vcon.setPenColor(penColorPicker);
 
     penPane.add(penColorLabel, 0, 0);
     penPane.add(penColorPicker, 1,0);
@@ -84,6 +83,11 @@ public class SettingsPane extends Pane {
     backgroundColorLabel =  new Label();
     backgroundColorLabel.setId("backgroundText");
     backgroundColorPicker = new ColorPicker();
+
+    backgroundColorPicker.setOnAction( e -> {
+      vcon.setPenColor(backgroundColorPicker.getValue().toString());
+    });
+
     backgroundPane = new GridPane();
     backgroundPane.add(backgroundColorLabel, 0, 0);
     backgroundPane.add(backgroundColorPicker, 1, 0);

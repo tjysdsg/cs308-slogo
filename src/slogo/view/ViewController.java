@@ -26,7 +26,7 @@ public interface ViewController {
    * Set the turtle pen color for the view.
    * @param colorPicker - The color to set pen to.
    */
-  void setPenColor(ColorPicker colorPicker);
+  void setPenColor(String color);
 
   /**
    * Set the turtle logo color for the view.

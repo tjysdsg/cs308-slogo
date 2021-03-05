@@ -8,19 +8,22 @@ import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
 
-public class TurtleView extends ImageView {
+public class TurtleView extends StackPane {
   private double currX;
   public static double ANIMATION_SPEED = 200;
   private double currY;
   private double rotation;
+  private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
 
   protected TurtleView(Image image) {
-    super(image);
+    turtleImage = new ImageView(image);
+    getChildren().addAll(turtleImage);
     this.currX = 0;
     this.currY = 0;
     this.animationQueue = new LinkedList<>();
@@ -53,7 +56,7 @@ public class TurtleView extends ImageView {
 
   public void update(TurtleRecord info) {
     if (getCurrRot() != info.rotation()) {
-      RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), this);
+      RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
       this.rotation = info.rotation();
       addAnimation(rt);
@@ -65,11 +68,11 @@ public class TurtleView extends ImageView {
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
       if (tx != info.xCoord()) {
         moveTurtle.setToX(-info.xCoord());
-      } 
+      }
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());
       }
-      moveTurtle.setNode(this);
+      moveTurtle.setNode(turtleImage);
       addAnimation(moveTurtle);
       this.currX = info.xCoord();
       this.currY = info.yCoord();

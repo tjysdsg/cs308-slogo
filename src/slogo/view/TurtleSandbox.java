@@ -1,9 +1,11 @@
 package slogo.view;
 
+import com.jfoenix.controls.JFXColorPicker;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import slogo.events.TurtleRecord;
@@ -25,8 +27,6 @@ public class TurtleSandbox extends StackPane {
     lines = new StackPane();
     getChildren().addAll(lines);
     addTurtle();
-    ContextMenu menu = new ContextMenu();
-
     setSandboxColor("#03A9F4");
     createMockData();
   }
@@ -35,6 +35,12 @@ public class TurtleSandbox extends StackPane {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
     getChildren().addAll(turtle);
+
+    ContextMenu menu = new ContextMenu();
+    MenuItem setPen = new MenuItem("Set Pen Color");
+    MenuItem setImage = new MenuItem("Set Turtle Image");
+    menu.getItems().addAll(setPen, setImage);
+    turtle.setOnContextMenuRequested(e -> menu.show(turtle, e.getScreenX(), e.getScreenY()));
   }
 
   private void createMockData() {
@@ -50,9 +56,9 @@ public class TurtleSandbox extends StackPane {
     demos.add(new TurtleRecord(0, 200, 200, -90)); // Rotate Left
     demos.add(new TurtleRecord(0, 200, 200, -180)); // Rotate down
     demos.add(new TurtleRecord(0, 200, 100, -180));
-    demos.add(new TurtleRecord(0, 200, 100, 90)); 
+    demos.add(new TurtleRecord(0, 200, 100, 90));
     demos.add(new TurtleRecord(0, 100, 100, 90));
-    demos.add(new TurtleRecord(0, 300, 400, 90)); 
+    demos.add(new TurtleRecord(0, 300, 400, 90));
     Button button = new Button("DEMO");
     button.setOnAction(
         (e) -> {
@@ -91,7 +97,6 @@ public class TurtleSandbox extends StackPane {
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);
       }
-      //line.setRotate(turtle.getCurrRot());
 
       line.setStartX(tx);
       line.setStartY(ty);

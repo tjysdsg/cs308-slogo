@@ -13,7 +13,11 @@ public class Turtle {
   private double y = 0;
   private boolean visible = true;
   private double rotation = 0;
-  private InfoBundle env; // FIXME: turtle probably shouldn't have this - Jiyang
+  private InfoBundle env;
+
+  public Turtle(InfoBundle infoBundle) {
+    env = infoBundle;
+  }
 
   /**
    * Set coordinate of the turtle.

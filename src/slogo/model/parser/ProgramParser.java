@@ -60,7 +60,8 @@ public class ProgramParser implements Parser {
     }
 
     if (nodeStack.size() != 1 | !nodeStack.peek().isDone()) {
-      throw new IncorrectParameterCountException(4, 3, "blorp");
+      ASTNode problem = nodeStack.peek();
+      throw new IncorrectParameterCountException(problem.getNumParams(), problem.getNumChildren(), problem.getToken());
     }
 
     return nodeStack.pop();

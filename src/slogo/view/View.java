@@ -52,6 +52,7 @@ public class View {
 	 * @param modelCon
 	 */
 	public View(Stage stage, ModelController modelCon) {
+		stage.setTitle("floating");
 		this.modelCon = modelCon;
 		this.environment = EnvironmentFactory.createEnvironment();
 		viewCon = new ViewBundle();

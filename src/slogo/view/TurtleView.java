@@ -6,9 +6,13 @@ import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
 
@@ -28,6 +32,30 @@ public class TurtleView extends StackPane {
     this.currY = 0;
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
+    setupContextMenu();
+  }
+
+  public void setupContextMenu() {
+    ContextMenu menu = new ContextMenu();
+    MenuItem setPen = new MenuItem("Set Pen Color");
+    MenuItem setImage = new MenuItem("Set Turtle Image");
+    menu.getItems().addAll(setPen, setImage);
+    ColorPicker picker = new ColorPicker();
+    picker.setVisible(false);
+    getChildren().add(picker);
+    picker.setOnAction(
+        (event) -> {
+          setPenColor("#" + picker.getValue().toString().substring(2));
+          picker.setVisible(false);
+        });
+    turtleImage.setOnContextMenuRequested(
+        e -> menu.show(turtleImage, e.getScreenX(), e.getScreenY()));
+
+    setPen.setOnAction(
+        e -> {
+          picker.setVisible(true);
+          picker.show();
+        });
   }
 
   public TurtleView() {
@@ -72,7 +100,7 @@ public class TurtleView extends StackPane {
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());
       }
-      moveTurtle.setNode(turtleImage);
+      moveTurtle.setNode(this);
       addAnimation(moveTurtle);
       this.currX = info.xCoord();
       this.currY = info.yCoord();

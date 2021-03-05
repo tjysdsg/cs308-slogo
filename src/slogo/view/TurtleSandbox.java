@@ -1,11 +1,8 @@
 package slogo.view;
 
-import com.jfoenix.controls.JFXColorPicker;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import slogo.events.TurtleRecord;
@@ -36,11 +33,6 @@ public class TurtleSandbox extends StackPane {
     turtles.add(turtle);
     getChildren().addAll(turtle);
 
-    ContextMenu menu = new ContextMenu();
-    MenuItem setPen = new MenuItem("Set Pen Color");
-    MenuItem setImage = new MenuItem("Set Turtle Image");
-    menu.getItems().addAll(setPen, setImage);
-    turtle.setOnContextMenuRequested(e -> menu.show(turtle, e.getScreenX(), e.getScreenY()));
   }
 
   private void createMockData() {

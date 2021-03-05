@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.shape.Line;
 import slogo.events.TurtleRecord;
 
@@ -24,6 +25,7 @@ public class TurtleSandbox extends StackPane {
     lines = new StackPane();
     getChildren().addAll(lines);
     addTurtle();
+    ContextMenu menu = new ContextMenu();
 
     setSandboxColor("#03A9F4");
     createMockData();
@@ -37,19 +39,17 @@ public class TurtleSandbox extends StackPane {
 
   private void createMockData() {
     List<TurtleRecord> demos = new ArrayList<>();
-    demos.add(new TurtleRecord(0, 0, 100, 0)); // Down 100
-    demos.add(new TurtleRecord(0, 0, 100, -90)); // Flip
-    demos.add(new TurtleRecord(0, 100, 100, -90)); // Right 100
-    demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Forward
+    demos.add(new TurtleRecord(0, 0, 100, 0)); // Up 100
+    demos.add(new TurtleRecord(0, 0, 100, -90)); // Flip Left
+    demos.add(new TurtleRecord(0, 100, 100, -90)); // Left 100
+    demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Up
     demos.add(new TurtleRecord(0, 100, 200, 0)); // Up 100
     demos.add(new TurtleRecord(0, 100, 200, 0)); // Flip
-    demos.add(new TurtleRecord(0, 200, 200, -90)); // Flip
-    demos.add(new TurtleRecord(0, 100, 200, -180)); // Flip
-    demos.add(new TurtleRecord(0, 200, 200, -180)); // Flip
+    demos.add(new TurtleRecord(0, 200, 200, -90)); // Rotate Left
+    demos.add(new TurtleRecord(0, 200, 200, -180)); // Rotate down 
     demos.add(new TurtleRecord(0, 200, 100, -180)); // Flip
-    demos.add(new TurtleRecord(0, 200, 0, -180));
-    demos.add(new TurtleRecord(0, 200, 0, 90));
-    demos.add(new TurtleRecord(0, 0, 0, 90));
+    demos.add(new TurtleRecord(0, 200, 100, 90)); // Flip
+    demos.add(new TurtleRecord(0, 100, 100, 90)); // Flip
     Button button = new Button("DEMO");
     button.setOnAction(
         (e) -> {
@@ -80,10 +80,10 @@ public class TurtleSandbox extends StackPane {
     if (tx != info.xCoord() || ty != info.yCoord()) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + penStyle);
-      line.setTranslateX(tx);
+      line.setTranslateX(-1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
-        line.setTranslateX(tx / 2 + info.xCoord() / 2);
+        line.setTranslateX(-1 * tx / 2 - info.xCoord() / 2);
       } 
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);

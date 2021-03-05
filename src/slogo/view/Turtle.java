@@ -27,10 +27,6 @@ public class Turtle extends ImageView {
     this.currX = 0;
     this.currY = 0;
     this.animationQueue = new LinkedList<>();
-    setOnMouseClicked(
-        e -> {
-          System.out.println("YAA!");
-        });
   }
 
   public Turtle() {
@@ -52,7 +48,7 @@ public class Turtle extends ImageView {
   public void update(TurtleRecord info) {
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), this);
-      rt.setByAngle(getCurrRot() - info.rotation());
+      rt.setByAngle(info.rotation() - getCurrRot());
       this.rotation = info.rotation();
       addAnimation(rt);
     }
@@ -62,7 +58,7 @@ public class Turtle extends ImageView {
       TranslateTransition moveTurtle = new TranslateTransition();
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
       if (tx != info.xCoord()) {
-        moveTurtle.setToX(info.xCoord());
+        moveTurtle.setToX(-info.xCoord());
       } 
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());

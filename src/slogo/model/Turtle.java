@@ -46,16 +46,10 @@ public class Turtle {
    * @param delta Number of pixels to move.
    */
   public void move(double delta) {
-    // TODO: test this
-    double deltaX = delta * Math.sin(rotation);
-    double deltaY = delta * Math.cos(rotation);
+    double rad = Math.toRadians(rotation);
+    double deltaX = delta * Math.sin(rad);
+    double deltaY = delta * Math.cos(rad);
 
-    if (rotation > 90.0 && rotation < 270.0) {
-      deltaY = -deltaY;
-    }
-    if (rotation > 180.0) {
-      deltaX = -deltaX;
-    }
     this.x += deltaX;
     this.y += deltaY;
     sendUpdate();

@@ -23,7 +23,7 @@ import javafx.application.Platform;
  */
 public class TurtleSandbox extends StackPane {
   private Queue<Animation> animationQueue;
-  private int ANIMATION_SPEED = 1;
+  private double ANIMATION_SPEED = 500;
   private ImageView turtle;
   private StackPane lines;
   // temp until moved to record
@@ -98,14 +98,14 @@ public class TurtleSandbox extends StackPane {
    */
   public void updateTurtle(TurtleRecord info) {
     if (rot != info.rotation()) {
-      RotateTransition rt = new RotateTransition(Duration.seconds(ANIMATION_SPEED), turtle);
+      RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtle);
       rt.setByAngle(rot - info.rotation());
       rot = info.rotation();
       addAnimation(rt);
     }
     if (tx != info.xCoord() || ty != info.yCoord()) {
       TranslateTransition moveTurtle = new TranslateTransition();
-      moveTurtle.setDuration(Duration.seconds(ANIMATION_SPEED));
+      moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
 
       Line line = new Line();
       if (tx != info.xCoord()) {

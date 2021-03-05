@@ -1,10 +1,8 @@
 package slogo.model.ASTNodes;
 
-import java.util.Random;
-
 public class ASTSin extends ASTUnaryOperator {
 
-  private static final String NAME = "sin";
+  private static final String NAME = "sine";
 
   public ASTSin() {
     super(NAME);

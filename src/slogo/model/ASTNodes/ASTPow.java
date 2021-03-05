@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTPow extends ASTBinaryOperator {
 
-  private static final String NAME = "pow";
+  private static final String NAME = "power";
 
   public ASTPow() {
     super(NAME);

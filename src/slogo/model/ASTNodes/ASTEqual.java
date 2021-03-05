@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTEqual extends ASTBinaryOperator {
 
-  private static final String NAME = "equal?";
+  private static final String NAME = "equal";
 
   public ASTEqual() {
     super(NAME);

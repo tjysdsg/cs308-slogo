@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTLess extends ASTBinaryOperator {
 
-  private static final String NAME = "less?";
+  private static final String NAME = "lessthan";
 
   public ASTLess() {
     super(NAME);

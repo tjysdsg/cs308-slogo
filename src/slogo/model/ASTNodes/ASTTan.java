@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTTan extends ASTUnaryOperator {
 
-  private static final String NAME = "tan";
+  private static final String NAME = "tangent";
 
   public ASTTan() {
     super(NAME);

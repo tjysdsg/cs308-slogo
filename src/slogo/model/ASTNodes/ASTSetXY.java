@@ -7,7 +7,7 @@ import slogo.model.Vec2D;
 public class ASTSetXY extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "setxy";
+  private static final String NAME = "setposition";
 
   public ASTSetXY() {
     super(NAME, NUM_PARAMS);

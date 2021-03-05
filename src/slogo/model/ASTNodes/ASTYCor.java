@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTYCor extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "ycor";
+  private static final String NAME = "ycoordinate";
 
   public ASTYCor() {
     super(NAME, NUM_PARAMS);

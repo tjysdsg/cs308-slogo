@@ -7,7 +7,7 @@ import slogo.model.Vec2D;
 public class ASTTowards extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "towards";
+  private static final String NAME = "settowards";
 
   public ASTTowards() {
     super(NAME, NUM_PARAMS);

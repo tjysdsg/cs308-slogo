@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTGreater extends ASTBinaryOperator {
 
-  private static final String NAME = "greater?";
+  private static final String NAME = "greaterthan";
 
   public ASTGreater() {
     super(NAME);

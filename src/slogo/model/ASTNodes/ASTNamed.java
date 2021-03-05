@@ -10,5 +10,8 @@ public abstract class ASTNamed extends ASTNode {
     this.name = name;
   }
 
+  public String getName() {
+    return name;
+  }
 
 }

@@ -59,7 +59,7 @@ public class ProgramParser implements Parser {
       }
     }
 
-    if (nodeStack.size() != 1) {
+    if (nodeStack.size() != 1 | !nodeStack.peek().isDone()) {
       throw new IncorrectParameterCountException(4, 3, "blorp");
     }
 
@@ -78,7 +78,7 @@ public class ProgramParser implements Parser {
 
   public static void main(String[] args) {
     Parser myParser = new ProgramParser("English");
-    ASTNode res = myParser.parseCommand("+ 50 50");
+    ASTNode res = myParser.parseCommand("+ + 50 50");
   }
 
   public void printStack(Stack<ASTCommand> myStack) {

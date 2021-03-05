@@ -30,6 +30,7 @@ public class TurtleSandbox extends StackPane {
   private double tx;
   private double ty;
   private double rot;
+  private String penStyle;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox() {
@@ -91,6 +92,10 @@ public class TurtleSandbox extends StackPane {
     setStyle("-fx-background-color: " + color);
   }
 
+  public void setPenColor(String color) {
+    penStyle =  color;
+  }
+
   /**
    * This method updates turtles position after the user command is executed on the backend.
    *
@@ -108,6 +113,7 @@ public class TurtleSandbox extends StackPane {
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
 
       Line line = new Line();
+      line.setStyle("-fx-stroke:" + penStyle);
       if (tx != info.xCoord()) {
         moveTurtle.setToX(info.xCoord());
         line.setTranslateX(tx / 2 + info.xCoord() / 2);

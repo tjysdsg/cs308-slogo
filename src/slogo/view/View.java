@@ -24,21 +24,21 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
-  public static final int SIZE = 700;
+  public static final int SIZE = 1000;
   private Insets layoutPadding = new Insets(10);
 
-	ModelController modelCon;
-	TrackableEnvironment environment;
-	ViewController viewCon;
-	EnvironmentPane environmentPane;
-	HelpPane helpPane;
-	TurtleSandbox turtleSandbox;
-	Pane settingsPane;
-	Pane commandPane;
-	Scene scene;
-	BorderPane borderPane;
-	TextField userText;
-	Button run;
+	private ModelController modelCon;
+	private TrackableEnvironment environment;
+	private ViewController viewCon;
+	private EnvironmentPane environmentPane;
+	private HelpPane helpPane;
+	private TurtleSandbox turtleSandbox;
+	private Pane settingsPane;
+	private Pane commandPane;
+	private Scene scene;
+	private BorderPane borderPane;
+	private TextField userText;
+	private Button run;
 	private static final String STYLESHEET = "gui.css";
 	private static final String RESOURCE_PACKAGE = "slogo.view.resources.";
 	private static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
@@ -121,7 +121,8 @@ public class View {
 		 * @param color - The color to set the background to.
 		 */
 		public void setBackground(String color) {
-
+			color = "#" + color.substring(2);
+			turtleSandbox.setSandboxColor(color);
 		}
 
 		/**
@@ -140,7 +141,8 @@ public class View {
 		 * @param color - the color to set the background to.
 		 */
 		public void setPenColor(String color) {
-			System.out.println(color);
+			color = "#" + color.substring(2);
+			turtleSandbox.setPenColor(color);
 		}
 
 		/**

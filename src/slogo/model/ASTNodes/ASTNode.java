@@ -54,6 +54,13 @@ public abstract class ASTNode {
   }
 
   /**
+   * Get child node at index `idx`
+   */
+  public ASTNode getChildAt(int idx) {
+    return children.get(idx);
+  }
+
+  /**
    * Get current number of children of this node
    */
   public int getNumChildren() {

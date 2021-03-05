@@ -21,14 +21,21 @@ public class ParserTest {
     parser = new ProgramParser("English");
   }
 
+  void printTestHeading(String command) {
+    System.out.println("Testing command: ");
+    System.out.println("=================");
+    System.out.println(command);
+    System.out.println("=================");
+  }
+
   void binaryOperationTestHelper(String command, double value1, double value2) {
     ASTNode tree = parser.parseCommand(command);
     assertEquals(2, tree.getNumChildren());
 
     var child1 = (ASTNumberLiteral) tree.getChildAt(0);
     var child2 = (ASTNumberLiteral) tree.getChildAt(1);
-    assertEquals(value1, child1.getValue());
-    assertEquals(value2, child2.getValue());
+    assertEquals(value1, child1.getValue(), 1E-5);
+    assertEquals(value2, child2.getValue(), 1E-5);
   }
 
   @Test
@@ -45,7 +52,7 @@ public class ParserTest {
       double a = rand.nextDouble() * 200.0 - 100.0;
       double b = rand.nextDouble() * 200.0 - 100.0;
       String cmd = String.format("\t%s %f \t\n %f\n", command, a, b);
-      System.out.println("Testing command: " + cmd);
+      printTestHeading(cmd);
       binaryOperationTestHelper(cmd, a, b);
     }
   }

@@ -7,6 +7,7 @@ import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
 
 public class ProgramParser implements Parser {
+
   private final ASTCommandFactory factory = new ASTCommandFactory();
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
@@ -26,12 +27,16 @@ public class ProgramParser implements Parser {
     int expLevel = 0;
 
     for (String token : lines) {
-      if (token.trim().length() > 0) {
+      // trim all whitespaces
+      // token.trim() doesn't work for symbols such as \t
+      // https://stackoverflow.com/a/15633284/7730917
+      token = token.replaceAll("\\s+", "");
+      if (token.length() > 0) {
         type = tc.getSymbol(token);
         System.out.printf("Token:%s, Type:%s\n", token, type);
 
         //TODO: Must refactor to become better designed and avoid duplication
-        switch(type) {
+        switch (type) {
           case "Constant" -> {
             nodeStack.peek().addChild(new ASTNumberLiteral(Double.parseDouble(token)));
           }
@@ -39,8 +44,9 @@ public class ProgramParser implements Parser {
           case "Command" -> {
             String commandName = cc.getSymbol(token);
             ASTCommand newCommand = factory.getCommand(commandName);
-            if (!nodeStack.isEmpty())
+            if (!nodeStack.isEmpty()) {
               nodeStack.peek().addChild(newCommand);
+            }
             nodeStack.push(newCommand);
           }
 
@@ -48,8 +54,12 @@ public class ProgramParser implements Parser {
             nodeStack.peek().addChild(new ASTVariable(token));
           }
 
-          case "ListStart" -> { expLevel++; }
-          case"ListEnd" -> { expLevel--; }
+          case "ListStart" -> {
+            expLevel++;
+          }
+          case "ListEnd" -> {
+            expLevel--;
+          }
 
           default -> throw new InvalidSyntaxException(token, command);
         }
@@ -61,7 +71,8 @@ public class ProgramParser implements Parser {
 
     if (nodeStack.size() != 1 | !nodeStack.peek().isDone()) {
       ASTNode problem = nodeStack.peek();
-      throw new IncorrectParameterCountException(problem.getNumParams(), problem.getNumChildren(), problem.getToken());
+      throw new IncorrectParameterCountException(problem.getNumParams(), problem.getNumChildren(),
+          problem.getToken());
     }
 
     return nodeStack.pop();

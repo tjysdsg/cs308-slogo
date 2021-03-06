@@ -50,9 +50,8 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void runCommand(String command) {
-    // TODO
     ASTNode commandTree = myParser.parseCommand(command);
-//    commandTree.evaluate();
+    commandTree.evaluate(executionEnvironment);
   }
 
   @Override

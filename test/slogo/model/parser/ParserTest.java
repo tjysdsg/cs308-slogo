@@ -19,10 +19,12 @@ public class ParserTest {
 
   private Parser parser;
   private static final double FLOATING_POINT_EPSILON = 1E-5;
+  private CommandClassifier commandClassifier;
 
   @BeforeEach
   void setUp() {
     parser = new ProgramParser("English");
+    commandClassifier = new CommandClassifier("English");
   }
 
   void printTestCommand(String command) {
@@ -37,6 +39,7 @@ public class ParserTest {
   }
 
   void checkCommandType(ASTNode node, String command) {
+    command = commandClassifier.getSymbol(command);
     assertTrue(node instanceof ASTCommand);
     assertEquals(command.toLowerCase(), ((ASTCommand) node).getName().toLowerCase());
   }

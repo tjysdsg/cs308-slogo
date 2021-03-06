@@ -1,5 +1,5 @@
 #guiname {
-  -fx-font-size: 16pt;
+  -fx-font-size: 30pt;
   -fx-font-family: "American Typewriter";
   -fx-base: white;
   -fx-alignment: center;
@@ -16,6 +16,16 @@
 
 .color-picker >.arrow-button{
   -fx-font-size: 7px;
+}
+
+/*#helpWindow{*/
+/*-fx-border-color: black;*/
+/*-fx-border-width: 3;*/
+/*}*/
+
+#helpLabel{
+  -fx-font-size: 18px;
+
 }
 
 

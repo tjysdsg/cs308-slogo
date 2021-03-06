@@ -24,7 +24,7 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
-  public static final int SIZE = 1000;
+  private static final int SIZE = 1200;
   private Insets layoutPadding = new Insets(10);
 
 	private ModelController modelCon;
@@ -68,7 +68,7 @@ public class View {
 		helpPane = new HelpPane();
 		turtleSandbox = new TurtleSandbox();
 		commandPane = makeBottomPane();
-		settingsPane = new SettingsPane(viewCon).createSettingsPane();
+		settingsPane = new SettingsPane(viewCon);
 		borderPane = new BorderPane();
 		Scene newScene = new Scene(borderPane, SIZE, SIZE);
 
@@ -90,9 +90,11 @@ public class View {
 		run =  new Button();
 		changeTextInstruction("English");
 		userText.setOnMouseClicked(event -> userText.clear());
-		userText.setPrefSize(.9*SIZE, .05*SIZE);
+		userText.setMinSize(.558*SIZE, .05*SIZE);
+		run.setPrefSize(.05*SIZE,.05*SIZE);
 		pane.add(userText, 0, 0);
 		pane.add(run, 1, 0);
+		pane.setTranslateX(250);//define size of sides as parameter
 		viewCon.sendUserText();
 
 
@@ -132,6 +134,7 @@ public class View {
 		 */
 		public void setLanguage(String language) {
 					changeTextInstruction(language);
+				((HelpPane) helpPane).createDisplayLanguages(language);
 		}
 
 

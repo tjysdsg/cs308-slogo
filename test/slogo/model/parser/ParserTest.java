@@ -99,4 +99,9 @@ public class ParserTest {
       unaryOperationTestHelper(str, command, a);
     }
   }
+
+  @Test
+  void testBasicContruction() {
+
+  }
 }

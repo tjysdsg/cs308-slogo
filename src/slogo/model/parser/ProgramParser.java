@@ -23,13 +23,17 @@ public class ProgramParser implements Parser {
       throws UnknownCommandException, InvalidSyntaxException, IncorrectParameterCountException {
     List<String> lines = Arrays.asList(command.split(SPLITTER));
     String type;
-    Stack<ASTCommand> nodeStack = new Stack<>();
+    Stack<Stack<ASTCommand>> scopeStack = new Stack<>();
+    scopeStack.push(new Stack<>());
+    Stack<ASTCommand> nodeStack;
     int expLevel = 0;
 
     for (String token : lines) {
       // trim all whitespaces
       // token.trim() doesn't work for symbols such as \t
       // https://stackoverflow.com/a/15633284/7730917
+      nodeStack = scopeStack.peek();
+
       token = token.replaceAll("\\s+", "");
       if (token.length() > 0) {
         type = tc.getSymbol(token);
@@ -56,9 +60,19 @@ public class ProgramParser implements Parser {
 
           case "ListStart" -> {
             expLevel++;
+            scopeStack.push(new Stack<>());
           }
+
           case "ListEnd" -> {
             expLevel--;
+
+            if (stackHasError(nodeStack)) {
+              throw new IncorrectParameterCountException(nodeStack.peek());
+            }
+
+            scopeStack.pop();
+            nodeStack = scopeStack.peek();
+            nodeStack.peek().addChild(nodeStack.peek());
           }
 
           default -> throw new InvalidSyntaxException(token, command);
@@ -69,10 +83,10 @@ public class ProgramParser implements Parser {
       }
     }
 
-    if (nodeStack.size() != 1 | !nodeStack.peek().isDone()) {
+    nodeStack = scopeStack.peek();
+    if (stackHasError(nodeStack)) {
       ASTNode problem = nodeStack.peek();
-      throw new IncorrectParameterCountException(problem.getNumParams(), problem.getNumChildren(),
-          problem.getToken());
+      throw new IncorrectParameterCountException(problem);
     }
 
     return nodeStack.pop();
@@ -90,12 +104,16 @@ public class ProgramParser implements Parser {
 
   public static void main(String[] args) {
     Parser myParser = new ProgramParser("English");
-    ASTNode res = myParser.parseCommand("+ + 50 50");
+    ASTNode res = myParser.parseCommand("fd fd fd fd fd fd 50");
   }
 
   public void printStack(Stack<ASTCommand> myStack) {
     for (ASTCommand item : myStack) {
       System.out.println(item.getClass().getName());
     }
+  }
+
+  private boolean stackHasError(Stack<ASTCommand> nodeStack) {
+    return nodeStack.size() != 1 | !nodeStack.peek().isDone();
   }
 }

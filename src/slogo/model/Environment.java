@@ -12,6 +12,8 @@ import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.parser.Parser;
+import slogo.model.parser.ProgramParser;
 
 public class Environment implements TrackableEnvironment {
 
@@ -22,11 +24,14 @@ public class Environment implements TrackableEnvironment {
   private UpdateTurtle updateTurtleCallback;
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
+  private Parser myParser;
+
+  private static final String DEFAULT_LANG = "English";
 
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
     lookupTable = new HashMap<>();
-
+    myParser = new ProgramParser(DEFAULT_LANG);
     turtles = new ArrayList<>();
     turtles.add(new Turtle(currTurtle, executionEnvironment));
     currTurtle = 0;
@@ -46,6 +51,8 @@ public class Environment implements TrackableEnvironment {
 
   public void runCommand(String command) {
     // TODO
+    ASTNode commandTree = myParser.parseCommand(command);
+//    commandTree.evaluate();
   }
 
   @Override

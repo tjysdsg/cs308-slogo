@@ -6,7 +6,8 @@ import java.lang.reflect.Modifier;
 import slogo.model.ASTNodes.ASTCommand;
 
 public class ASTCommandFactory {
-  public static final String packagePath = ASTCommandFactory.class.getPackageName() + ".";
+  // FIXME: Find better way of referencing the root package of ASTNode
+  public static final String packagePath = "slogo.model.ASTNodes.";
   public static final String dirPath = "src/" + packagePath.replace(".", "/") + "/";
 
   public ASTCommandFactory() {

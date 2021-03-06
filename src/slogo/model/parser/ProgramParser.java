@@ -104,7 +104,7 @@ public class ProgramParser implements Parser {
 
   public static void main(String[] args) {
     Parser myParser = new ProgramParser("English");
-    ASTNode res = myParser.parseCommand("fd fd fd fd fd fd 50");
+    ASTNode res = myParser.parseCommand("MINUS 1");
   }
 
   public void printStack(Stack<ASTCommand> myStack) {

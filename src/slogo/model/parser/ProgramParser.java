@@ -20,7 +20,7 @@ public class ProgramParser implements Parser {
   //TODO: Add Expression Handling and Logic for Errors
 
   public ASTNode parseCommand(String command)
-      throws UnknownCommandException, InvalidSyntaxException, IncorrectParameterCountException {
+      throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
     List<String> lines = Arrays.asList(command.split(SPLITTER));
     String type;
     Stack<Stack<ASTCommand>> scopeStack = new Stack<>();

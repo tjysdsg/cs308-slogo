@@ -18,6 +18,10 @@ public class ASTNumberLiteral extends ASTNode {
     return value;
   }
 
+  public void setValue(double value) {
+    this.value = value;
+  }
+
   @Override
   public double doEvaluate(InfoBundle info) {
     return this.value;

@@ -12,11 +12,11 @@ public interface Parser {
    *
    * @param command the string to parse
    * @return The ASTNode created by the command
-   * @throws UnknownCommandException
+   * @throws UnknownIdentifierException
    * @throws InvalidSyntaxException
    * @throws IncorrectParameterCountException
    */
-  public ASTNode parseCommand(String command) throws UnknownCommandException, InvalidSyntaxException, IncorrectParameterCountException;
+  public ASTNode parseCommand(String command) throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException;
 
   public void changeLanguage(String language);
 }

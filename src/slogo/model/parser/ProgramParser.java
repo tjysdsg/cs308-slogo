@@ -27,11 +27,17 @@ public class ProgramParser implements Parser {
     scopeStack.push(new Stack<>());
     Stack<ASTCommand> nodeStack;
     int expLevel = 0;
+    boolean skipNext = false;
 
     for (String token : lines) {
       // trim all whitespaces
       // token.trim() doesn't work for symbols such as \t
       // https://stackoverflow.com/a/15633284/7730917
+      if (skipNext) {
+        skipNext = false;
+        continue;
+      }
+
       nodeStack = scopeStack.peek();
 
       token = token.replaceAll("\\s+", "");
@@ -47,11 +53,23 @@ public class ProgramParser implements Parser {
 
           case "Command" -> {
             String commandName = cc.getSymbol(token);
-            ASTCommand newCommand = factory.getCommand(commandName);
-            if (!nodeStack.isEmpty()) {
-              nodeStack.peek().addChild(newCommand);
+            if (commandName.equals("To")) {
+              String identifier = lines.get(lines.indexOf(token) + 1);
+              //ASTCommand newCommand = new ASTFunction(identifier);
+              skipNext = true;
+            } else {
+              ASTCommand newCommand = factory.getCommand(commandName);
+
+              if (newCommand == null) {
+//                foundFunc = lookUpTable.get(commandName);
+//                newCommand = foundFunc.clone();
+              }
+
+              if (!nodeStack.isEmpty()) {
+                nodeStack.peek().addChild(newCommand);
+              }
+              nodeStack.push(newCommand);
             }
-            nodeStack.push(newCommand);
           }
 
           case "Variable" -> {

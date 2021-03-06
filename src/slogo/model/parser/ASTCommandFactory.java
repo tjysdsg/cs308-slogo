@@ -41,9 +41,20 @@ public class ASTCommandFactory {
       }
     }
 
-    // TODO: Find the nodes
+    // TODO: Find the user defined functions
     return null;
   }
+
+  /**
+   * To doThing [2 vars] [...]
+   *
+   * ASTFunction
+   *  numParams = 2
+   *
+   * doThing 2 2 fd 50
+   * @return
+   */
+
 
   private Class[] getNodes() {
     File myPackage = new File(dirPath);

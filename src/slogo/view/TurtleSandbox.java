@@ -2,12 +2,14 @@ package slogo.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.animation.TranslateTransition;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
+import javafx.util.Duration;
 import slogo.events.TurtleRecord;
 
 /**
@@ -21,7 +23,6 @@ public class TurtleSandbox extends BorderPane {
   private StackPane lines;
   private StackPane sandbox;
   private HBox controls;
-  private String penStyle = "#009624";
   private double dragX;
   private double dragY;
 
@@ -32,44 +33,51 @@ public class TurtleSandbox extends BorderPane {
     sandbox = new StackPane();
     sandbox.getChildren().add(lines);
     addTurtle();
-    //getChildren().addAll(sandbox);
     setCenter(sandbox);
     setSandboxColor("#03A9F4");
-    //sandbox.setTranslateX(-100);
     makeDraggable(sandbox);
     createControls();
     createMockData();
   }
 
   private void makeDraggable(Pane pane) {
-    pane.setOnMouseEntered( e -> {
-      //pane.
-    });
-    setOnMousePressed( e -> {
-      dragX = e.getX();
-      dragY = e.getY();
-    });
-    setOnMouseDragged( e -> {
-      double newX = pane.getTranslateX()  + (e.getX() - dragX);
-      double newY = pane.getTranslateY()  + (e.getY() - dragY);
-      pane.setTranslateX(newX);
-      pane.setTranslateY(newY);
-      dragX = e.getX();
-      dragY = e.getY();
-    });
+    pane.setOnMouseEntered(
+        e -> {
+          // pane.
+        });
+    setOnMousePressed(
+        e -> {
+          dragX = e.getX();
+          dragY = e.getY();
+        });
+    setOnMouseDragged(
+        e -> {
+          double newX = pane.getTranslateX() + (e.getX() - dragX);
+          double newY = pane.getTranslateY() + (e.getY() - dragY);
+          pane.setTranslateX(newX);
+          pane.setTranslateY(newY);
+          dragX = e.getX();
+          dragY = e.getY();
+        });
   }
 
   private void createControls() {
     controls = new HBox();
     Button addTurtle = new Button("Add Turtle");
-    addTurtle.setOnAction( e -> {
-      addTurtle();
-    });
+    addTurtle.setOnAction(
+        e -> {
+          addTurtle();
+        });
     Button centerButton = new Button("Center");
-    centerButton.setOnAction( (e) -> {
-      sandbox.setTranslateX(0);
-      sandbox.setTranslateY(0);
-    });
+    TranslateTransition centerSandbox = new TranslateTransition();
+    centerSandbox.setDuration(Duration.seconds(1));
+    centerSandbox.setToX(0);
+    centerSandbox.setToY(0);
+    centerSandbox.setNode(sandbox);
+    centerButton.setOnAction(
+        (e) -> {
+          centerSandbox.play();
+        });
     controls.getChildren().addAll(addTurtle, centerButton);
     setBottom(controls);
   }

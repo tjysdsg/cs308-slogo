@@ -33,7 +33,7 @@ public class ASTFor extends ASTCommand {
     double step = comp1.getChildAt(3).evaluate(info);
 
     ASTNumberLiteral variable = new ASTNumberLiteral(1.0);
-    for (double i = step; i <= end; ++i) {
+    for (double i = start; i <= end; i += step) {
       // counter is set in the lookup table as a variable
       variable.setValue(i);
       info.getLookupTable().put(counterName, variable);

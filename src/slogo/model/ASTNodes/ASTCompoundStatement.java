@@ -23,6 +23,9 @@ public class ASTCompoundStatement extends ASTNode {
 
   @Override
   public boolean isDone() {
+    for (int i = 0; i < getNumChildren(); ++i) {
+      if (!getChildAt(i).isDone()) return false;
+    }
     return true;
   }
 }

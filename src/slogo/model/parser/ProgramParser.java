@@ -62,13 +62,11 @@ public class ProgramParser implements Parser {
               String identifier = lines.get(lines.indexOf(token) + 1);
               newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
               skipNext = true;
+            } else if (commandName.equals("NO MATCH")) {
+              ASTFunctionCall foundFunc = lookUpTable.get(token);
+              newCommand = foundFunc.clone();
             } else {
               newCommand = factory.getCommand(commandName);
-
-              if (newCommand == null) {
-                ASTFunctionCall foundFunc = lookUpTable.get(commandName);
-                newCommand = foundFunc.clone();
-              }
             }
             currScope.push(newCommand);
           }

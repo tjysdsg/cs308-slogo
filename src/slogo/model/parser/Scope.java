@@ -40,7 +40,7 @@ public class Scope {
   }
 
   public boolean isIncomplete() {
-    return commands.isEmpty() || !myStack.isEmpty();
+    return commands.isEmpty() || !myStack.isEmpty() || !getCommands().isDone();
   }
 
   public boolean addNextAsChild() {

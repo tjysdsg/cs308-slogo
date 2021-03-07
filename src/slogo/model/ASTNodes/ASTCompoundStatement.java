@@ -1,9 +1,16 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTCompoundStatement extends ASTNode {
   // TODO: numParams()?
+
+  public ASTCompoundStatement(List<ASTNode> children) {
+    for (ASTNode child : children) {
+      addChild(child);
+    }
+  }
 
   @Override
   protected double doEvaluate(InfoBundle info) {
@@ -12,5 +19,10 @@ public class ASTCompoundStatement extends ASTNode {
       ret = getChildAt(i).evaluate(info);
     }
     return ret;
+  }
+
+  @Override
+  public boolean isDone() {
+    return true;
   }
 }

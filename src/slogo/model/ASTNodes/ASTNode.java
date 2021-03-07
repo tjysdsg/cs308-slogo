@@ -90,4 +90,6 @@ public abstract class ASTNode {
    * Subclasses implement this method to do the actual evaluation
    */
   protected abstract double doEvaluate(InfoBundle info);
+
+  public abstract boolean isDone();
 }

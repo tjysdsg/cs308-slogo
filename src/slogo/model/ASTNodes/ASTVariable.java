@@ -20,4 +20,9 @@ public class ASTVariable extends ASTNamed {
     }
     return referred.evaluate(info);
   }
+
+  @Override
+  public boolean isDone() {
+    return true;
+  }
 }

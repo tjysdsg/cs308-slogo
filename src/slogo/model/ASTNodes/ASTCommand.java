@@ -39,6 +39,7 @@ public abstract class ASTCommand extends ASTNamed {
     return size;
   }
 
+  @Override
   public boolean isDone() {
     return numParams == getNumChildren();
   }

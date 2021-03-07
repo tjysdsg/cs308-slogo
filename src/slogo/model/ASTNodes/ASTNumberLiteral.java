@@ -26,4 +26,9 @@ public class ASTNumberLiteral extends ASTNode {
   public double doEvaluate(InfoBundle info) {
     return this.value;
   }
+
+  @Override
+  public boolean isDone() {
+    return true;
+  }
 }

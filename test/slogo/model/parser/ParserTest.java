@@ -3,11 +3,11 @@ package slogo.model.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Locale;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.model.ASTNodes.ASTCommand;
+import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
@@ -105,6 +105,20 @@ public class ParserTest {
 
   @Test
   void testBasicContruction() {
+    ASTNode expected = new ASTForward();
+    expected.addChild(new ASTNumberLiteral(50));
 
+    ASTNode actual = parser.parseCommand("FD 50");
+
+    assertNodeStructure(expected, actual);
+  }
+
+  void assertNodeStructure(ASTNode expected, ASTNode actual) {
+    assertEquals(expected.getToken(), actual.getToken());
+    assertEquals(expected.getNumChildren(), actual.getNumChildren());
+
+    for (int i  = 0; i < expected.getNumChildren(); i++) {
+      assertNodeStructure(expected.getChildAt(i), actual.getChildAt(i));
+    }
   }
 }

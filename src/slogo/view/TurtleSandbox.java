@@ -22,6 +22,8 @@ public class TurtleSandbox extends BorderPane {
   private StackPane sandbox;
   private HBox controls;
   private String penStyle = "#009624";
+  private double dragX;
+  private double dragY;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox() {
@@ -33,17 +35,42 @@ public class TurtleSandbox extends BorderPane {
     //getChildren().addAll(sandbox);
     setCenter(sandbox);
     setSandboxColor("#03A9F4");
+    //sandbox.setTranslateX(-100);
+    makeDraggable(sandbox);
     createControls();
     createMockData();
   }
 
+  private void makeDraggable(Pane pane) {
+    pane.setOnMouseEntered( e -> {
+      //pane.
+    });
+    setOnMousePressed( e -> {
+      dragX = e.getX();
+      dragY = e.getY();
+    });
+    setOnMouseDragged( e -> {
+      double newX = pane.getTranslateX()  + (e.getX() - dragX);
+      double newY = pane.getTranslateY()  + (e.getY() - dragY);
+      pane.setTranslateX(newX);
+      pane.setTranslateY(newY);
+      dragX = e.getX();
+      dragY = e.getY();
+    });
+  }
+
   private void createControls() {
     controls = new HBox();
-    Button button = new Button("Add Turtle");
-    button.setOnAction( e -> {
+    Button addTurtle = new Button("Add Turtle");
+    addTurtle.setOnAction( e -> {
       addTurtle();
     });
-    controls.getChildren().add(button);
+    Button centerButton = new Button("Center");
+    centerButton.setOnAction( (e) -> {
+      sandbox.setTranslateX(0);
+      sandbox.setTranslateY(0);
+    });
+    controls.getChildren().addAll(addTurtle, centerButton);
     setBottom(controls);
   }
 

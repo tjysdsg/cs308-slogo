@@ -16,6 +16,7 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTCompoundStatement body;
+  private static final String NAME = "func";
 
   /**
    * Constructor

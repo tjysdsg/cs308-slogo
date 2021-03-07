@@ -16,7 +16,6 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTNode body;
-  private String identifier;
   private static final String NAME = "func";
 
   /**
@@ -57,6 +56,6 @@ public class ASTFunctionCall extends ASTCommand {
   }
 
   public ASTFunctionCall clone() {
-    return new ASTFunctionCall(getToken(), parameterNames, body);
+    return new ASTFunctionCall(getName(), parameterNames, body);
   }
 }

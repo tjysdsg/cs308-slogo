@@ -136,7 +136,7 @@ public class ParserTest {
 
     for (int i = 0; i < numCommands; i++) {
       double val = rand.nextDouble();
-      TEST_STRING += String.format("%s %f ", toTest, val);
+      TEST_STRING.concat(String.format("%s %f ", toTest, val));
       ASTNode forward = new ASTForward();
       forward.addChild(new ASTNumberLiteral(val));
       commands.add(forward);
@@ -193,13 +193,21 @@ public class ParserTest {
     ASTNode body = new ASTCompoundStatement(commands);
     ASTNode expected = new ASTFunctionCall("test", params, body);
 
-    String TEST_STRING = "To test \n"
-        + "[ :itemA :itemB ] \n"
-        + "[fd :itemA sum 1 1]";
+    String TEST_STRING = """
+        To test\s
+        [ :itemA :itemB ]\s
+        [fd :itemA sum 1 1]""";
 
     parser.parseCommand(TEST_STRING);
 
     ASTNode actual = functionTable.get("test");
+    assertNodeStructure(expected, actual);
+
+    TEST_STRING = "test 2 3";
+
+    expected.addChild(new ASTNumberLiteral(2));
+    expected.addChild(new ASTNumberLiteral(3));
+    actual = parser.parseCommand(TEST_STRING);
     assertNodeStructure(expected, actual);
   }
 

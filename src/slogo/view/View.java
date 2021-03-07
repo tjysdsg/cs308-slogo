@@ -24,7 +24,7 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
-  public static final int SIZE = 1000;
+  private static final int SIZE = 1200;
   private Insets layoutPadding = new Insets(10);
 
 	private ModelController modelCon;
@@ -40,8 +40,9 @@ public class View {
 	private TextField userText;
 	private Button run;
 	private static final String STYLESHEET = "gui.css";
-	private static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-	private static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
+	public static final String RESOURCE_PACKAGE = "resources.";
+	public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
+	public static final String LANGUAGE_FOLDER = RESOURCE_FOLDER + "languages/";
 
 	/**
 	 * This is teh constructor for the View class.
@@ -68,7 +69,7 @@ public class View {
 		helpPane = new HelpPane();
 		turtleSandbox = new TurtleSandbox();
 		commandPane = makeBottomPane();
-		settingsPane = new SettingsPane(viewCon).createSettingsPane();
+		settingsPane = new SettingsPane(viewCon);
 		borderPane = new BorderPane();
 		Scene newScene = new Scene(borderPane, SIZE, SIZE);
 
@@ -78,7 +79,6 @@ public class View {
 		borderPane.setLeft(environmentPane);
 		borderPane.setRight(helpPane);
 		borderPane.setPadding(layoutPadding);
-
 		newScene.getStylesheets().add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
 		return newScene;
@@ -90,9 +90,11 @@ public class View {
 		run =  new Button();
 		changeTextInstruction("English");
 		userText.setOnMouseClicked(event -> userText.clear());
-		userText.setPrefSize(.9*SIZE, .05*SIZE);
+		userText.setMinSize(.558*SIZE, .05*SIZE);
+		run.setPrefSize(.05*SIZE,.05*SIZE);
 		pane.add(userText, 0, 0);
 		pane.add(run, 1, 0);
+		pane.setTranslateX(250);//define size of sides as parameter
 		viewCon.sendUserText();
 
 
@@ -101,7 +103,7 @@ public class View {
 	}
 
 	private void changeTextInstruction(String language) {
-		ResourceBundle resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+		ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
 		userText.setText(resources.getString("userCommand"));
 		run.setText(resources.getString("runButton"));
 	}
@@ -132,6 +134,8 @@ public class View {
 		 */
 		public void setLanguage(String language) {
 					changeTextInstruction(language);
+				((HelpPane) helpPane).createDisplayLanguages(language);
+			((EnvironmentPane) environmentPane ).createTitles(language);
 		}
 
 

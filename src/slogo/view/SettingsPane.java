@@ -1,14 +1,18 @@
 package slogo.view;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
 /**
  * @author marthaaboagye
@@ -20,7 +24,7 @@ import javafx.scene.layout.Pane;
  */
 
 public class SettingsPane extends Pane {
-  public static final int SIZE = 700;
+  public static final int SIZE = 1000;
   private final ChoiceBox<String> languageList = new ChoiceBox();
   private final ChoiceBox<String> turtleList = new ChoiceBox();
 
@@ -33,6 +37,10 @@ public class SettingsPane extends Pane {
   GridPane penPane;
   GridPane backgroundPane;
   ResourceBundle resources;
+  private Button uploadTurtle;
+  FileChooser fileChooser;
+  File userFile;
+  Node node;
 
   ViewController vcon;
 
@@ -48,13 +56,9 @@ public class SettingsPane extends Pane {
    */
   public  SettingsPane(ViewController vcon) {
     this.vcon = vcon;
-}
-
-  public Pane createSettingsPane() {
     createHbox();
-    return hbox;
-
-  }
+    getChildren().add(hbox);
+}
 
   private void createHbox(){
     title = new Label();
@@ -62,11 +66,30 @@ public class SettingsPane extends Pane {
     createLanguageList();
     createPenAndBackground();
     createTurtleOptions();
+    createTurtleUpload();
     hbox = new HBox(title, languageList,  turtleList, penPane,
-            backgroundPane);
+            backgroundPane,uploadTurtle);
     displayLabels("English");
     hbox.setSpacing(20);
-    hbox.setId("settingsPane");
+    hbox.setMinWidth(SIZE);
+    //hbox.setTranslateX(200);//define size of sides as parameter
+
+  }
+
+  private void createTurtleUpload() {
+    uploadTurtle = new Button();
+    fileChooser = new FileChooser();
+
+    uploadTurtle.setOnAction(e-> {
+      node = (Node) e.getSource();
+      userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
+      System.out.println(userFile.toString());
+      vcon.setTurtleLogo(userFile.toString());
+      if (userFile == null){
+        System.out.println("empty file");
+      }
+    });
+
 
   }
 
@@ -125,6 +148,7 @@ public class SettingsPane extends Pane {
     title.setText(resources.getString("title"));
     penColorLabel.setText(resources.getString("penColorLabel"));
     backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));
+    uploadTurtle.setText(resources.getString("turtleUpload"));
 
   }
 

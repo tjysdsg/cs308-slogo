@@ -4,13 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
+import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.ASTNodes.ASTRemainder;
@@ -27,10 +31,12 @@ public class ParserTest {
   private Parser parser;
   private static final double FLOATING_POINT_EPSILON = 1E-5;
   private CommandClassifier commandClassifier;
+  private Map<String, ASTFunctionCall> functionTable;
 
   @BeforeEach
   void setUp() {
-    parser = new ProgramParser("English", null);
+    functionTable =  new HashMap<>();
+    parser = new ProgramParser("English", functionTable);
     commandClassifier = new CommandClassifier("English");
   }
 
@@ -167,6 +173,33 @@ public class ParserTest {
 
     ASTNode actual = parser.parseCommand(TEST_COMMAND);
 
+    assertNodeStructure(expected, actual);
+  }
+
+  @Test
+  void testUserDefinedCommand() {
+    List<String> params = new ArrayList<>(
+        Arrays.asList("item1", "item2"));
+
+    List<ASTNode> commands = new ArrayList<>();
+    ASTNode next = new ASTForward();
+    next.addChild(new ASTVariable("itemA"));
+    commands.add(next);
+    next = new ASTSum();
+    next.addChild(new ASTNumberLiteral(1));
+    next.addChild(new ASTNumberLiteral(1));
+    commands.add(next);
+
+    ASTNode body = new ASTCompoundStatement(commands);
+    ASTNode expected = new ASTFunctionCall("test", params, body);
+
+    String TEST_STRING = "To test \n"
+        + "[ :itemA :itemB ] \n"
+        + "[fd :itemA sum 1 1]";
+
+    parser.parseCommand(TEST_STRING);
+
+    ASTNode actual = functionTable.get("test");
     assertNodeStructure(expected, actual);
   }
 

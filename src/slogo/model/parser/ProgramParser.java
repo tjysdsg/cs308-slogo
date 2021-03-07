@@ -1,6 +1,7 @@
 package slogo.model.parser;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -13,11 +14,11 @@ public class ProgramParser implements Parser {
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
-  private Map<String, ASTNode> lookup;
+  private Map<String, ASTFunctionCall> lookUpTable;
 
-  public ProgramParser(String language, Map<String, ASTNode> lookup) {
+  public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
     cc = new CommandClassifier(language);
-    this.lookup = lookup;
+    lookUpTable = table;
   }
 
   //TODO: Add Expression Handling and Logic for Errors
@@ -25,8 +26,8 @@ public class ProgramParser implements Parser {
   public ASTNode parseCommand(String command)
       throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
 
-    List<String> lines = Arrays.asList(command.split(SPLITTER));
-
+    List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
+    lines.removeIf((filter) -> { return filter.isBlank(); });
     Stack<Scope> scopeStack = new Stack<>();
     scopeStack.push(new Scope());
     int expLevel = 0;
@@ -56,20 +57,20 @@ public class ProgramParser implements Parser {
 
           case "Command" -> {
             String commandName = cc.getSymbol(token);
-            if (commandName.equals("To")) {
+            ASTNode newCommand;
+            if (commandName.equalsIgnoreCase("makeuserinstruction")) {
               String identifier = lines.get(lines.indexOf(token) + 1);
-              //ASTCommand newCommand = new ASTFunction(identifier);
+              newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
               skipNext = true;
             } else {
-              ASTCommand newCommand = factory.getCommand(commandName);
+              newCommand = factory.getCommand(commandName);
 
               if (newCommand == null) {
-//                foundFunc = lookUpTable.get(commandName);
-//                newCommand = foundFunc.clone();
+                ASTFunctionCall foundFunc = lookUpTable.get(commandName);
+                newCommand = foundFunc.clone();
               }
-
-              currScope.push(newCommand);
             }
+            currScope.push(newCommand);
           }
 
           case "Variable" -> {

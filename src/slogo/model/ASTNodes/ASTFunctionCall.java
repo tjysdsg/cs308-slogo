@@ -14,7 +14,8 @@ import slogo.model.InfoBundle;
  */
 public class ASTFunctionCall extends ASTCommand {
 
-  private ASTFunctionDefinition function;
+  private List<String> parameterNames;
+  private ASTCompoundStatement body;
 
   /**
    * Constructor
@@ -23,18 +24,32 @@ public class ASTFunctionCall extends ASTCommand {
    */
   public ASTFunctionCall(ASTFunctionDefinition function) {
     super(function.getIdentifier(), function.getParameterNames().size());
-    this.function = function;
+    this.parameterNames = function.getParameterNames();
+    this.body = function.getFunctionBody();
+  }
+
+  /**
+   * Constructor
+   *
+   * @param identifier     Name of the function being called
+   * @param parameterNames Parameter names
+   * @param body           Function body
+   */
+  public ASTFunctionCall(String identifier, List<String> parameterNames,
+      ASTCompoundStatement body) {
+    super(identifier, parameterNames.size());
+    this.parameterNames = parameterNames;
+    this.body = body;
   }
 
   @Override
   protected double doEvaluate(InfoBundle info) {
     // insert actual parameters into the lookup table
     Map<String, ASTNode> table = info.getLookupTable();
-    List<String> parameterNames = function.getParameterNames();
     for (int i = 0; i < getNumParams(); ++i) {
       table.put(parameterNames.get(i), getChildAt(i));
     }
 
-    return function.getCommands().evaluate(info);
+    return body.evaluate(info);
   }
 }

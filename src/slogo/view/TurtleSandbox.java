@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.TranslateTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.image.WritableImage;
@@ -26,6 +28,9 @@ import slogo.events.TurtleRecord;
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
 public class TurtleSandbox extends BorderPane {
+  public static final double MAX_ZOOM = 3;
+  public static final double MIN_ZOOM = .3;
+  public static final double ZOOM_INTENSITY = .05;
   private List<TurtleView> turtles;
   private StackPane lines;
   private StackPane sandbox;
@@ -66,6 +71,19 @@ public class TurtleSandbox extends BorderPane {
           dragX = e.getX();
           dragY = e.getY();
         });
+    setOnScroll( e -> {
+      if (e.getDeltaY() == 0) return;
+      double scale = 1;
+      if (e.getDeltaY() < 0) {
+        scale = sandbox.getScaleX() - ZOOM_INTENSITY;
+        if (scale < MIN_ZOOM) scale = MIN_ZOOM;
+      } else {
+        scale = sandbox.getScaleX() + ZOOM_INTENSITY;
+        if (scale > MAX_ZOOM) scale = MAX_ZOOM;
+      }
+        sandbox.setScaleX(scale);
+        sandbox.setScaleY(scale);
+    });
   }
 
   private void createControls() {
@@ -81,9 +99,17 @@ public class TurtleSandbox extends BorderPane {
     centerSandbox.setToX(0);
     centerSandbox.setToY(0);
     centerSandbox.setNode(sandbox);
+
+    ScaleTransition scaleCenter = new ScaleTransition();
+    scaleCenter.setToX(1);
+    scaleCenter.setToY(1);
+    scaleCenter.setNode(sandbox);
+    scaleCenter.setDuration(Duration.seconds(1));
+    ParallelTransition center = new ParallelTransition(centerSandbox, scaleCenter);
+
     centerButton.setOnAction(
         (e) -> {
-          centerSandbox.play();
+          center.play();
         });
     Button saveImage = new Button("Save");
     FileChooser fileChooser = new FileChooser();

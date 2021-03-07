@@ -73,11 +73,11 @@ public class View {
 		borderPane = new BorderPane();
 		Scene newScene = new Scene(borderPane, SIZE, SIZE);
 
+		borderPane.setCenter(turtleSandbox);
 		borderPane.setTop(settingsPane);
 		borderPane.setBottom(commandPane);
 		borderPane.setLeft(environmentPane);
 		borderPane.setRight(helpPane);
-		borderPane.setCenter(turtleSandbox);
 		borderPane.setPadding(layoutPadding);
 		newScene.getStylesheets().add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 

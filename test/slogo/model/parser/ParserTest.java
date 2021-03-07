@@ -136,7 +136,7 @@ public class ParserTest {
 
     for (int i = 0; i < numCommands; i++) {
       double val = rand.nextDouble();
-      TEST_STRING.concat(String.format("%s %f ", toTest, val));
+      TEST_STRING = TEST_STRING.concat(String.format("%s %f ", toTest, val));
       ASTNode forward = new ASTForward();
       forward.addChild(new ASTNumberLiteral(val));
       commands.add(forward);

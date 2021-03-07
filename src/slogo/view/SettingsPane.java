@@ -1,6 +1,18 @@
 package slogo.view;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
 /**
  * @author marthaaboagye
@@ -12,8 +24,28 @@ import javafx.scene.layout.Pane;
  */
 
 public class SettingsPane extends Pane {
+  public static final int SIZE = 1000;
+  private final ChoiceBox<String> languageList = new ChoiceBox();
+  private final ChoiceBox<String> turtleList = new ChoiceBox();
+
+  private HBox hbox;
+  private ColorPicker backgroundColorPicker;
+  private ColorPicker penColorPicker;
+  private Label penColorLabel;
+  private Label backgroundColorLabel;
+  private Label title;
+  GridPane penPane;
+  GridPane backgroundPane;
+  ResourceBundle resources;
+  private Button uploadTurtle;
+  FileChooser fileChooser;
+  File userFile;
+  Node node;
 
   ViewController vcon;
+
+  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
+  //public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
 
   /**
    * This method intializes a viewController object which defines method
@@ -22,9 +54,105 @@ public class SettingsPane extends Pane {
    *
    * @param vcon
    */
-  public SettingsPane(ViewController vcon) {
+  public  SettingsPane(ViewController vcon) {
     this.vcon = vcon;
-  }
+    createHbox();
+    getChildren().add(hbox);
 }
+
+  private void createHbox(){
+    title = new Label();
+    title.setId("guiname");
+    createLanguageList();
+    createPenAndBackground();
+    createTurtleOptions();
+    createTurtleUpload();
+    hbox = new HBox(title, languageList,  turtleList, penPane,
+            backgroundPane,uploadTurtle);
+    displayLabels("English");
+    hbox.setSpacing(20);
+    hbox.setMinWidth(SIZE);
+    //hbox.setTranslateX(200);//define size of sides as parameter
+
+  }
+
+  private void createTurtleUpload() {
+    uploadTurtle = new Button();
+    fileChooser = new FileChooser();
+
+    uploadTurtle.setOnAction(e-> {
+      node = (Node) e.getSource();
+      userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
+      System.out.println(userFile.toString());
+      vcon.setTurtleLogo(userFile.toString());
+      if (userFile == null){
+        System.out.println("empty file");
+      }
+    });
+
+
+  }
+
+  private void createPenAndBackground() {
+    penPane = new GridPane();
+    penColorLabel = new Label();
+    penColorLabel.setId("penColorText");
+    penColorPicker = new ColorPicker();
+    penColorPicker.setOnAction(e-> {
+      vcon.setPenColor(penColorPicker.getValue().toString());
+
+    });
+
+    penPane.add(penColorLabel, 0, 0);
+    penPane.add(penColorPicker, 1,0);
+    penPane.setHgap(10);
+    backgroundColorLabel =  new Label();
+    backgroundColorPicker = new ColorPicker();
+
+    backgroundColorPicker.setOnAction( e -> {
+      vcon.setBackground(backgroundColorPicker.getValue().toString());
+    });
+
+    backgroundPane = new GridPane();
+    backgroundPane.add(backgroundColorLabel, 0, 0);
+    backgroundPane.add(backgroundColorPicker, 1, 0);
+    backgroundPane.setHgap(10);
+
+  }
+
+  private void createTurtleOptions() {
+    List<String> turtles =  Arrays.asList("Happy", "Sad", "Angry", "Rainbow", "White");
+    turtleList.getItems().addAll(turtles);
+    turtleList.setValue("TurtleLogo");
+    turtleList.setOnAction((e->{
+      vcon.setTurtleLogo(turtleList.getValue().toString());
+    }));
+  }
+
+  private  void createLanguageList(){
+    List<String> languages =  Arrays.asList("English", "Chinese", "French", "German",
+        "Italian", "Portuguese", "Russian", "Spanish", "Urdu");
+    languageList.getItems().addAll(languages);
+    languageList.setValue("English");
+    languageList.setOnAction(e->{
+      displayLabels(languageList.getValue().toString());
+      vcon.setLanguage(languageList.getValue().toString());
+
+
+    });
+
+  }
+
+  private void displayLabels(String language){
+    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+    title.setText(resources.getString("title"));
+    penColorLabel.setText(resources.getString("penColorLabel"));
+    backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));
+    uploadTurtle.setText(resources.getString("turtleUpload"));
+
+  }
+
+
+  }
   
 

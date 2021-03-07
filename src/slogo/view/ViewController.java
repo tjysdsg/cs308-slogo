@@ -14,14 +14,14 @@ public interface ViewController {
 
   /**
    * Sets the language used within the environment.
-   * @param lang - The language locale to use.
+   * @param language - The language locale to use.
    */
-  void setLanguage(String lang);
+  void setLanguage(String language);
 
 
   /**
    * Set the turtle pen color for the view.
-   * @param color- The color to set pen to.
+   * @param color - The color to set pen to.
    */
   void setPenColor(String color);
 
@@ -32,5 +32,11 @@ public interface ViewController {
   void setTurtleLogo(String turtleLogo);
 
   void sendAlert(String title, String message);
+
+  /**
+   * send user command to model to parse.
+   *
+   */
+   void sendUserText();
 
 }

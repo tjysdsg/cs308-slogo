@@ -3,12 +3,11 @@ package slogo.model.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTNode;
 
 public class Scope {
-  private Stack<ASTCommand> myStack = new Stack<>();
+  private Stack<ASTNode> myStack = new Stack<>();
   private List<ASTNode> commands = new ArrayList<>();
 
   public void collapse() {
@@ -21,11 +20,11 @@ public class Scope {
     }
   }
 
-  public ASTCommand peek() {
+  public ASTNode peek() {
     return myStack.peek();
   }
 
-  public void push(ASTCommand command) {
+  public void push(ASTNode command) {
     if (addNextAsChild()) {
       myStack.peek().addChild(command);
     }
@@ -36,8 +35,7 @@ public class Scope {
     if (commands.size() == 1) {
       return commands.get(0);
     } else {
-      //TODO: Add the commands
-      return new ASTCompoundStatement();
+      return new ASTCompoundStatement(commands);
     }
   }
 

@@ -22,14 +22,13 @@ public class ProgramParser implements Parser {
 
   public ASTNode parseCommand(String command)
       throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
+
     List<String> lines = Arrays.asList(command.split(SPLITTER));
-    String type;
+
     Stack<Scope> scopeStack = new Stack<>();
     scopeStack.push(new Scope());
-    Scope currScope;
     int expLevel = 0;
     boolean skipNext = false;
-    List<ASTNode> nodeList = new ArrayList<>();
 
     for (String token : lines) {
       // trim all whitespaces
@@ -40,17 +39,17 @@ public class ProgramParser implements Parser {
         continue;
       }
 
-      currScope = scopeStack.peek();
+      Scope currScope = scopeStack.peek();
 
       token = token.replaceAll("\\s+", "");
       if (token.length() > 0) {
-        type = tc.getSymbol(token);
-        System.out.printf("Token:%s, Type:%s\n", token, type);
+        String type = tc.getSymbol(token);
+        //System.out.printf("Token:%s, Type:%s\n", token, type);
 
         //TODO: Must refactor to become better designed and avoid duplication
         switch (type) {
           case "Constant" -> {
-            currScope.peek().addChild(new ASTNumberLiteral(Double.parseDouble(token)));
+            currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
           }
 
           case "Command" -> {
@@ -72,7 +71,7 @@ public class ProgramParser implements Parser {
           }
 
           case "Variable" -> {
-            currScope.peek().addChild(new ASTVariable(token));
+            currScope.push(new ASTVariable(token));
           }
 
           case "ListStart" -> {
@@ -87,9 +86,9 @@ public class ProgramParser implements Parser {
               throw new IncorrectParameterCountException(currScope.peek());
             }
 
-            scopeStack.pop();
+            Scope prevScope = scopeStack.pop();
             currScope = scopeStack.peek();
-            currScope.peek().addChild(currScope.peek());
+            currScope.peek().addChild(prevScope.getCommands());
           }
 
           default -> throw new InvalidSyntaxException(token, command);
@@ -100,7 +99,7 @@ public class ProgramParser implements Parser {
       }
     }
 
-    currScope = scopeStack.peek();
+    Scope currScope = scopeStack.peek();
     if (currScope.isIncomplete() || scopeStack.size() != 1) {
       ASTNode problem = currScope.peek();
       throw new IncorrectParameterCountException(problem);
@@ -108,10 +107,6 @@ public class ProgramParser implements Parser {
 
     return currScope.getCommands();
   }
-
-//  private void collapse(Stack<ASTCommand> myStack) {
-//
-//  }
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
@@ -127,8 +122,4 @@ public class ProgramParser implements Parser {
       System.out.println(item.getClass().getName());
     }
   }
-
-//  private boolean stackHasError(Stack<ASTCommand> nodeStack) {
-//    return nodeStack.size() != 1 | !nodeStack.peek().isDone();
-//  }
 }

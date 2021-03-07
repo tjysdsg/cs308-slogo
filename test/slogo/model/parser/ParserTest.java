@@ -13,6 +13,10 @@ import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTRemainder;
+import slogo.model.ASTNodes.ASTRepeat;
+import slogo.model.ASTNodes.ASTSum;
+import slogo.model.ASTNodes.ASTVariable;
 
 
 /**
@@ -135,6 +139,33 @@ public class ParserTest {
 
     ASTNode expected = new ASTCompoundStatement(commands);
     ASTNode actual = parser.parseCommand(TEST_STRING);
+
+    assertNodeStructure(expected, actual);
+  }
+
+  @Test
+  void testLoopStatementStructure() {
+    String TEST_COMMAND = "repeat 4 \n[ \nfd :repcount \nfd + 3 5\n]";
+    printTestCommand(TEST_COMMAND);
+
+    List<ASTNode> commands = new ArrayList<>();
+
+    ASTNode forward = new ASTForward();
+    forward.addChild(new ASTVariable("repcount"));
+    commands.add(forward);
+
+    forward = new ASTForward();
+    ASTNode sum = new ASTSum();
+    sum.addChild(new ASTNumberLiteral(3));
+    sum.addChild(new ASTNumberLiteral(5));
+    forward.addChild(sum);
+    commands.add(forward);
+
+    ASTNode expected = new ASTRepeat();
+    expected.addChild(new ASTNumberLiteral(4));
+    expected.addChild(new ASTCompoundStatement(commands));
+
+    ASTNode actual = parser.parseCommand(TEST_COMMAND);
 
     assertNodeStructure(expected, actual);
   }

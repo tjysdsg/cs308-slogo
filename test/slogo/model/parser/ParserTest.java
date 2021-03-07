@@ -3,6 +3,8 @@ package slogo.model.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -116,14 +118,22 @@ public class ParserTest {
 
   @Test
   void testCompoundStatements() {
-    String TEST_STRING = "fd 50 fd 30";
-    ASTNode expected = new ASTCompoundStatement();
-    ASTNode forward = new ASTForward();
-    forward.addChild(new ASTNumberLiteral(50));
-    expected.addChild(forward);
-    forward = new ASTForward();
-    forward.addChild(new ASTNumberLiteral(30));
+    int numCommands = 5;
+    String toTest = "fd";
+    Random rand = new Random();
+    String TEST_STRING = "";
+    List<ASTNode> commands = new ArrayList<>();
 
+    for (int i = 0; i < numCommands; i++) {
+      double val = rand.nextDouble();
+      TEST_STRING += String.format("%s %f ", toTest, val);
+      ASTNode forward = new ASTForward();
+      forward.addChild(new ASTNumberLiteral(val));
+      commands.add(forward);
+    }
+    printTestCommand(TEST_STRING);
+
+    ASTNode expected = new ASTCompoundStatement(commands);
     ASTNode actual = parser.parseCommand(TEST_STRING);
 
     assertNodeStructure(expected, actual);

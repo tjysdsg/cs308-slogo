@@ -2,6 +2,7 @@ package slogo.view;
 
 import com.jfoenix.controls.JFXListView;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
@@ -21,6 +22,11 @@ public class EnvironmentPane extends Pane {
   TableView<DisplayCommand> commandsTable;
   TableView<DisplayVariable> variablesTable;
   JFXListView<Label> previousCommands;
+  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
+  ResourceBundle resources;
+  TitledPane commandsToggle;
+  TitledPane variablesToggle;
+  TitledPane prevCommands;
 
   public EnvironmentPane() {
     VBox vbox = new VBox();
@@ -30,15 +36,32 @@ public class EnvironmentPane extends Pane {
     getChildren().add(vbox);
 
     createTableViews();
-    TitledPane commandsToggle = new TitledPane("Commands", commandsTable);
-    TitledPane variablesToggle = new TitledPane("Variables", variablesTable);
-
+//    TitledPane commandsToggle = new TitledPane("Commands", commandsTable);
+    commandsToggle = new TitledPane();
+    commandsToggle.setContent(commandsTable);
+//    TitledPane variablesToggle = new TitledPane("Variables", variablesTable);
+    variablesToggle = new TitledPane();
+    variablesToggle.setContent(variablesTable);
     previousCommands = new JFXListView<Label>();
-    TitledPane prevCommands = new TitledPane("Previous Commands", previousCommands);
+    //TitledPane prevCommands = new TitledPane("Previous Commands", previousCommands);
+    prevCommands = new TitledPane();
+    prevCommands.setContent(previousCommands);
 
     vbox.getChildren().addAll(variablesToggle, commandsToggle, prevCommands);
 
+    createTitles("English");
     createMockData();
+
+
+  }
+
+  public void createTitles(String language) {
+    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+    commandsToggle.setText(resources.getString("command"));
+    variablesToggle.setText(resources.getString("variable"));
+    prevCommands.setText(resources.getString("prevCommand"));
+
+
   }
 
   public void createTableViews() {

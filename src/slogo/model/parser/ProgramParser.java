@@ -1,5 +1,6 @@
 package slogo.model.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
@@ -23,11 +24,12 @@ public class ProgramParser implements Parser {
       throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
     List<String> lines = Arrays.asList(command.split(SPLITTER));
     String type;
-    Stack<Stack<ASTCommand>> scopeStack = new Stack<>();
-    scopeStack.push(new Stack<>());
-    Stack<ASTCommand> nodeStack;
+    Stack<Scope> scopeStack = new Stack<>();
+    scopeStack.push(new Scope());
+    Scope currScope;
     int expLevel = 0;
     boolean skipNext = false;
+    List<ASTNode> nodeList = new ArrayList<>();
 
     for (String token : lines) {
       // trim all whitespaces
@@ -38,7 +40,7 @@ public class ProgramParser implements Parser {
         continue;
       }
 
-      nodeStack = scopeStack.peek();
+      currScope = scopeStack.peek();
 
       token = token.replaceAll("\\s+", "");
       if (token.length() > 0) {
@@ -48,7 +50,7 @@ public class ProgramParser implements Parser {
         //TODO: Must refactor to become better designed and avoid duplication
         switch (type) {
           case "Constant" -> {
-            nodeStack.peek().addChild(new ASTNumberLiteral(Double.parseDouble(token)));
+            currScope.peek().addChild(new ASTNumberLiteral(Double.parseDouble(token)));
           }
 
           case "Command" -> {
@@ -65,56 +67,51 @@ public class ProgramParser implements Parser {
 //                newCommand = foundFunc.clone();
               }
 
-              if (!nodeStack.isEmpty()) {
-                nodeStack.peek().addChild(newCommand);
-              }
-              nodeStack.push(newCommand);
+              currScope.push(newCommand);
             }
           }
 
           case "Variable" -> {
-            nodeStack.peek().addChild(new ASTVariable(token));
+            currScope.peek().addChild(new ASTVariable(token));
           }
 
           case "ListStart" -> {
             expLevel++;
-            scopeStack.push(new Stack<>());
+            scopeStack.push(new Scope());
           }
 
           case "ListEnd" -> {
             expLevel--;
 
-            if (stackHasError(nodeStack)) {
-              throw new IncorrectParameterCountException(nodeStack.peek());
+            if (currScope.isIncomplete()) {
+              throw new IncorrectParameterCountException(currScope.peek());
             }
 
             scopeStack.pop();
-            nodeStack = scopeStack.peek();
-            nodeStack.peek().addChild(nodeStack.peek());
+            currScope = scopeStack.peek();
+            currScope.peek().addChild(currScope.peek());
           }
 
           default -> throw new InvalidSyntaxException(token, command);
         }
 
-        collapse(nodeStack);
-        printStack(nodeStack);
+        currScope.collapse();
+        //printStack(currScope);
       }
     }
 
-    nodeStack = scopeStack.peek();
-    if (stackHasError(nodeStack)) {
-      ASTNode problem = nodeStack.peek();
+    currScope = scopeStack.peek();
+    if (currScope.isIncomplete() || scopeStack.size() != 1) {
+      ASTNode problem = currScope.peek();
       throw new IncorrectParameterCountException(problem);
     }
 
-    return nodeStack.pop();
+    return currScope.getCommands();
   }
 
-  private void collapse(Stack<ASTCommand> myStack) {
-    while (myStack.size() > 1 && myStack.peek().isDone()) {
-      myStack.pop();
-    }
-  }
+//  private void collapse(Stack<ASTCommand> myStack) {
+//
+//  }
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
@@ -131,7 +128,7 @@ public class ProgramParser implements Parser {
     }
   }
 
-  private boolean stackHasError(Stack<ASTCommand> nodeStack) {
-    return nodeStack.size() != 1 | !nodeStack.peek().isDone();
-  }
+//  private boolean stackHasError(Stack<ASTCommand> nodeStack) {
+//    return nodeStack.size() != 1 | !nodeStack.peek().isDone();
+//  }
 }

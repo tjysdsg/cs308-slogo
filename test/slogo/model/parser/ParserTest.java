@@ -7,6 +7,7 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.model.ASTNodes.ASTCommand;
+import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
@@ -109,6 +110,21 @@ public class ParserTest {
     expected.addChild(new ASTNumberLiteral(50));
 
     ASTNode actual = parser.parseCommand("FD 50");
+
+    assertNodeStructure(expected, actual);
+  }
+
+  @Test
+  void testCompoundStatements() {
+    String TEST_STRING = "fd 50 fd 30";
+    ASTNode expected = new ASTCompoundStatement();
+    ASTNode forward = new ASTForward();
+    forward.addChild(new ASTNumberLiteral(50));
+    expected.addChild(forward);
+    forward = new ASTForward();
+    forward.addChild(new ASTNumberLiteral(30));
+
+    ASTNode actual = parser.parseCommand(TEST_STRING);
 
     assertNodeStructure(expected, actual);
   }

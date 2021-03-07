@@ -31,7 +31,7 @@ public class Environment implements TrackableEnvironment {
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
     lookupTable = new HashMap<>();
-    myParser = new ProgramParser(DEFAULT_LANG);
+    myParser = new ProgramParser(DEFAULT_LANG, null);
     turtles = new ArrayList<>();
     turtles.add(new Turtle(currTurtle, executionEnvironment));
     currTurtle = 0;

@@ -1,8 +1,8 @@
 package slogo.model.parser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
@@ -13,9 +13,11 @@ public class ProgramParser implements Parser {
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
+  private Map<String, ASTNode> lookup;
 
-  public ProgramParser(String language) {
+  public ProgramParser(String language, Map<String, ASTNode> lookup) {
     cc = new CommandClassifier(language);
+    this.lookup = lookup;
   }
 
   //TODO: Add Expression Handling and Logic for Errors
@@ -113,7 +115,7 @@ public class ProgramParser implements Parser {
   }
 
   public static void main(String[] args) {
-    Parser myParser = new ProgramParser("English");
+    Parser myParser = new ProgramParser("English", null);
     ASTNode res = myParser.parseCommand("MINUS 1");
   }
 

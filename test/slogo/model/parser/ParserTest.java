@@ -30,7 +30,7 @@ public class ParserTest {
 
   @BeforeEach
   void setUp() {
-    parser = new ProgramParser("English");
+    parser = new ProgramParser("English", null);
     commandClassifier = new CommandClassifier("English");
   }
 

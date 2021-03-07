@@ -6,26 +6,28 @@ import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
- * Contains definition of a function, use {@link ASTFunctionDefinition#getFunctionBody()} and {@link
+ * Contains definition of a function, use {@link
  * ASTFunctionDefinition#getParameterNames()} to call the commands in this function
  */
 public class ASTFunctionDefinition extends ASTDeclaration {
 
   private static final String NAME = "makeuserinstruction";
   private static final int NUM_PARAMS = 2;
-  private ASTCompoundStatement vars; // contains a list of ASTVariable names
-  private ASTCompoundStatement commands;
+  private ASTNode vars; // contains a list of ASTVariable names
+  private ASTNode commands;
+  private Map<String, ASTFunctionCall> functionTable;
+  private int result;
 
-  public ASTFunctionDefinition(String identifier, ASTCompoundStatement vars,
-      ASTCompoundStatement commands) {
+  public ASTFunctionDefinition(String identifier, Map<String, ASTFunctionCall> functionTable) {
     super(NAME, identifier, NUM_PARAMS);
-    this.vars = vars;
-    this.commands = commands;
+    this.functionTable = functionTable;
+//    this.vars = vars;
+//    this.commands = commands;
   }
 
-  public ASTCompoundStatement getFunctionBody() {
-    return commands;
-  }
+//  public ASTNode getFunctionBody() {
+//    return commands;
+//  }
 
   /**
    * Get a list of parameter names of the function
@@ -41,16 +43,29 @@ public class ASTFunctionDefinition extends ASTDeclaration {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    Map<String, ASTNode> table = info.getLookupTable();
+    return result;
+  }
 
-    // check if there's already a function with the same name
-    ASTNode prev = table.getOrDefault(getIdentifier(), null);
-    if (prev != null) {
-      return 0;
+  @Override
+  public int addChild(ASTNode newChild) {
+    int numChildren = super.addChild(newChild);
+    if (numChildren == 1) {
+      vars = newChild;
+    } else {
+      commands = newChild;
+
+      ASTNode prev = functionTable.getOrDefault(getIdentifier(), null);
+      if (prev != null) {
+        result = 0;
+      } else {
+        result = 1;
+      }
+
+      functionTable.put(getIdentifier(),
+          new ASTFunctionCall(getIdentifier(),
+              getParameterNames(),
+              commands));
     }
-
-    // insert this into the lookup table
-    info.getLookupTable().put(getIdentifier(), this);
-    return 1;
+    return numChildren;
   }
 }

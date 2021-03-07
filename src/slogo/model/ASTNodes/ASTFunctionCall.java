@@ -15,7 +15,8 @@ import slogo.model.InfoBundle;
 public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
-  private ASTCompoundStatement body;
+  private ASTNode body;
+  private String identifier;
   private static final String NAME = "func";
 
   /**
@@ -23,11 +24,12 @@ public class ASTFunctionCall extends ASTCommand {
    *
    * @param function The function being called
    */
-  public ASTFunctionCall(ASTFunctionDefinition function) {
-    super(function.getIdentifier(), function.getParameterNames().size());
-    this.parameterNames = function.getParameterNames();
-    this.body = function.getFunctionBody();
-  }
+//  public ASTFunctionCall(ASTFunctionDefinition function) {
+//    super(function.getIdentifier(), function.getParameterNames().size());
+//    identifier = function.getIdentifier();
+//    this.parameterNames = function.getParameterNames();
+//    this.body = function.getFunctionBody();
+//  }
 
   /**
    * Constructor
@@ -37,7 +39,7 @@ public class ASTFunctionCall extends ASTCommand {
    * @param body           Function body
    */
   public ASTFunctionCall(String identifier, List<String> parameterNames,
-      ASTCompoundStatement body) {
+      ASTNode body) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
     this.body = body;
@@ -52,5 +54,9 @@ public class ASTFunctionCall extends ASTCommand {
     }
 
     return body.evaluate(info);
+  }
+
+  public ASTFunctionCall clone() {
+    return new ASTFunctionCall(getToken(), parameterNames, body);
   }
 }

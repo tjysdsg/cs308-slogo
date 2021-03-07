@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
+import javafx.collections.ObservableList; import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -18,11 +17,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class HelpPane extends Pane {
+  public final static String RESOURCE_PACKAGE = View.RESOURCE_PACKAGE;
+  public final static String RESOURCE_FOLDER = View.RESOURCE_FOLDER;
   private static final int SIZE = 200;
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  private final static String SEARCH_ICON = "/images/searchicon.png";
-  private final static String CLEAR_ICON = "/images/clearicon.png";
-  private final static String HELP_ICON = "/images/helpicon.png";
+  private final static String SEARCH_ICON = "images/searchicon.png";
+  private final static String CLEAR_ICON = "images/clearicon.png";
+  private final static String HELP_ICON = "images/helpicon.png";
   private VBox vbox;
   private GridPane searchBar;
   private GridPane displayWindow;
@@ -65,7 +65,7 @@ public class HelpPane extends Pane {
 
   public void createDisplayLanguages(String language) {
 
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "languages/" + language);
     helpLabel.setText(resources.getString("helpTitle"));
     commandList.getItems().clear();
     commandList.getItems().addAll(resources.getString("commandList").split(","));
@@ -95,7 +95,7 @@ public class HelpPane extends Pane {
 
   private void createDisplayWindow() {
     displayWindow = new GridPane();
-    ImageView helpIcon = new ImageView(HELP_ICON);
+    ImageView helpIcon = new ImageView(getClass().getResource(RESOURCE_FOLDER + HELP_ICON).toExternalForm());
     helpIcon.setFitHeight(.3*SIZE);
     helpIcon.setFitWidth(.4*SIZE);
     helpLabel = new Label();
@@ -111,10 +111,10 @@ public class HelpPane extends Pane {
     searchBar= new GridPane();
     TextField search = new TextField();
     search.setPrefWidth(.8*SIZE);
-    ImageView searchIcon = new ImageView(SEARCH_ICON);
+    ImageView searchIcon = new ImageView(getClass().getResource(RESOURCE_FOLDER + SEARCH_ICON).toExternalForm());
     searchIcon.setFitWidth(.1*SIZE);
     searchIcon.setFitHeight(.1*SIZE);
-    ImageView clearIcon = new ImageView(CLEAR_ICON);
+    ImageView clearIcon = new ImageView(getClass().getResource(RESOURCE_FOLDER + CLEAR_ICON).toExternalForm());
     clearIcon.setFitWidth(.1*SIZE);
     clearIcon.setFitHeight(.1*SIZE);
     searchBar.add(searchIcon, 0, 0);

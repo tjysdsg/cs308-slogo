@@ -40,8 +40,9 @@ public class View {
 	private TextField userText;
 	private Button run;
 	private static final String STYLESHEET = "gui.css";
-	private static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-	private static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
+	public static final String RESOURCE_PACKAGE = "resources.";
+	public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
+	public static final String LANGUAGE_FOLDER = RESOURCE_FOLDER + "languages/";
 
 	/**
 	 * This is teh constructor for the View class.
@@ -78,7 +79,6 @@ public class View {
 		borderPane.setRight(helpPane);
 		borderPane.setCenter(turtleSandbox);
 		borderPane.setPadding(layoutPadding);
-
 		newScene.getStylesheets().add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
 		return newScene;
@@ -103,7 +103,7 @@ public class View {
 	}
 
 	private void changeTextInstruction(String language) {
-		ResourceBundle resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+		ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
 		userText.setText(resources.getString("userCommand"));
 		run.setText(resources.getString("runButton"));
 	}

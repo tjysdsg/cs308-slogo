@@ -1,15 +1,22 @@
 package slogo.view;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.TranslateTransition;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
+import javax.imageio.ImageIO;
 import slogo.events.TurtleRecord;
 
 /**
@@ -78,7 +85,22 @@ public class TurtleSandbox extends BorderPane {
         (e) -> {
           centerSandbox.play();
         });
-    controls.getChildren().addAll(addTurtle, centerButton);
+    Button saveImage = new Button("Save");
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
+    saveImage.setOnAction(
+        (e) -> {
+          WritableImage wi = new WritableImage((int) sandbox.getWidth(), (int) sandbox.getHeight());
+          snapshot(null, wi);
+          File file = fileChooser.showSaveDialog(getScene().getWindow());
+          if (file == null) return;
+          try {
+            ImageIO.write(SwingFXUtils.fromFXImage(wi, null), "png", file);
+          } catch (IOException uhoh) {
+            uhoh.printStackTrace();
+          }
+        });
+    controls.getChildren().addAll(addTurtle, centerButton, saveImage);
     setBottom(controls);
   }
 

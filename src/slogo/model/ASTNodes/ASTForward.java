@@ -13,7 +13,7 @@ public class ASTForward extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    double delta = children.get(0).evaluate(info);
+    double delta = getChildAt(0).evaluate(info);
     info.getTurtle().move(delta);
     return delta;
   }

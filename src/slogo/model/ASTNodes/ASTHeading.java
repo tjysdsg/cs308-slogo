@@ -2,18 +2,17 @@ package slogo.model.ASTNodes;
 
 import slogo.model.InfoBundle;
 
-public class ASTPenUp extends ASTCommand {
+public class ASTHeading extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "ispenup";
+  private static final String NAME = "heading";
 
-  public ASTPenUp() {
+  public ASTHeading() {
     super(NAME, NUM_PARAMS);
   }
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    info.getTurtle().setPenDown(false);
-    return 0;
+    return info.getTurtle().getRotation();
   }
 }

@@ -7,7 +7,7 @@ import slogo.model.Vec2D;
 public class ASTSetXY extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "setxy";
+  private static final String NAME = "setposition";
 
   public ASTSetXY() {
     super(NAME, NUM_PARAMS);
@@ -15,8 +15,8 @@ public class ASTSetXY extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    double x = children.get(0).evaluate(info);
-    double y = children.get(1).evaluate(info);
+    double x = getChildAt(0).evaluate(info);
+    double y = getChildAt(1).evaluate(info);
 
     Turtle turtle = info.getTurtle();
     turtle.setPosition(x, y);

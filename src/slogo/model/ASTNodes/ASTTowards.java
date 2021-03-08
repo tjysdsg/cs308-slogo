@@ -13,6 +13,7 @@ public class ASTTowards extends ASTCommand {
     super(NAME, NUM_PARAMS);
   }
 
+  // FIXME: clockwiseness
   @Override
   protected double doEvaluate(InfoBundle info) {
     double x = getChildAt(0).evaluate(info);
@@ -20,16 +21,11 @@ public class ASTTowards extends ASTCommand {
 
     Turtle turtle = info.getTurtle();
 
-    Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
-    Vec2D dest = new Vec2D(x, y);
-    double deg = Math.acos(dest.cosAngle(src)); // acos returns degree, not radian
-    if (deg < 0) {
-      deg = 180.0 - deg;
-    }
-    int clockwiseness = dest.clockwiseness(src);
+    double rotation = turtle.getRotation();
+    double deg = Math.toDegrees(Math.atan(y / x));
 
-    deg *= clockwiseness;
-    turtle.rotate(deg);
-    return deg;
+    double delta = deg - rotation;
+    turtle.rotate(delta);
+    return delta;
   }
 }

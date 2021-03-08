@@ -41,6 +41,21 @@ public class ASTNodeTest {
     return node.evaluate(infoBundle);
   }
 
+  double parseAndEvaluateCommands(String cmd, double param1, double param2) {
+    String str = String.format("%s %f %f", cmd, param1, param2);
+    ASTNode node = parser.parseCommand(str);
+    return node.evaluate(infoBundle);
+  }
+
+  void assertTurtleXY(double x, double y) {
+    assertEquals(x, infoBundle.getTurtle().getX(), 1E-5);
+    assertEquals(y, infoBundle.getTurtle().getY(), 1E-5);
+  }
+
+  void assertTurtleRotation(double rotation) {
+    assertEquals(rotation, infoBundle.getTurtle().getRotation(), 1E-5);
+  }
+
   @Test
   void testMoveCommands() {
     Random rand = new Random();
@@ -57,12 +72,29 @@ public class ASTNodeTest {
       assertEquals(a, res, 1E-5);
 
       switch (cmd) {
-        case "FORWARD" -> assertEquals(a, infoBundle.getTurtle().getY(), 1E-5);
-        case "BACK" -> assertEquals(-a, infoBundle.getTurtle().getY(), 1E-5);
-        case "RIGHT" -> assertEquals(a, infoBundle.getTurtle().getRotation(), 1E-5);
-        case "LEFT" -> assertEquals(-a, infoBundle.getTurtle().getRotation(), 1E-5);
+        case "FORWARD" -> assertTurtleXY(0, a);
+        case "BACK" -> assertTurtleXY(0, -a);
+        case "RIGHT" -> assertTurtleRotation(a);
+        case "LEFT" -> assertTurtleRotation(-a);
       }
     }
+  }
+
+  @Test
+  void testSetHeading() {
+    double a = 123.21;
+    double res = parseAndEvaluateCommands("SETHEADING", a);
+    assertEquals(a, res);
+    assertTurtleRotation(a);
+  }
+
+  @Test
+  void testTowards() {
+    double x = 10;
+    double y = 10;
+    double res = parseAndEvaluateCommands("TOWARDS", x, y);
+    assertEquals(45, res);
+    assertTurtleRotation(45);
   }
 
   @Test
@@ -78,8 +110,7 @@ public class ASTNodeTest {
     res = node.evaluate(infoBundle);
     assertEquals(20.0, res, 1E-5);
 
-    assertEquals(20, infoBundle.getTurtle().getX(), 1E-5);
-    assertEquals(10, infoBundle.getTurtle().getY(), 1E-5);
+    assertTurtleXY(20, 10);
   }
 
   class TestBundle implements InfoBundle {

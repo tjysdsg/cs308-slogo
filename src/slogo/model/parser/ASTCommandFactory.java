@@ -10,16 +10,12 @@ public class ASTCommandFactory {
   public static final String packagePath = "slogo.model.ASTNodes.";
   public static final String dirPath = "src/" + packagePath.replace(".", "/") + "/";
 
-  public ASTCommandFactory() {
-    //TODO: Set languages to get the commands
-  }
-
-  public ASTCommand getCommand(String command) {
+  public static ASTCommand getCommand(String command) {
     //TODO: get the commands
-    Class[] availNodes = getNodes();
+    Class[] availNodes = getASTNodes();
     for (Class node : availNodes) {
 
-      if (isNotCommand(node) | isAbstract(node))
+      if (isNodeDescendantOfClass(node, ASTCommand.class) | isNodeAbstract(node))
         continue;
 
       String name = "";
@@ -40,23 +36,10 @@ public class ASTCommandFactory {
         }
       }
     }
-
-    // TODO: Find the user defined functions
     return null;
   }
 
-  /**
-   * To doThing [2 vars] [...]
-   *
-   * ASTFunction
-   *  numParams = 2
-   *
-   * doThing 2 2 fd 50
-   * @return
-   */
-
-
-  private Class[] getNodes() {
+  public static Class[] getASTNodes() {
     File myPackage = new File(dirPath);
     assert(myPackage.isDirectory());
 
@@ -75,16 +58,16 @@ public class ASTCommandFactory {
     return nodes;
   }
 
-  private boolean isNotCommand(Class node) {
-    Class ancestor = node.getSuperclass();
-    if (ancestor == null)
+  private static boolean isNodeDescendantOfClass(Class node, Class ancestor) {
+    Class parent = node.getSuperclass();
+    if (parent == null)
       return true;
-    if (ancestor == ASTCommand.class)
+    if (parent == ancestor)
       return false;
-    return isNotCommand(ancestor);
+    return isNodeDescendantOfClass(parent, ancestor);
   }
 
-  private boolean isAbstract(Class node) {
+  private static boolean isNodeAbstract(Class node) {
     return Modifier.isAbstract(node.getModifiers());
   }
 }

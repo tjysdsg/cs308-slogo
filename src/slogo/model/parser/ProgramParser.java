@@ -10,7 +10,6 @@ import slogo.model.ASTNodes.*;
 
 public class ProgramParser implements Parser {
 
-  private final ASTCommandFactory factory = new ASTCommandFactory();
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
@@ -66,7 +65,7 @@ public class ProgramParser implements Parser {
               ASTFunctionCall foundFunc = lookUpTable.get(token);
               newCommand = foundFunc.clone();
             } else {
-              newCommand = factory.getCommand(commandName);
+              newCommand = ASTCommandFactory.getCommand(commandName);
             }
             currScope.push(newCommand);
           }
@@ -113,14 +112,14 @@ public class ProgramParser implements Parser {
     cc.changeLanguage(language);
   }
 
-  public static void main(String[] args) {
-    Parser myParser = new ProgramParser("English", null);
-    ASTNode res = myParser.parseCommand("MINUS 1");
-  }
-
-  public void printStack(Stack<ASTCommand> myStack) {
-    for (ASTCommand item : myStack) {
-      System.out.println(item.getClass().getName());
-    }
-  }
+//  public static void main(String[] args) {
+//    Parser myParser = new ProgramParser("English", null);
+//    ASTNode res = myParser.parseCommand("MINUS 1");
+//  }
+//
+//  public void printStack(Stack<ASTCommand> myStack) {
+//    for (ASTCommand item : myStack) {
+//      System.out.println(item.getClass().getName());
+//    }
+//  }
 }

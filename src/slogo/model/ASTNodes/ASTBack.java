@@ -6,7 +6,7 @@ import slogo.model.Turtle;
 public class ASTBack extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "back";
+  private static final String NAME = "backward";
 
   public ASTBack() {
     super(NAME, NUM_PARAMS);

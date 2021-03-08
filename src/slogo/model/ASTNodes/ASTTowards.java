@@ -2,7 +2,6 @@ package slogo.model.ASTNodes;
 
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
-import slogo.model.Vec2D;
 
 public class ASTTowards extends ASTCommand {
 
@@ -13,7 +12,6 @@ public class ASTTowards extends ASTCommand {
     super(NAME, NUM_PARAMS);
   }
 
-  // FIXME: clockwiseness
   @Override
   protected double doEvaluate(InfoBundle info) {
     double x = getChildAt(0).evaluate(info);

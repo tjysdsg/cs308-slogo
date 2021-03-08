@@ -21,10 +21,18 @@ public class ASTTowards extends ASTCommand {
 
     Turtle turtle = info.getTurtle();
 
-    double rotation = turtle.getRotation();
-    double deg = Math.toDegrees(Math.atan(y / x));
+    double tan = x / y;
+    double deg = Math.toDegrees(Math.atan(tan));
 
-    double delta = deg - rotation;
+    if (tan > 0 && x < 0) {
+      deg -= 180;
+    }
+
+    if (tan < 0 && x > 0) {
+      deg += 180;
+    }
+
+    double delta = deg - turtle.getRotation();
     turtle.rotate(delta);
     return delta;
   }

@@ -15,7 +15,8 @@ public class Scope {
       myStack.pop();
     }
 
-    if (myStack.peek().isDone()) {
+
+    if (!myStack.isEmpty() && myStack.peek().isDone()) {
       commands.add(myStack.pop());
     }
   }
@@ -40,7 +41,7 @@ public class Scope {
   }
 
   public boolean isIncomplete() {
-    return commands.isEmpty() || !myStack.isEmpty() || !getCommands().isDone();
+    return !myStack.isEmpty() || !getCommands().isDone();
   }
 
   public boolean addNextAsChild() {

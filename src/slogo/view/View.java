@@ -1,5 +1,8 @@
 package slogo.view;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -56,7 +59,7 @@ public class View {
 	 * @param modelCon
 	 */
 	public View(Stage stage, ModelController modelCon) {
-		stage.setTitle("floating");
+		stage.setTitle("Turtle IDE... T-IDE");
 		this.modelCon = modelCon;
 		this.environment = EnvironmentFactory.createEnvironment();
 
@@ -110,6 +113,7 @@ public class View {
 	public Pane makeBottomPane(){
 		GridPane pane = new GridPane();
 		codeArea = new TextArea();
+		pane.add(alert, 2, 0);
 		run =  new Button();
 		changeTextInstruction("English");
 		run.setOnMouseClicked(event -> {
@@ -166,8 +170,8 @@ public class View {
 		 */
 		public void setLanguage(String language) {
 					changeTextInstruction(language);
-				((HelpPane) helpPane).createDisplayLanguages(language);
-			((EnvironmentPane) environmentPane ).createTitles(language);
+				helpPane.createDisplayLanguages(language);
+			environmentPane.createTitles(language);
 		}
 
 
@@ -190,7 +194,10 @@ public class View {
 		}
 
 		public void sendAlert(String title, String message) {
-
+			Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);
+			a.showAndWait().ifPresent(res -> {
+				System.out.println(res);
+			});
 		}
 
 		public void sendUserText(){

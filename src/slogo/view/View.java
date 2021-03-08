@@ -1,5 +1,5 @@
 package slogo.view;
-
+import javafx.scene.input.KeyCode;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -37,7 +38,7 @@ public class View {
 	private Pane commandPane;
 	private Scene scene;
 	private BorderPane borderPane;
-	private TextField userText;
+	private TextArea codeArea;
 	private Button run;
 	private static final String STYLESHEET = "gui.css";
 	public static final String RESOURCE_PACKAGE = "resources.";
@@ -92,18 +93,26 @@ public class View {
 
 	public Pane makeBottomPane(){
 		GridPane pane = new GridPane();
-		userText = new TextField();
+		codeArea = new TextArea();
 		run =  new Button();
 		changeTextInstruction("English");
 		run.setOnMouseClicked(event -> {
-			String command = userText.getText();
+			String command = codeArea.getText();
 			modelCon.sendCommand(command);
 			System.out.printf("Button heard: %s", command);
-			userText.clear();
+			codeArea.clear();
 		});
-		userText.setMinSize(.558*SIZE, .05*SIZE);
+
+		codeArea.setOnKeyPressed( e -> {
+			String command = codeArea.getText();
+			if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
+				modelCon.sendCommand(command);
+				codeArea.clear();
+			}
+		});
+
 		run.setPrefSize(.05*SIZE,.05*SIZE);
-		pane.add(userText, 0, 0);
+		pane.add(codeArea, 0, 0);
 		pane.add(run, 1, 0);
 		pane.setTranslateX(250);//define size of sides as parameter
 		return pane;
@@ -111,7 +120,8 @@ public class View {
 
 	private void changeTextInstruction(String language) {
 		ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
-		userText.setText(resources.getString("userCommand"));
+		// TODO: Maybe say an instruction like shift+enter to run?
+		codeArea.setPromptText(resources.getString("userCommand"));
 		run.setText(resources.getString("runButton"));
 	}
 
@@ -169,15 +179,12 @@ public class View {
 		}
 
 		public void sendUserText(){
-			run.setOnAction(e -> {
-				if (userText.getText()!=null) {
-					modelCon.sendCommand(userText.getText());
-				}
-				else{
-					viewCon.sendAlert("Error", "STOSAPSGI");
-				}
-			});
-
+			if (codeArea.getText()!=null) {
+				modelCon.sendCommand(codeArea.getText());
+			}
+			else{
+				viewCon.sendAlert("Error", "STOSAPSGI");
+			}
 		}
 	}
 }

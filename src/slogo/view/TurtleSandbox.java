@@ -168,7 +168,7 @@ public class TurtleSandbox extends BorderPane {
       line.setStartY(ty);
       line.setEndX(info.xCoord());
       line.setEndY(info.yCoord());
-      line.setStrokeWidth(7);
+      line.setStrokeWidth(2);
       lines.getChildren().addAll(line);
     }
     turtle.update(info);

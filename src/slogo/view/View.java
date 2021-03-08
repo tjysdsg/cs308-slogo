@@ -24,7 +24,7 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
-  private static final int SIZE = 1200;
+  private static final int SIZE = 1000;
   private Insets layoutPadding = new Insets(10);
 
 	private ModelController modelCon;
@@ -33,7 +33,7 @@ public class View {
 	private EnvironmentPane environmentPane;
 	private HelpPane helpPane;
 	private TurtleSandbox turtleSandbox;
-	private Pane settingsPane;
+	private SettingsPane settingsPane;
 	private Pane commandPane;
 	private Scene scene;
 	private BorderPane borderPane;
@@ -56,6 +56,7 @@ public class View {
 		stage.setTitle("floating");
 		this.modelCon = modelCon;
 		this.environment = EnvironmentFactory.createEnvironment();
+
 		viewCon = new ViewBundle();
 		modelCon.setController(viewCon);
 		modelCon.setModel(environment);
@@ -82,6 +83,10 @@ public class View {
 		borderPane.setPadding(layoutPadding);
 		newScene.getStylesheets().add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
+		environment.setOnTurtleUpdate( e -> {
+			turtleSandbox.updateTurtle(e);
+		});
+
 		return newScene;
 	}
 
@@ -101,10 +106,6 @@ public class View {
 		pane.add(userText, 0, 0);
 		pane.add(run, 1, 0);
 		pane.setTranslateX(250);//define size of sides as parameter
-		viewCon.sendUserText();
-
-
-
 		return pane;
 	}
 

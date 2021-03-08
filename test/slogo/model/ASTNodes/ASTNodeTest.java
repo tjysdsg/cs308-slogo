@@ -170,6 +170,12 @@ public class ASTNodeTest {
   }
 
   @Test
+  void testSetXY() {
+    double res = parseAndEvaluateCommands("SETXY", 30, 40);
+    assertEquals(50, res);
+  }
+
+  @Test
   void testFunctions() {
     String definition = "TO translate [:dForward :dRight] [FORWARD :dForward RIGHT 90 FORWARD :dRight]";
     String call = "translate 10 20";

@@ -78,6 +78,12 @@ public class View {
 		borderPane = new BorderPane();
 		Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
 
+		environmentPane.setStyle("-fx-background-color: white");
+		commandPane.setStyle("-fx-background-color: white");
+		settingsPane.setStyle("-fx-background-color: white");
+		helpPane.setStyle("-fx-background-color: white");
+
+		borderPane.setStyle("-fx-background-color: white");
 		borderPane.setCenter(turtleSandbox);
 		borderPane.setTop(settingsPane);
 		borderPane.setBottom(commandPane);

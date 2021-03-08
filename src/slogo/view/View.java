@@ -58,6 +58,7 @@ public class View {
 		this.environment = EnvironmentFactory.createEnvironment();
 		viewCon = new ViewBundle();
 		modelCon.setController(viewCon);
+		modelCon.setModel(environment);
 		scene = createScene();
 		stage.setScene(scene);
 		stage.show();
@@ -89,7 +90,12 @@ public class View {
 		userText = new TextField();
 		run =  new Button();
 		changeTextInstruction("English");
-		userText.setOnMouseClicked(event -> userText.clear());
+		run.setOnMouseClicked(event -> {
+			String command = userText.getText();
+			modelCon.sendCommand(command);
+			System.out.printf("Button heard: %s", command);
+			userText.clear();
+		});
 		userText.setMinSize(.558*SIZE, .05*SIZE);
 		run.setPrefSize(.05*SIZE,.05*SIZE);
 		pane.add(userText, 0, 0);

@@ -49,7 +49,6 @@ public class TurtleSandbox extends BorderPane {
     setSandboxColor("#03A9F4");
     makeDraggable(sandbox);
     createControls();
-    createMockData();
   }
 
   private void makeDraggable(Pane pane) {
@@ -136,40 +135,6 @@ public class TurtleSandbox extends BorderPane {
     sandbox.getChildren().addAll(turtle);
   }
 
-  private void createMockData() {
-    List<TurtleRecord> demos = new ArrayList<>();
-    demos.add(new TurtleRecord(0, 0, 100, 0)); // Up 100
-    demos.add(new TurtleRecord(0, 0, 100, -120)); // Flip Left
-    demos.add(new TurtleRecord(0, 0, 130, -120)); // Flip Left
-    demos.add(new TurtleRecord(0, 50, 150, -140)); // Flip Left
-
-    demos.add(new TurtleRecord(1, 0, 0, -180));
-    demos.add(new TurtleRecord(1, 0, -100, -180));
-    demos.add(new TurtleRecord(1, 0, -200, -180));
-    demos.add(new TurtleRecord(1, 0, -200, -90));
-    demos.add(new TurtleRecord(1, 100, -200, -90));
-
-    demos.add(new TurtleRecord(0, 100, 100, -90)); // Left 100
-    demos.add(new TurtleRecord(0, 100, 100, 0)); // Rotate Up
-    demos.add(new TurtleRecord(0, 100, 200, 0)); // Up 100
-    demos.add(new TurtleRecord(0, 100, 200, 0));
-    demos.add(new TurtleRecord(0, 200, 200, -90)); // Rotate Left
-    demos.add(new TurtleRecord(0, 200, 200, -180)); // Rotate down
-    demos.add(new TurtleRecord(0, 200, 100, -180));
-    demos.add(new TurtleRecord(0, 200, 100, 90));
-    demos.add(new TurtleRecord(0, 100, 100, 90));
-    demos.add(new TurtleRecord(0, 300, 400, 90));
-
-    Button button = new Button("DEMO");
-    button.setOnAction(
-        (e) -> {
-          if (demos.size() > 0) {
-            updateTurtle(demos.remove(0));
-          }
-        });
-    controls.getChildren().addAll(button);
-  }
-
   public void setSandboxColor(String color) {
     setStyle("-fx-background-color: " + color);
   }
@@ -190,10 +155,10 @@ public class TurtleSandbox extends BorderPane {
     if (tx != info.xCoord() || ty != info.yCoord()) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
-      line.setTranslateX(-1 * tx);
+      line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
-        line.setTranslateX(-1 * tx / 2 - info.xCoord() / 2);
+        line.setTranslateX(1 * tx / 2 + info.xCoord() / 3);
       }
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);

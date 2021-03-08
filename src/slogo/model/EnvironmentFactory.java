@@ -10,6 +10,6 @@ public class EnvironmentFactory {
    * @return A trackable environment.
    */
   public static TrackableEnvironment createEnvironment() {
-    return null;
+    return new Environment();
   }
 }

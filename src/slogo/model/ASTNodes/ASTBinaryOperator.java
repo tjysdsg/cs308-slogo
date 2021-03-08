@@ -13,8 +13,8 @@ public abstract class ASTBinaryOperator extends ASTCommand {
   @Override
   protected double doEvaluate(InfoBundle info) {
     return calculate(
-        children.get(0).evaluate(info),
-        children.get(1).evaluate(info)
+        getChildAt(0).evaluate(info),
+        getChildAt(1).evaluate(info)
     );
   }
 }

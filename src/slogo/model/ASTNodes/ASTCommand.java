@@ -16,20 +16,31 @@ public abstract class ASTCommand extends ASTNamed {
   }
 
   @Override
+  public int getNumParams() {
+    return numParams;
+  }
+
+  @Override
   protected void preEvaluate(InfoBundle info) {
-    int size = children.size();
+    int size = getNumChildren();
     if (size > numParams) {
-      throw new IncorrectParameterCountException(numParams, size, token);
+      throw new IncorrectParameterCountException(this);
     }
   }
 
   @Override
   public int addChild(ASTNode newChild) throws IncorrectParameterCountException {
-    int size = children.size();
-    if (size + 1 > numParams) {
-      throw new IncorrectParameterCountException(numParams, size, token);
+    super.addChild(newChild);
+    int size = getNumChildren();
+
+    if (size > numParams) {
+      throw new IncorrectParameterCountException(this);
     }
-    children.add(newChild);
-    return size + 1;
+    return size;
+  }
+
+  @Override
+  public boolean isDone() {
+    return numParams == getNumChildren();
   }
 }

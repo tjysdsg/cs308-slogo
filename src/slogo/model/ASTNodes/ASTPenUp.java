@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTPenUp extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "penup";
+  private static final String NAME = "ispenup";
 
   public ASTPenUp() {
     super(NAME, NUM_PARAMS);
@@ -13,7 +13,7 @@ public class ASTPenUp extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    // TODO: make the pen up
+    info.getTurtle().setPenDown(false);
     return 0;
   }
 }

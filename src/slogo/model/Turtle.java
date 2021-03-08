@@ -1,5 +1,7 @@
 package slogo.model;
 
+import slogo.events.TurtleRecord;
+
 /**
  * Contains the information of the turtle, such as position and orientation.
  * <p>
@@ -9,16 +11,22 @@ package slogo.model;
  */
 public class Turtle {
 
+  private int id;
   private double x = 0;
   private double y = 0;
   private boolean visible = true;
   private double rotation = 0;
-  private InfoBundle env; // FIXME: turtle probably shouldn't have this - Jiyang
+  private boolean penDown = true;
+  private InfoBundle env;
 
-  /**
-   * Set coordinate of the turtle.
-   */
-  public void setXY(double x, double y) {
+  public Turtle(int id, InfoBundle infoBundle) {
+    env = infoBundle;
+    this.id = id;
+  }
+
+  private void sendUpdate() {
+    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
+    env.notifyTurtleUpdate(record);
   }
 
   /**
@@ -28,20 +36,31 @@ public class Turtle {
    *                 counter-clockwise
    */
   public void rotate(double rotation) {
+    this.rotation += rotation;
+    sendUpdate();
   }
 
   /**
    * Move the turtle towards its the current orientation.
    *
-   * @param x Number of pixels to move.
+   * @param delta Number of pixels to move.
    */
-  public void move(double x) {
+  public void move(double delta) {
+    double rad = Math.toRadians(rotation);
+    double deltaX = delta * Math.sin(rad);
+    double deltaY = delta * Math.cos(rad);
+
+    this.x += deltaX;
+    this.y += deltaY;
+    sendUpdate();
   }
 
   /**
    * Set absolute rotation.
    */
   public void setRotation(double rotation) {
+    this.rotation = rotation;
+    sendUpdate();
   }
 
   /**
@@ -50,6 +69,7 @@ public class Turtle {
   public void setPosition(double x, double y) {
     this.x = x;
     this.y = y;
+    sendUpdate();
   }
 
   /**
@@ -73,5 +93,15 @@ public class Turtle {
 
   public void setVisible(boolean visible) {
     this.visible = visible;
+    sendUpdate();
+  }
+
+  public void setPenDown(boolean penDown) {
+    this.penDown = penDown;
+    sendUpdate();
+  }
+
+  public boolean isPenDown() {
+    return this.penDown;
   }
 }

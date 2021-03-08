@@ -5,7 +5,7 @@ package slogo.exceptions;
  */
 public class UnknownCommandException extends ModelException {
   private String command;
-  private static final String name = "UnknownCommandException";
+  private static final String name = "UnknownIdentifierException";
 
   /**
    * Create a new instance of this exception

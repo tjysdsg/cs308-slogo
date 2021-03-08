@@ -23,7 +23,7 @@ import javafx.scene.control.TextInputDialog;
 
 public class TurtleView extends Group {
   private double currX;
-  public static double ANIMATION_SPEED = 200;
+  public static double ANIMATION_SPEED = 10;
   private double currY;
   private double rotation;
   private ImageView turtleImage;
@@ -113,9 +113,11 @@ public class TurtleView extends Group {
   }
 
   public void update(TurtleRecord info) {
+    System.out.println(info);
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
+      //turtleImage.setRotate(info.rotation() - getCurrRot());
       this.rotation = info.rotation();
       addAnimation(rt);
     }
@@ -125,10 +127,12 @@ public class TurtleView extends Group {
       TranslateTransition moveTurtle = new TranslateTransition();
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
       if (tx != info.xCoord()) {
-        moveTurtle.setToX(-info.xCoord());
+        moveTurtle.setToX(info.xCoord());
+        //turtleImage.setTranslateX(-info.xCoord());
       }
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());
+        //turtleImage.setTranslateY(-info.yCoord());
       }
       moveTurtle.setNode(this);
       addAnimation(moveTurtle);

@@ -11,12 +11,12 @@ import slogo.model.InfoBundle;
  */
 public abstract class ASTNode {
 
-  protected List<ASTNode> children;
+  private List<ASTNode> children;
 
   /**
    * The original string we parsed from to create this node
    */
-  protected String token = "";
+  private String token = "";
 
   /**
    * Constructor
@@ -25,8 +25,22 @@ public abstract class ASTNode {
     children = new ArrayList<>();
   }
 
+  public int getNumParams() {
+    return 0;
+  }
+
+  /**
+   * Set the original string we parsed from to create this node
+   */
   public void setToken(String token) {
     this.token = token;
+  }
+
+  /**
+   * Get the original string we parsed from to create this node
+   */
+  public String getToken() {
+    return token;
   }
 
   /**
@@ -36,6 +50,20 @@ public abstract class ASTNode {
    */
   public int addChild(ASTNode newChild) {
     children.add(newChild);
+    return children.size();
+  }
+
+  /**
+   * Get child node at index `idx`
+   */
+  public ASTNode getChildAt(int idx) {
+    return children.get(idx);
+  }
+
+  /**
+   * Get current number of children of this node
+   */
+  public int getNumChildren() {
     return children.size();
   }
 
@@ -62,4 +90,6 @@ public abstract class ASTNode {
    * Subclasses implement this method to do the actual evaluation
    */
   protected abstract double doEvaluate(InfoBundle info);
+
+  public abstract boolean isDone();
 }

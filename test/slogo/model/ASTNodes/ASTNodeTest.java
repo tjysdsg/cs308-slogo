@@ -65,6 +65,23 @@ public class ASTNodeTest {
     }
   }
 
+  @Test
+  void testFunctions() {
+    String definition = "TO translate [:dForward :dRight] [FORWARD :dForward RIGHT 90 FORWARD :dRight]";
+    String call = "translate 10 20";
+
+    ASTNode node = parser.parseCommand(definition);
+    double res = node.evaluate(infoBundle);
+    assertEquals(1, res, 1E-5);
+
+    node = parser.parseCommand(call);
+    res = node.evaluate(infoBundle);
+    assertEquals(20.0, res, 1E-5);
+
+    assertEquals(20, infoBundle.getTurtle().getX(), 1E-5);
+    assertEquals(10, infoBundle.getTurtle().getY(), 1E-5);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> lookupTable;

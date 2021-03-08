@@ -155,10 +155,10 @@ public class TurtleSandbox extends BorderPane {
     if (tx != info.xCoord() || ty != info.yCoord()) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
-      line.setTranslateX(-1 * tx);
+      line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
-        line.setTranslateX(-1 * tx / 2 - info.xCoord() / 2);
+        line.setTranslateX(1 * tx / 2 + info.xCoord() / 3);
       }
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);

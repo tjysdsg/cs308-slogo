@@ -1,6 +1,7 @@
 package slogo.model.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
@@ -210,6 +213,16 @@ public class ParserTest {
     expected.addChild(new ASTNumberLiteral(3));
     actual = parser.parseCommand(TEST_STRING);
     assertNodeStructure(expected, actual);
+  }
+
+  @Test
+  void testIncompleteCommands() {
+    String[] TESTs = new String[]{"fd", "fd fd", "sum 1", "fd 1 sum"};
+    for (String test : TESTs) {
+        assertThrows(IncorrectParameterCountException.class, () -> {
+            parser.parseCommand(test);
+        });
+     }
   }
 
   void assertNodeStructure(ASTNode expected, ASTNode actual) {

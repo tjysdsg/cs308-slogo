@@ -30,6 +30,7 @@ public class TurtleView extends Group {
   private Queue<Animation> animationQueue;
   private String penColor;
   private Label name;
+  private boolean penDown;
 
   protected TurtleView(Image image) {
     turtleImage = new ImageView(image);
@@ -37,6 +38,7 @@ public class TurtleView extends Group {
     this.currX = 0;
     this.currY = 0;
     this.name = new Label("Turtle :)");
+    this.penDown = true;
     getChildren().add(name);
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
@@ -108,12 +110,17 @@ public class TurtleView extends Group {
     return this.penColor;
   }
 
+  public boolean isPenDown() {
+    return this.penDown;
+  }
+
   public void setPenColor(String penColor) {
     this.penColor = penColor;
   }
 
   public void update(TurtleRecord info) {
-    System.out.println(info);
+    penDown = info.penDown();
+    turtleImage.setVisible(info.visible());
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());

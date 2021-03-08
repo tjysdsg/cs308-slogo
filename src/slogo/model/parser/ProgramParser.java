@@ -54,7 +54,7 @@ public class ProgramParser implements Parser {
             String commandName = cc.getSymbol(token);
             ASTNode newCommand;
             switch (commandName) {
-              case "makeuserinstruction" -> {
+              case "MakeUserInstruction" -> {
                 String identifier = lines.get(lines.indexOf(token) + 1);
                 newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
                 skipNext = true;

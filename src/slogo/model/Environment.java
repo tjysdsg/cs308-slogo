@@ -51,7 +51,6 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void runCommand(String command) {
-    System.out.printf("Made it to backend environment %s", command);
     ASTNode commandTree = myParser.parseCommand(command);
     commandTree.evaluate(executionEnvironment);
   }

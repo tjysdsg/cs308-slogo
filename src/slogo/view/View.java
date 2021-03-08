@@ -99,7 +99,6 @@ public class View {
 		run.setOnMouseClicked(event -> {
 			String command = codeArea.getText();
 			modelCon.sendCommand(command);
-			System.out.printf("Button heard: %s", command);
 			codeArea.clear();
 		});
 

@@ -88,6 +88,14 @@ public class View {
 			turtleSandbox.updateTurtle(e);
 		});
 
+		environment.setOnVariableUpdate( e -> {
+			environmentPane.updateVariables(e);
+		});
+
+		environment.setOnCommandUpdate( e -> {
+			environmentPane.updateCommands(e);
+		});
+
 		return newScene;
 	}
 
@@ -99,7 +107,6 @@ public class View {
 		run.setOnMouseClicked(event -> {
 			String command = codeArea.getText();
 			modelCon.sendCommand(command);
-			System.out.printf("Button heard: %s", command);
 			codeArea.clear();
 		});
 
@@ -108,6 +115,7 @@ public class View {
 			if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
 				modelCon.sendCommand(command);
 				codeArea.clear();
+				environmentPane.addPreviousCommand(command);
 			}
 		});
 

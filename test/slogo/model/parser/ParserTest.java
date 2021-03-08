@@ -1,5 +1,6 @@
 package slogo.model.parser;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import slogo.exceptions.IncorrectParameterCountException;
+import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
@@ -223,6 +225,21 @@ public class ParserTest {
             parser.parseCommand(test);
         });
      }
+  }
+
+  @Test
+  void testUnknownCommand() {
+    String USER_TEST = "doStuff 2";
+    String DEFINE_COMMAND = "to doStuff [ :item ] [ fd :item ]";
+
+    assertThrows(UnknownIdentifierException.class, () -> {
+      parser.parseCommand(USER_TEST);
+    });
+
+    assertDoesNotThrow(() -> {
+      parser.parseCommand(DEFINE_COMMAND);
+      parser.parseCommand(USER_TEST);
+    });
   }
 
   void assertNodeStructure(ASTNode expected, ASTNode actual) {

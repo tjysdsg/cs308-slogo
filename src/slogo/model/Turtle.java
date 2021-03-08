@@ -36,7 +36,7 @@ public class Turtle {
    *                 counter-clockwise
    */
   public void rotate(double rotation) {
-    this.rotation = rotation;
+    this.rotation += rotation;
     sendUpdate();
   }
 

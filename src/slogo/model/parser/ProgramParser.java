@@ -1,6 +1,7 @@
 package slogo.model.parser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -106,5 +107,21 @@ public class ProgramParser implements Parser {
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
+  }
+
+  public static void main(String[] args) {
+    Parser parser = new ProgramParser("English", new HashMap<>());
+    parser.parseCommand("""
+to dash [ :count ]
+[
+    repeat :count
+        [
+        pu fd 4 pd fd 4
+  ]      
+]
+
+    cs
+        home
+    dash 10""");
   }
 }

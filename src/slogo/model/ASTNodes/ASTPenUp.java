@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTPenUp extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "ispenup";
+  private static final String NAME = "PenUp";
 
   public ASTPenUp() {
     super(NAME, NUM_PARAMS);

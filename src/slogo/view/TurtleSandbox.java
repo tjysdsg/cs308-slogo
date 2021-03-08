@@ -163,8 +163,6 @@ public class TurtleSandbox extends BorderPane {
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);
       }
-      System.out.println(line.getTranslateX());
-      System.out.println(line.getTranslateY());
       line.setStartX(-tx);
       line.setStartY(ty);
       line.setEndX(-info.xCoord());

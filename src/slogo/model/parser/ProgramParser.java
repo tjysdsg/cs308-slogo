@@ -20,16 +20,13 @@ public class ProgramParser implements Parser {
     lookUpTable = table;
   }
 
-  //TODO: Add Expression Handling and Logic for Errors
-
   public ASTNode parseCommand(String command)
       throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
 
     List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
-    lines.removeIf((filter) -> { return filter.isBlank(); });
+    lines.removeIf(String::isBlank);
     Stack<Scope> scopeStack = new Stack<>();
     scopeStack.push(new Scope());
-    int expLevel = 0;
     boolean skipNext = false;
 
     for (String token : lines) {
@@ -46,9 +43,8 @@ public class ProgramParser implements Parser {
       token = token.replaceAll("\\s+", "");
       if (token.length() > 0) {
         String type = tc.getSymbol(token);
-        //System.out.printf("Token:%s, Type:%s\n", token, type);
 
-        //TODO: Must refactor to become better designed and avoid duplication
+        //TODO: Try to avoid using a switch statement
         switch (type) {
           case "Constant" -> {
             currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
@@ -57,31 +53,32 @@ public class ProgramParser implements Parser {
           case "Command" -> {
             String commandName = cc.getSymbol(token);
             ASTNode newCommand;
-            if (commandName.equalsIgnoreCase("makeuserinstruction")) {
-              String identifier = lines.get(lines.indexOf(token) + 1);
-              newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
-              skipNext = true;
-            } else if (commandName.equals("NO MATCH")) {
-              ASTFunctionCall foundFunc = lookUpTable.get(token);
-              newCommand = foundFunc.clone();
-            } else {
-              newCommand = ASTCommandFactory.getCommand(commandName);
+            switch (commandName) {
+              case "makeuserinstruction" -> {
+                String identifier = lines.get(lines.indexOf(token) + 1);
+                newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
+                skipNext = true;
+              }
+
+              case "NO MATCH" -> {
+                ASTFunctionCall foundFunc = lookUpTable.get(token);
+                if (foundFunc == null) {
+                  throw new UnknownIdentifierException(token);
+                }
+                newCommand = foundFunc.clone();
+              }
+
+              default -> newCommand = ASTCommandFactory.getCommand(commandName);
             }
+
             currScope.push(newCommand);
           }
 
-          case "Variable" -> {
-            currScope.push(new ASTVariable(token));
-          }
+          case "Variable" -> currScope.push(new ASTVariable(token));
 
-          case "ListStart" -> {
-            expLevel++;
-            scopeStack.push(new Scope());
-          }
+          case "ListStart" -> scopeStack.push(new Scope());
 
           case "ListEnd" -> {
-            expLevel--;
-
             if (currScope.isIncomplete()) {
               throw new IncorrectParameterCountException(currScope.peek());
             }
@@ -95,7 +92,6 @@ public class ProgramParser implements Parser {
         }
 
         currScope.collapse();
-        //printStack(currScope);
       }
     }
 
@@ -111,15 +107,4 @@ public class ProgramParser implements Parser {
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
   }
-
-//  public static void main(String[] args) {
-//    Parser myParser = new ProgramParser("English", null);
-//    ASTNode res = myParser.parseCommand("MINUS 1");
-//  }
-//
-//  public void printStack(Stack<ASTCommand> myStack) {
-//    for (ASTCommand item : myStack) {
-//      System.out.println(item.getClass().getName());
-//    }
-//  }
 }

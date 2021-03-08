@@ -20,6 +20,7 @@ import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.ASTNodes.ASTRemainder;
 import slogo.model.ASTNodes.ASTRepeat;
 import slogo.model.ASTNodes.ASTSum;
+import slogo.model.ASTNodes.ASTUnaryOperator;
 import slogo.model.ASTNodes.ASTVariable;
 
 

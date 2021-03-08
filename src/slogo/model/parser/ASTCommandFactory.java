@@ -11,11 +11,10 @@ public class ASTCommandFactory {
   public static final String dirPath = "src/" + packagePath.replace(".", "/") + "/";
 
   public static ASTCommand getCommand(String command) {
-    //TODO: get the commands
     Class[] availNodes = getASTNodes();
     for (Class node : availNodes) {
 
-      if (isNodeDescendantOfClass(node, ASTCommand.class) | isNodeAbstract(node))
+      if (!isNodeDescendantOfClass(node, ASTCommand.class) | isNodeAbstract(node))
         continue;
 
       String name = "";
@@ -58,16 +57,16 @@ public class ASTCommandFactory {
     return nodes;
   }
 
-  private static boolean isNodeDescendantOfClass(Class node, Class ancestor) {
+  public static boolean isNodeDescendantOfClass(Class node, Class ancestor) {
     Class parent = node.getSuperclass();
     if (parent == null)
-      return true;
-    if (parent == ancestor)
       return false;
+    if (parent == ancestor)
+      return true;
     return isNodeDescendantOfClass(parent, ancestor);
   }
 
-  private static boolean isNodeAbstract(Class node) {
+  public static boolean isNodeAbstract(Class node) {
     return Modifier.isAbstract(node.getModifiers());
   }
 }

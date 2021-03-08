@@ -1,4 +1,5 @@
 package slogo.view;
+import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -25,7 +26,8 @@ import slogo.model.TrackableEnvironment;
  *  color for the pen and background.
  */
 public class View {
-  private static final int SIZE = 1000;
+  private static final int WIDTH = 1200;
+  private static final int HEIGHT = 750;
   private Insets layoutPadding = new Insets(10);
 
 	private ModelController modelCon;
@@ -74,7 +76,7 @@ public class View {
 		commandPane = makeBottomPane();
 		settingsPane = new SettingsPane(viewCon);
 		borderPane = new BorderPane();
-		Scene newScene = new Scene(borderPane, SIZE, SIZE);
+		Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
 
 		borderPane.setCenter(turtleSandbox);
 		borderPane.setTop(settingsPane);
@@ -119,10 +121,9 @@ public class View {
 			}
 		});
 
-		run.setPrefSize(.05*SIZE,.05*SIZE);
 		pane.add(codeArea, 0, 0);
 		pane.add(run, 1, 0);
-		pane.setTranslateX(250);//define size of sides as parameter
+		pane.setAlignment(Pos.CENTER);
 		return pane;
 	}
 

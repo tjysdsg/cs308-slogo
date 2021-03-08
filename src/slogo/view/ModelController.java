@@ -64,8 +64,8 @@ public class ModelController {
         env.runCommand(command);
         System.out.println("MADE IT");
       } catch(ModelException e) {
-        String excp = buildException(e);
-        vc.sendAlert("Error", excp);
+        //String excp = buildException(e);
+        //vc.sendAlert("Error", excp);
       }
     } else {
 

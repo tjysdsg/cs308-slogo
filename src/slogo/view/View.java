@@ -113,7 +113,6 @@ public class View {
   public Pane makeBottomPane() {
     GridPane pane = new GridPane();
     codeArea = new TextArea();
-    pane.add(alert, 2, 0);
     run = new Button();
     changeTextInstruction("English");
     run.setOnMouseClicked(

@@ -73,7 +73,7 @@ public class EnvironmentPane extends Pane {
     comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
 
     commandsTable.getColumns().addAll(comNameCol, comValueCol);
-    commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    //commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
@@ -82,7 +82,7 @@ public class EnvironmentPane extends Pane {
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
 
-    variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    //variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     variablesTable.setPrefHeight(TABLE_SIZE);
     commandsTable.setPrefHeight(TABLE_SIZE);
   }
@@ -121,6 +121,10 @@ public class EnvironmentPane extends Pane {
     if (lastRanCommand != null) {
       lastRanCommand.setStyle("-fx-text-fill: red");
     }
+  }
+
+  public String getPreviousCommand() {
+    return lastRanCommand != null ? lastRanCommand.getText() : "";
   }
 
   public void addPreviousCommand(String command) {

@@ -123,6 +123,9 @@ public class View {
           String command = codeArea.getText();
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendTextBox();
+          } else if (e.getCode() == KeyCode.UP && codeArea.getText() == "") {
+            codeArea.setText(environmentPane.getPreviousCommand());
+            codeArea.end();
           }
         });
 

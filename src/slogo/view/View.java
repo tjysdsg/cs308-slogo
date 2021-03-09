@@ -27,7 +27,6 @@ import slogo.model.TrackableEnvironment;
 public class View {
   private static final int WIDTH = 1200;
   private static final int HEIGHT = 750;
-  private Insets layoutPadding = new Insets(10);
 
   private ModelController modelCon;
   private TrackableEnvironment environment;
@@ -87,7 +86,6 @@ public class View {
     borderPane.setBottom(commandPane);
     borderPane.setLeft(environmentPane);
     borderPane.setRight(helpPane);
-    borderPane.setPadding(layoutPadding);
     newScene
         .getStylesheets()
         .add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());

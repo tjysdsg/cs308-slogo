@@ -81,4 +81,12 @@ public class ModelController {
   public void setLanguage(String language) {
 
   }
+
+  public void addTurtle() {
+    env.addTurtle();
+  }
+
+  public void setCurrTurtle(int turtle) {
+    env.setCurrTurtle(turtle);
+  }
 }

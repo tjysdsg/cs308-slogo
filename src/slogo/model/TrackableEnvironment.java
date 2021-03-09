@@ -47,4 +47,8 @@ public interface TrackableEnvironment {
    * @param bundle - The bundle to use.
    */
   void setBundle(ResourceBundle bundle);
+
+  void addTurtle();
+
+  void setCurrTurtle(int turtle);
 }

@@ -37,12 +37,14 @@ public class TurtleSandbox extends BorderPane {
   private HBox controls;
   private double dragX;
   private double dragY;
+  private ViewController viewController;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
-  public TurtleSandbox() {
-    turtles = new ArrayList<>();
-    lines = new StackPane();
-    sandbox = new StackPane();
+  public TurtleSandbox(ViewController viewController) {
+    this.turtles = new ArrayList<>();
+    this.lines = new StackPane();
+    this.sandbox = new StackPane();
+    this.viewController = viewController;
     sandbox.getChildren().add(lines);
     addTurtle();
     setCenter(sandbox);
@@ -132,6 +134,12 @@ public class TurtleSandbox extends BorderPane {
   private void addTurtle() {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
+    if (turtles.size() > 1) viewController.addTurtle();
+    turtle.setOnMouseClicked( e -> {
+      if (e.isShiftDown()) {
+        viewController.setCurrTurtle(turtles.indexOf(turtle));
+      }
+    });
     sandbox.getChildren().addAll(turtle);
   }
 

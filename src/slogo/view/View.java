@@ -70,7 +70,7 @@ public class View {
   public Scene createScene() {
     environmentPane = new EnvironmentPane();
     helpPane = new HelpPane();
-    turtleSandbox = new TurtleSandbox();
+    turtleSandbox = new TurtleSandbox(viewCon);
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
@@ -205,6 +205,14 @@ public class View {
       } else {
         viewCon.sendAlert("Error", "STOSAPSGI");
       }
+    }
+
+    public void addTurtle() {
+      modelCon.addTurtle();
+    }
+
+    public void setCurrTurtle(int id) {
+      modelCon.setCurrTurtle(id);
     }
   }
 }

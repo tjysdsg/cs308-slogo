@@ -35,10 +35,12 @@ public class HelpPane extends Pane {
   private  ChoiceBox<String> booleanList = new ChoiceBox();
   private  ChoiceBox<String> variablesList = new ChoiceBox();
   private  ChoiceBox<String> userCommandList = new ChoiceBox();
+  ViewController vcon;
 
 
 
-  public HelpPane( ){
+  public HelpPane(ViewController vcon ){
+    this.vcon = vcon;
     createHelpWindow();
     getChildren().add(vbox);
     
@@ -48,7 +50,7 @@ public class HelpPane extends Pane {
     createDisplayWindow();
     createSearchBar();
     createList();
-    createDisplayLanguages("English");
+    createDisplayLanguages();
     vbox = new VBox(displayWindow, searchBar, list);
     vbox.setPadding(new Insets(0,0, 0, 2));
     vbox.setSpacing(5);
@@ -63,9 +65,8 @@ public class HelpPane extends Pane {
 
   }
 
-  public void createDisplayLanguages(String language) {
-
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "languages/" + language);
+  public void createDisplayLanguages() {
+    resources = vcon.setBundle();
     helpLabel.setText(resources.getString("helpTitle"));
     commandList.getItems().clear();
     commandList.getItems().addAll(resources.getString("commandList").split(","));

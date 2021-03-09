@@ -46,6 +46,7 @@ public class View {
 	public static final String RESOURCE_PACKAGE = "resources.";
 	public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
 	public static final String LANGUAGE_FOLDER = RESOURCE_FOLDER + "languages/";
+	ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + "English");
 
 	/**
 	 * This is teh constructor for the View class.
@@ -70,8 +71,8 @@ public class View {
 	}
 
 	public Scene createScene() {
-		environmentPane = new EnvironmentPane();
-		helpPane = new HelpPane();
+		environmentPane = new EnvironmentPane(viewCon);
+		helpPane = new HelpPane(viewCon);
 		turtleSandbox = new TurtleSandbox();
 		commandPane = makeBottomPane();
 		settingsPane = new SettingsPane(viewCon);
@@ -109,6 +110,7 @@ public class View {
 		run.setOnMouseClicked(event -> {
 			String command = codeArea.getText();
 			modelCon.sendCommand(command);
+			environmentPane.addPreviousCommand(command);
 			codeArea.clear();
 		});
 
@@ -128,11 +130,21 @@ public class View {
 	}
 
 	private void changeTextInstruction(String language) {
-		ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
+		resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
 		// TODO: Maybe say an instruction like shift+enter to run?
 		codeArea.setPromptText(resources.getString("userCommand"));
 		run.setText(resources.getString("runButton"));
 	}
+
+
+//	public ResourceBundle setBundle(ResourceBundle resources) {
+//		return this.resources;
+//
+//	}
+
+
+
+
 
 
 	/**
@@ -160,8 +172,8 @@ public class View {
 		 */
 		public void setLanguage(String language) {
 					changeTextInstruction(language);
-				((HelpPane) helpPane).createDisplayLanguages(language);
-			((EnvironmentPane) environmentPane ).createTitles(language);
+				helpPane.createDisplayLanguages();
+			environmentPane.createTitles();
 		}
 
 
@@ -183,17 +195,24 @@ public class View {
 
 		}
 
+		@Override
+		public ResourceBundle setBundle() {
+			return resources;
+		}
+
+
 		public void sendAlert(String title, String message) {
 
 		}
 
-		public void sendUserText(){
-			if (codeArea.getText()!=null) {
-				modelCon.sendCommand(codeArea.getText());
-			}
-			else{
-				viewCon.sendAlert("Error", "STOSAPSGI");
-			}
-		}
+//		public void sendUserText(){
+//			if (codeArea.getText()!=null) {
+//				((EnvironmentPane) environmentPane).addPreviousCommand(codeArea.getText());
+//				modelCon.sendCommand(codeArea.getText());
+//			}
+//			else{
+//				viewCon.sendAlert("Error", "STOSAPSGI");
+//			}
+//		}
 	}
 }

@@ -27,8 +27,10 @@ public class EnvironmentPane extends Pane {
   TitledPane commandsToggle;
   TitledPane variablesToggle;
   TitledPane prevCommands;
+  ViewController vcon;
 
-  public EnvironmentPane() {
+  public EnvironmentPane(ViewController vcon) {
+    this.vcon = vcon;
     VBox vbox = new VBox();
     variablesTable = new TableView<>();
     commandsTable = new TableView<>();
@@ -50,12 +52,13 @@ public class EnvironmentPane extends Pane {
 
     vbox.getChildren().addAll(variablesToggle, commandsToggle, prevCommands);
 
-    createTitles("English");
+    createTitles();
     createMockData();
   }
 
-  public void createTitles(String language) {
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  public void createTitles() {
+    resources = vcon.setBundle();
+    //ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
     commandsToggle.setText(resources.getString("command"));
     variablesToggle.setText(resources.getString("variable"));
     prevCommands.setText(resources.getString("prevCommand"));
@@ -113,6 +116,7 @@ public class EnvironmentPane extends Pane {
   }
 
   public void addPreviousCommand(String command) {
+    System.out.println(command);
     previousCommands.getItems().add(new Label(command));
   }
 }

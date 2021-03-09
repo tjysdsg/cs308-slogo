@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.ResourceBundle;
+
 /**
  * A controller to manipulate
  * the current view.
@@ -31,12 +33,11 @@ public interface ViewController {
    */
   void setTurtleLogo(String turtleLogo);
 
-  void sendAlert(String title, String message);
-
-  /**
-   * send user command to model to parse.
-   *
-   */
-   void sendUserText();
+  ResourceBundle setBundle();
+//  /**
+//   * send user command to model to parse.
+//   *
+//   */
+//   void sendUserText();
 
 }

@@ -44,8 +44,7 @@ public class SettingsPane extends Pane {
 
   ViewController vcon;
 
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  //public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
+
 
   /**
    * This method intializes a viewController object which defines method
@@ -69,7 +68,7 @@ public class SettingsPane extends Pane {
     createTurtleUpload();
     hbox = new HBox(title, languageList,  turtleList, penPane,
             backgroundPane,uploadTurtle);
-    displayLabels("English");
+    displayLabels();
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
     //hbox.setTranslateX(200);//define size of sides as parameter
@@ -83,10 +82,11 @@ public class SettingsPane extends Pane {
     uploadTurtle.setOnAction(e-> {
       node = (Node) e.getSource();
       userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
-      System.out.println(userFile.toString());
       vcon.setTurtleLogo(userFile.toString());
       if (userFile == null){
         System.out.println("empty file");
+
+        //need to set up an empty turtle method exception.
       }
     });
 
@@ -135,16 +135,16 @@ public class SettingsPane extends Pane {
     languageList.getItems().addAll(languages);
     languageList.setValue("English");
     languageList.setOnAction(e->{
-      displayLabels(languageList.getValue().toString());
       vcon.setLanguage(languageList.getValue().toString());
+      displayLabels();
 
 
     });
 
   }
 
-  private void displayLabels(String language){
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  private void displayLabels(){
+    resources = vcon.setBundle();
     title.setText(resources.getString("title"));
     penColorLabel.setText(resources.getString("penColorLabel"));
     backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));

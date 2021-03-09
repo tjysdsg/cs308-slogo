@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 
 /**
@@ -69,11 +70,10 @@ public class SettingsPane extends Pane {
     createTurtleUpload();
     hbox = new HBox(title, languageList,  turtleList, penPane,
             backgroundPane,uploadTurtle);
+    hbox.setAlignment(Pos.CENTER);
     displayLabels("English");
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
-    //hbox.setTranslateX(200);//define size of sides as parameter
-
   }
 
   private void createTurtleUpload() {
@@ -106,6 +106,7 @@ public class SettingsPane extends Pane {
     penPane.add(penColorLabel, 0, 0);
     penPane.add(penColorPicker, 1,0);
     penPane.setHgap(10);
+    penPane.setAlignment(Pos.CENTER);
     backgroundColorLabel =  new Label();
     backgroundColorPicker = new ColorPicker();
 
@@ -114,6 +115,7 @@ public class SettingsPane extends Pane {
     });
 
     backgroundPane = new GridPane();
+    backgroundPane.setAlignment(Pos.CENTER);
     backgroundPane.add(backgroundColorLabel, 0, 0);
     backgroundPane.add(backgroundColorPicker, 1, 0);
     backgroundPane.setHgap(10);

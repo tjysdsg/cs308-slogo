@@ -19,6 +19,7 @@ import slogo.events.VariablesRecord;
 public class EnvironmentPane extends Pane {
 
   public static final int TABLE_SIZE = 200;
+  private Label lastRanCommand;
   TableView<DisplayCommand> commandsTable;
   TableView<DisplayVariable> variablesTable;
   JFXListView<Label> previousCommands;
@@ -112,7 +113,18 @@ public class EnvironmentPane extends Pane {
     commandsTable.getItems().addAll(records.commands());
   }
 
+  /**
+   * Changes the color of the most recently run
+   * command if it resulted in an error.
+   */
+  public void previousError() {
+    if (lastRanCommand != null) {
+      lastRanCommand.setStyle("-fx-text-fill: red");
+    }
+  }
+
   public void addPreviousCommand(String command) {
-    previousCommands.getItems().add(new Label(command));
+    lastRanCommand = new Label(command);
+    previousCommands.getItems().add(lastRanCommand);
   }
 }

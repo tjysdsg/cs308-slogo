@@ -115,18 +115,14 @@ public class View {
     changeTextInstruction("English");
     run.setOnMouseClicked(
         event -> {
-          String command = codeArea.getText();
-          modelCon.sendCommand(command);
-          codeArea.clear();
+          sendTextBox();
         });
 
     codeArea.setOnKeyPressed(
         e -> {
           String command = codeArea.getText();
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
-            modelCon.sendCommand(command);
-            codeArea.clear();
-            environmentPane.addPreviousCommand(command);
+            sendTextBox();
           }
         });
 
@@ -141,6 +137,13 @@ public class View {
     // TODO: Maybe say an instruction like shift+enter to run?
     codeArea.setPromptText(resources.getString("userCommand"));
     run.setText(resources.getString("runButton"));
+  }
+
+  private void sendTextBox() {
+    String command = codeArea.getText();
+    modelCon.sendCommand(command);
+    environmentPane.addPreviousCommand(command);
+    codeArea.clear();
   }
 
   /**
@@ -197,20 +200,16 @@ public class View {
               });
     }
 
-    public void sendUserText() {
-      if (codeArea.getText() != null) {
-        modelCon.sendCommand(codeArea.getText());
-      } else {
-        viewCon.sendAlert("Error", "STOSAPSGI");
-      }
-    }
-
     public void addTurtle() {
       modelCon.addTurtle();
     }
 
     public void setCurrTurtle(int id) {
       modelCon.setCurrTurtle(id);
+    }
+
+    public void sendCommand(String command) {
+
     }
   }
 }

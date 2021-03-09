@@ -34,7 +34,7 @@ public interface ViewController {
   void sendAlert(String title, String message);
 
   /** send user command to model to parse. */
-  void sendUserText();
+  void sendCommand(String command);
 
   void addTurtle();
 

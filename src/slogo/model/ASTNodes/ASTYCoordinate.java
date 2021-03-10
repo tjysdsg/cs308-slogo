@@ -2,12 +2,12 @@ package slogo.model.ASTNodes;
 
 import slogo.model.InfoBundle;
 
-public class ASTYCor extends ASTCommand {
+public class ASTYCoordinate extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "ycoordinate";
+  private static final String NAME = "YCoordinate";
 
-  public ASTYCor() {
+  public ASTYCoordinate() {
     super(NAME, NUM_PARAMS);
   }
 

@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTATan extends ASTUnaryOperator {
+public class ASTArcTangent extends ASTUnaryOperator {
 
-  private static final String NAME = "arctangent";
+  private static final String NAME = "ArcTangent";
 
-  public ASTATan() {
+  public ASTArcTangent() {
     super(NAME);
   }
 

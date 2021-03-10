@@ -6,7 +6,7 @@ import slogo.model.Turtle;
 public class ASTSetHeading extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "setheading";
+  private static final String NAME = "SetHeading";
 
   public ASTSetHeading() {
     super(NAME, NUM_PARAMS);

@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTHeading extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "heading";
+  private static final String NAME = "Heading";
 
   public ASTHeading() {
     super(NAME, NUM_PARAMS);

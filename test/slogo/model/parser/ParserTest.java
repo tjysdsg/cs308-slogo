@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import slogo.exceptions.IncorrectParameterCountException;
+import slogo.exceptions.InvalidSyntaxException;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
@@ -241,6 +242,31 @@ public class ParserTest {
       parser.parseCommand(USER_TEST);
     });
   }
+
+  @Test
+  void testScopeNotEnded() {
+    String TEST_STRING = "fd [[";
+    assertThrows(InvalidSyntaxException.class, () -> {
+      parser.parseCommand(TEST_STRING);
+    });
+  }
+
+  @Test
+  void testEmptyScope() {
+    String TEST_STRING = "to stuff [] [ fd 50 ]";
+    assertDoesNotThrow(() -> {
+      parser.parseCommand(TEST_STRING);
+    });
+  }
+
+  @Test
+  void testAddLiteralFirst() {
+    String TEST_STRING = "50";
+    assertThrows(InvalidSyntaxException.class, () -> {
+      parser.parseCommand(TEST_STRING);
+    });
+  }
+
 
   void assertNodeStructure(ASTNode expected, ASTNode actual) {
     assertEquals(expected.getToken(), actual.getToken());

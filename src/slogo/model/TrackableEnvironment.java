@@ -1,6 +1,7 @@
 package slogo.model;
 
 import java.util.ResourceBundle;
+import slogo.events.ClearEnvironment;
 import slogo.events.UpdateCommands;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
@@ -51,4 +52,6 @@ public interface TrackableEnvironment {
   void addTurtle();
 
   void setCurrTurtle(int turtle);
+
+  void setOnClear(ClearEnvironment callback);
 }

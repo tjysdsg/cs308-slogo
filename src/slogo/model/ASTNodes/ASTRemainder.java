@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTRemainder extends ASTBinaryOperator {
 
-  private static final String NAME = "remainder";
+  private static final String NAME = "Remainder";
 
   public ASTRemainder() {
     super(NAME);

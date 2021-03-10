@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTLess extends ASTBinaryOperator {
+public class ASTLessThan extends ASTBinaryOperator {
 
-  private static final String NAME = "lessthan";
+  private static final String NAME = "LessThan";
 
-  public ASTLess() {
+  public ASTLessThan() {
     super(NAME);
   }
 

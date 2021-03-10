@@ -9,12 +9,12 @@ import slogo.model.InfoBundle;
  *   <li>Expression</li>
  * </ol>
  */
-public class ASTVariableDeclaration extends ASTDeclaration {
+public class ASTMakeVariable extends ASTDeclaration {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "makevariable";
+  private static final String NAME = "MakeVariable";
 
-  public ASTVariableDeclaration() {
+  public ASTMakeVariable() {
     super(NAME, NUM_PARAMS);
   }
 

@@ -48,16 +48,18 @@ public class ProgramParser implements Parser {
         //TODO: Try to avoid using a switch statement
         switch (type) {
           case "Constant" -> {
+            assertNeedsChild(scopeStack.size(), currScope);
             currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
           }
 
           case "Command" -> {
             String commandName = cc.getSymbol(token);
             ASTNode newCommand;
+
             switch (commandName) {
               case "MakeUserInstruction" -> {
                 String identifier = lines.get(lines.indexOf(token) + 1);
-                newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
+                newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
                 skipNext = true;
               }
 
@@ -98,11 +100,23 @@ public class ProgramParser implements Parser {
 
     Scope currScope = scopeStack.peek();
     if (currScope.isIncomplete() || scopeStack.size() != 1) {
+      if (currScope.peek() == null) {
+        throw new InvalidSyntaxException(command, command);
+      }
+
       ASTNode problem = currScope.peek();
       throw new IncorrectParameterCountException(problem);
     }
 
-    return currScope.getCommands();
+    ASTNode out = currScope.getCommands();
+    if (out.getNumChildren() == 1)
+      return out.getChildAt(0);
+    return out;
+  }
+
+  private void assertNeedsChild(int scopeDepth, Scope currScope) {
+    if (scopeDepth == 1 && !currScope.addNextAsChild())
+      throw new InvalidSyntaxException("Variable or Constant", "Without a Parent");
   }
 
   public void changeLanguage(String language) {

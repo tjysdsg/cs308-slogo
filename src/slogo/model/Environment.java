@@ -103,6 +103,12 @@ public class Environment implements TrackableEnvironment {
       }
     }
 
+    public void notifyEnvironmentClear() {
+      if (clearEnvironmentCallback != null) {
+        clearEnvironmentCallback.execute();
+      }
+    }
+
     public void notifyCommandUpdate(CommandsRecord info) {
       if (updateCommandsCallback != null) {
         updateCommandsCallback.execute(info);

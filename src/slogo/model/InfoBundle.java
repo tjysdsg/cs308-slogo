@@ -37,6 +37,8 @@ public interface InfoBundle {
    */
   void notifyVariableUpdate(VariablesRecord info);
 
+  void notifyEnvironmentClear();
+
   /**
    * Returns the mapping of names to AST trees.
    *

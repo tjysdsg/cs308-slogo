@@ -41,28 +41,138 @@ public class ASTNodeTest {
     return node.evaluate(infoBundle);
   }
 
+  double parseAndEvaluateCommands(String cmd, double param1, double param2) {
+    String str = String.format("%s %f %f", cmd, param1, param2);
+    ASTNode node = parser.parseCommand(str);
+    return node.evaluate(infoBundle);
+  }
+
+  void assertTurtleXY(double x, double y) {
+    assertEquals(x, infoBundle.getTurtle().getX(), 1E-5);
+    assertEquals(y, infoBundle.getTurtle().getY(), 1E-5);
+  }
+
+  void assertTurtleRotation(double rotation) {
+    assertEquals(rotation, infoBundle.getTurtle().getRotation(), 1E-5);
+  }
+
   @Test
-  void testMoveCommands() {
+  void testForwardBackwardCommands() {
     Random rand = new Random();
-    for (String cmd : new String[]{
-        "FORWARD",
-        "BACK",
-        "RIGHT",
-        "LEFT",
-    }) {
-      infoBundle = new TestBundle(); // reset turtle
 
+    { // FORWARD
+      infoBundle.reset(); // reset turtle
       double a = rand.nextDouble() * 200.0 - 100.0;
-      double res = parseAndEvaluateCommands(cmd, a);
+      double res = parseAndEvaluateCommands("FORWARD", a);
       assertEquals(a, res, 1E-5);
-
-      switch (cmd) {
-        case "FORWARD" -> assertEquals(a, infoBundle.getTurtle().getY(), 1E-5);
-        case "BACK" -> assertEquals(-a, infoBundle.getTurtle().getY(), 1E-5);
-        case "RIGHT" -> assertEquals(a, infoBundle.getTurtle().getRotation(), 1E-5);
-        case "LEFT" -> assertEquals(-a, infoBundle.getTurtle().getRotation(), 1E-5);
-      }
+      assertTurtleXY(0, a);
     }
+
+    { // BACKWARD
+      infoBundle.reset(); // reset turtle
+      double a = rand.nextDouble() * 200.0 - 100.0;
+      double res = parseAndEvaluateCommands("BACK", a);
+      assertEquals(a, res, 1E-5);
+      assertTurtleXY(0, -a);
+    }
+  }
+
+  @Test
+  void testLeftRightCommands() {
+    { // LEFT 20
+      infoBundle.reset(); // reset turtle
+      double res = parseAndEvaluateCommands("LEFT", 20);
+      assertEquals(-20, res, 1E-5);
+      assertTurtleRotation(-20);
+    }
+
+    { // LEFT -20
+      infoBundle.reset(); // reset turtle
+      double res = parseAndEvaluateCommands("LEFT", -20);
+      assertEquals(20, res, 1E-5);
+      assertTurtleRotation(20);
+    }
+
+    { // RIGHT 20
+      infoBundle.reset(); // reset turtle
+      double res = parseAndEvaluateCommands("RIGHT", 20);
+      assertEquals(20, res, 1E-5);
+      assertTurtleRotation(20);
+    }
+
+    { // RIGHT -20
+      infoBundle.reset(); // reset turtle
+      double res = parseAndEvaluateCommands("RIGHT", -20);
+      assertEquals(-20, res, 1E-5);
+      assertTurtleRotation(-20);
+    }
+
+    { // RIGHT 200
+      infoBundle.reset(); // reset turtle
+      double res = parseAndEvaluateCommands("RIGHT", 200);
+      assertEquals(200, res, 1E-5);
+      assertTurtleRotation(-160);
+    }
+  }
+
+  @Test
+  void testSetHeading() {
+    double a = 123.21;
+    double res = parseAndEvaluateCommands("SETHEADING", a);
+    assertEquals(a, res);
+    assertTurtleRotation(a);
+  }
+
+  @Test
+  void testTowards() {
+    { // 45 degrees
+      double x = 10;
+      double y = 10;
+      double res = parseAndEvaluateCommands("TOWARDS", x, y);
+      assertEquals(45, res, 1E-5);
+      assertTurtleRotation(45);
+    }
+
+    { // upwards
+      infoBundle.reset(); // reset
+      double x = 0;
+      double y = 10;
+      double res = parseAndEvaluateCommands("TOWARDS", x, y);
+      assertEquals(0, res, 1E-5);
+      assertTurtleRotation(0);
+    }
+
+    { // -30 degrees
+      infoBundle.reset(); // reset
+      double x = -10;
+      double y = 10 * Math.sqrt(3);
+      double res = parseAndEvaluateCommands("TOWARDS", x, y);
+      assertEquals(-30, res, 1E-5);
+      assertTurtleRotation(-30);
+    }
+
+    { // from -30 degrees to -150
+      // NO RESET
+      double x = -10;
+      double y = -10 * Math.sqrt(3);
+      double res = parseAndEvaluateCommands("TOWARDS", x, y);
+      assertEquals(-120, res, 1E-5);
+      assertTurtleRotation(-150);
+    }
+
+    { // from -150 degrees to 30
+      double x = 10;
+      double y = 10 * Math.sqrt(3);
+      double res = parseAndEvaluateCommands("TOWARDS", x, y);
+      assertEquals(180, res, 1E-5);
+      assertTurtleRotation(30);
+    }
+  }
+
+  @Test
+  void testSetXY() {
+    double res = parseAndEvaluateCommands("SETXY", 30, 40);
+    assertEquals(50, res);
   }
 
   @Test
@@ -78,18 +188,23 @@ public class ASTNodeTest {
     res = node.evaluate(infoBundle);
     assertEquals(20.0, res, 1E-5);
 
-    assertEquals(20, infoBundle.getTurtle().getX(), 1E-5);
-    assertEquals(10, infoBundle.getTurtle().getY(), 1E-5);
+    assertTurtleXY(20, 10);
   }
 
   class TestBundle implements InfoBundle {
 
-    private Map<String, ASTNode> lookupTable;
+    private Map<String, ASTNode> variableTable;
+    private Map<String, ASTNode> commandTable;
     private TurtleRecord info;
     private Turtle turtle;
 
     public TestBundle() {
-      lookupTable = new HashMap<>();
+      reset();
+    }
+
+    public void reset() {
+      variableTable = new HashMap<>();
+      commandTable = new HashMap<>();
       info = new TurtleRecord(0, 0, 0, 0, true, true);
       turtle = new Turtle(0, this);
     }
@@ -113,11 +228,17 @@ public class ASTNodeTest {
     }
 
     @Override
-    public void notifyEnvironmentClear() {}
+    public void notifyEnvironmentClear() {
+    }
 
     @Override
-    public Map<String, ASTNode> getLookupTable() {
-      return lookupTable;
+    public Map<String, ASTNode> getVariableTable() {
+      return variableTable;
+    }
+
+    @Override
+    public Map<String, ASTNode> getCommandTable() {
+      return commandTable;
     }
 
     public TurtleRecord getInfo() {

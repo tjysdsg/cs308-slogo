@@ -44,5 +44,15 @@ public interface InfoBundle {
    *
    * @return The table of command names to AST tree.
    */
-  Map<String, ASTNode> getLookupTable();
+  // Map<String, ASTNode> getLookupTable();
+
+  /**
+   * Returns the mapping of variable names to variable values.
+   */
+  Map<String, ASTNode> getVariableTable();
+
+  /**
+   * Returns the mapping of command names to command node.
+   */
+  Map<String, ASTNode> getCommandTable();
 }

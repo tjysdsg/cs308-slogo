@@ -36,8 +36,29 @@ public class Turtle {
    *                 counter-clockwise
    */
   public void rotate(double rotation) {
-    this.rotation += rotation;
+    this.rotation = clampDegree(this.rotation + rotation);
     sendUpdate();
+  }
+
+  /**
+   * Clamp the degree to [-180, 180], with negative value being on the left, positive value on the
+   * right
+   */
+  private double clampDegree(double deg) {
+    // first clamp to 0-360
+    while (deg < 0) {
+      deg += 360;
+    }
+    while (deg > 360) {
+      deg -= 360;
+    }
+
+    // then clamp to [-180, 180]
+    if (deg > 180) {
+      deg -= 360;
+    }
+
+    return deg;
   }
 
   /**
@@ -59,7 +80,7 @@ public class Turtle {
    * Set absolute rotation.
    */
   public void setRotation(double rotation) {
-    this.rotation = rotation;
+    this.rotation = clampDegree(rotation);
     sendUpdate();
   }
 

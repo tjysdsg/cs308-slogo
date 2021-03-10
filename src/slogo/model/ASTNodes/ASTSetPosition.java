@@ -19,9 +19,10 @@ public class ASTSetPosition extends ASTCommand {
     double y = getChildAt(1).evaluate(info);
 
     Turtle turtle = info.getTurtle();
+    Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
+
     turtle.setPosition(x, y);
 
-    Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
     return (new Vec2D(x, y)).minus(src).magnitude();
   }
 }

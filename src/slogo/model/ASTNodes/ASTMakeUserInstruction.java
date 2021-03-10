@@ -6,8 +6,8 @@ import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
- * Contains definition of a function, use {@link
- * ASTMakeUserInstruction#getParameterNames()} to call the commands in this function
+ * Contains definition of a function, use {@link ASTMakeUserInstruction#getParameterNames()} to call
+ * the commands in this function
  */
 public class ASTMakeUserInstruction extends ASTDeclaration {
 
@@ -21,13 +21,7 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   public ASTMakeUserInstruction(String identifier, Map<String, ASTFunctionCall> functionTable) {
     super(NAME, identifier, NUM_PARAMS);
     this.functionTable = functionTable;
-//    this.vars = vars;
-//    this.commands = commands;
   }
-
-//  public ASTNode getFunctionBody() {
-//    return commands;
-//  }
 
   /**
    * Get a list of parameter names of the function
@@ -43,6 +37,8 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
+    // add to runtime function table
+    info.getCommandTable().put(getIdentifier(), this);
     return result;
   }
 
@@ -67,5 +63,24 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
               commands));
     }
     return numChildren;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder ret = new StringBuilder();
+    ret.append(getIdentifier()).append(" [");
+
+    // parameters
+    int nParams = vars.getNumChildren();
+    for (int i = 0; i < nParams; ++i) {
+      ASTVariable variable = (ASTVariable) vars.getChildAt(i);
+      ret.append(variable.getName());
+      if (i < vars.getNumChildren() - 1) {
+        ret.append(", ");
+      }
+    }
+
+    ret.append("]");
+    return ret.toString();
   }
 }

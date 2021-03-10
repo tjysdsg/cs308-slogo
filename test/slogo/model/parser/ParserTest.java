@@ -17,6 +17,7 @@ import org.junit.jupiter.api.function.Executable;
 import slogo.exceptions.IncorrectParameterCountException;
 import slogo.exceptions.InvalidSyntaxException;
 import slogo.exceptions.UnknownIdentifierException;
+import slogo.model.ASTNodes.ASTBackward;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
@@ -42,7 +43,7 @@ public class ParserTest {
 
   @BeforeEach
   void setUp() {
-    functionTable =  new HashMap<>();
+    functionTable = new HashMap<>();
     parser = new ProgramParser("English", functionTable);
     commandClassifier = new CommandClassifier("English");
   }
@@ -222,10 +223,29 @@ public class ParserTest {
   void testIncompleteCommands() {
     String[] TESTs = new String[]{"fd", "fd fd", "sum 1", "fd 1 sum"};
     for (String test : TESTs) {
-        assertThrows(IncorrectParameterCountException.class, () -> {
-            parser.parseCommand(test);
-        });
-     }
+      assertThrows(IncorrectParameterCountException.class, () -> {
+        parser.parseCommand(test);
+      });
+    }
+  }
+
+  @Test
+  void testComments() {
+    String TEST_STRING = "back 200\n# this is a comment\n fd 100";
+    ASTNode actual = parser.parseCommand(TEST_STRING);
+
+    ASTBackward back = new ASTBackward();
+    back.addChild(new ASTNumberLiteral(200));
+    ASTForward fd = new ASTForward();
+    fd.addChild(new ASTNumberLiteral(100));
+
+    ArrayList<ASTNode> children = new ArrayList<>();
+    children.add(back);
+    children.add(fd);
+
+    ASTCompoundStatement expected = new ASTCompoundStatement(children);
+
+    assertNodeStructure(expected, actual);
   }
 
   @Test
@@ -303,7 +323,7 @@ public class ParserTest {
     assertEquals(expected.getToken(), actual.getToken());
     assertEquals(expected.getNumChildren(), actual.getNumChildren());
 
-    for (int i  = 0; i < expected.getNumChildren(); i++) {
+    for (int i = 0; i < expected.getNumChildren(); i++) {
       assertNodeStructure(expected.getChildAt(i), actual.getChildAt(i));
     }
   }

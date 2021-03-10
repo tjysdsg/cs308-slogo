@@ -57,7 +57,7 @@ public class ProgramParser implements Parser {
             switch (commandName) {
               case "MakeUserInstruction" -> {
                 String identifier = lines.get(lines.indexOf(token) + 1);
-                newCommand = new ASTFunctionDefinition(identifier, lookUpTable);
+                newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
                 skipNext = true;
               }
 

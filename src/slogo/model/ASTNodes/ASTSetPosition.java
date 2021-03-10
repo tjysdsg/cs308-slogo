@@ -4,12 +4,12 @@ import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 import slogo.model.Vec2D;
 
-public class ASTTowards extends ASTCommand {
+public class ASTSetPosition extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "settowards";
+  private static final String NAME = "SetPosition";
 
-  public ASTTowards() {
+  public ASTSetPosition() {
     super(NAME, NUM_PARAMS);
   }
 
@@ -19,17 +19,9 @@ public class ASTTowards extends ASTCommand {
     double y = getChildAt(1).evaluate(info);
 
     Turtle turtle = info.getTurtle();
+    turtle.setPosition(x, y);
 
     Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
-    Vec2D dest = new Vec2D(x, y);
-    double deg = Math.acos(dest.cosAngle(src)); // acos returns degree, not radian
-    if (deg < 0) {
-      deg = 180.0 - deg;
-    }
-    int clockwiseness = dest.clockwiseness(src);
-
-    deg *= clockwiseness;
-    turtle.rotate(deg);
-    return deg;
+    return (new Vec2D(x, y)).minus(src).magnitude();
   }
 }

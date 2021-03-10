@@ -13,7 +13,7 @@ import slogo.model.InfoBundle;
 public class ASTIfElse extends ASTCommand {
 
   private static final int NUM_PARAMS = 3;
-  private static final String NAME = "ifelse";
+  private static final String NAME = "IfElse";
 
   public ASTIfElse() {
     super(NAME, NUM_PARAMS);

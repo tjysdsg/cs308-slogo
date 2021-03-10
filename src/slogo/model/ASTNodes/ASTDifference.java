@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTDiff extends ASTBinaryOperator {
+public class ASTDifference extends ASTBinaryOperator {
 
   private static final String NAME = "difference";
 
-  public ASTDiff() {
+  public ASTDifference() {
     super(NAME);
   }
 

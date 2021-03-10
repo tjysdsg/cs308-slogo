@@ -7,7 +7,7 @@ import slogo.model.Vec2D;
 public class ASTHome extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "home";
+  private static final String NAME = "Home";
 
   public ASTHome() {
     super(NAME, NUM_PARAMS);

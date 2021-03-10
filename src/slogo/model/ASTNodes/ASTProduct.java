@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTProduct extends ASTBinaryOperator {
 
-  private static final String NAME = "product";
+  private static final String NAME = "Product";
 
   public ASTProduct() {
     super(NAME);

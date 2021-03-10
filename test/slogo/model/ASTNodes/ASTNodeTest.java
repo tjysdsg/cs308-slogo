@@ -113,6 +113,9 @@ public class ASTNodeTest {
     }
 
     @Override
+    public void notifyEnvironmentClear() {}
+
+    @Override
     public Map<String, ASTNode> getLookupTable() {
       return lookupTable;
     }

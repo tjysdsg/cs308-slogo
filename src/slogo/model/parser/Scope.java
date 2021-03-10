@@ -35,11 +35,7 @@ public class Scope {
   }
 
   public ASTNode getCommands() {
-    if (commands.size() == 1) {
-      return commands.get(0);
-    } else {
-      return new ASTCompoundStatement(commands);
-    }
+    return new ASTCompoundStatement(commands);
   }
 
   public boolean isIncomplete() {

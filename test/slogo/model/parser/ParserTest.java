@@ -259,6 +259,15 @@ public class ParserTest {
     });
   }
 
+  @Test
+  void testAddLiteralFirst() {
+    String TEST_STRING = "50";
+    assertThrows(InvalidSyntaxException.class, () -> {
+      parser.parseCommand(TEST_STRING);
+    });
+  }
+
+
   void assertNodeStructure(ASTNode expected, ASTNode actual) {
     assertEquals(expected.getToken(), actual.getToken());
     assertEquals(expected.getNumChildren(), actual.getNumChildren());

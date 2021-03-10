@@ -13,7 +13,7 @@ public class ProgramParser implements Parser {
 
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
+  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
   private Map<String, ASTFunctionCall> lookUpTable;
 
   public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
@@ -49,7 +49,7 @@ public class ProgramParser implements Parser {
         //TODO: Try to avoid using a switch statement
         switch (type) {
           case "Constant" -> {
-            assertNeedsChild(scopeStack.size(), currScope);
+            assertNeedsChild(scopeStack.size(), currScope, command, token);
             currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
           }
 
@@ -78,7 +78,10 @@ public class ProgramParser implements Parser {
             currScope.push(newCommand);
           }
 
-          case "Variable" -> currScope.push(new ASTVariable(token));
+          case "Variable" -> {
+            assertNeedsChild(scopeStack.size(), currScope, command, token);
+            currScope.push(new ASTVariable(token));
+          }
 
           case "ListStart" -> scopeStack.push(new Scope());
 
@@ -115,9 +118,9 @@ public class ProgramParser implements Parser {
     return out;
   }
 
-  private void assertNeedsChild(int scopeDepth, Scope currScope) {
+  private void assertNeedsChild(int scopeDepth, Scope currScope, String command, String token) {
     if (scopeDepth == 1 && !currScope.addNextAsChild())
-      throw new InvalidSyntaxException("Variable or Constant", "Without a Parent");
+      throw new InvalidSyntaxException(token, command);
   }
 
   public void changeLanguage(String language) {

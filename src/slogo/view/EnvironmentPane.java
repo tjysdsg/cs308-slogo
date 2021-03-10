@@ -37,22 +37,18 @@ public class EnvironmentPane extends Pane {
     getChildren().add(vbox);
 
     createTableViews();
-//    TitledPane commandsToggle = new TitledPane("Commands", commandsTable);
     commandsToggle = new TitledPane();
     commandsToggle.setContent(commandsTable);
-//    TitledPane variablesToggle = new TitledPane("Variables", variablesTable);
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
-    //TitledPane prevCommands = new TitledPane("Previous Commands", previousCommands);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
 
     vbox.getChildren().addAll(variablesToggle, commandsToggle, prevCommands);
 
     createTitles("English");
-    createMockData();
   }
 
   public void createTitles(String language) {
@@ -85,22 +81,6 @@ public class EnvironmentPane extends Pane {
     //variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     variablesTable.setPrefHeight(TABLE_SIZE);
     commandsTable.setPrefHeight(TABLE_SIZE);
-  }
-
-  private void createMockData() {
-    commandsTable
-        .getItems()
-        .addAll(
-            new DisplayCommand("name", "signature"),
-            new DisplayCommand("name1", "signature1"),
-            new DisplayCommand("name2", "signature2"));
-    variablesTable
-        .getItems()
-        .addAll(
-            new DisplayVariable("name", "value"),
-            new DisplayVariable("name1", "value1"),
-            new DisplayVariable("name2", "value2"),
-            new DisplayVariable("name3", "value3"));
   }
 
   public void updateVariables(VariablesRecord records) {

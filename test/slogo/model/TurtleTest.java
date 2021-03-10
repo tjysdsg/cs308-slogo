@@ -89,6 +89,10 @@ public class TurtleTest {
     }
 
     @Override
+    public void notifyEnvironmentClear() {
+    }
+
+    @Override
     public Map<String, ASTNode> getLookupTable() {
       return null;
     }

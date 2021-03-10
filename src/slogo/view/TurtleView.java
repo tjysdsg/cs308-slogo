@@ -32,6 +32,7 @@ public class TurtleView extends Group {
   private Label name;
   private boolean penDown;
 
+
   protected TurtleView(Image image) {
     turtleImage = new ImageView(image);
     getChildren().addAll(turtleImage);

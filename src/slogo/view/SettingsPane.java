@@ -67,11 +67,10 @@ public class SettingsPane extends Pane {
     createTurtleOptions();
     createTurtleUpload();
     hbox = new HBox(title, languageList,  turtleList, penPane,
-            backgroundPane,uploadTurtle);
+            backgroundPane);
     displayLabels();
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
-    //hbox.setTranslateX(200);//define size of sides as parameter
 
   }
 

@@ -3,8 +3,11 @@ package slogo.view;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList; import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -36,6 +39,7 @@ public class HelpPane extends Pane {
   private  ChoiceBox<String> variablesList = new ChoiceBox();
   private  ChoiceBox<String> userCommandList = new ChoiceBox();
   ViewController vcon;
+  Button backButton;
 
 
 
@@ -51,8 +55,11 @@ public class HelpPane extends Pane {
     createSearchBar();
     createList();
     createDisplayLanguages();
-    vbox = new VBox(displayWindow, searchBar, list);
+    createListAction();
+    createButtonAction();
+    vbox = new VBox(displayWindow, list);
     vbox.setPadding(new Insets(0,0, 0, 2));
+    vbox.setPrefSize(SIZE, 3*SIZE);
     vbox.setSpacing(5);
   }
 
@@ -60,7 +67,7 @@ public class HelpPane extends Pane {
     list = new ListView<>();
     ObservableList<ChoiceBox<String>> items =FXCollections.observableArrayList (commandList,queriesList,mathList,booleanList, variablesList, userCommandList );
     list.setItems(items);
-    list.setPrefSize(SIZE, 3*SIZE);
+    list.setMinSize(SIZE, 2*SIZE);
 
 
   }
@@ -91,7 +98,40 @@ public class HelpPane extends Pane {
     variablesList.setValue(resources.getString("variable"));
     userCommandList.setValue(resources.getString("user"));
 
+  }
 
+  private void createListAction() {
+    backButton = new Button("Back to Menu");
+    addHelpText(commandList);
+    addHelpText(queriesList);
+    addHelpText(booleanList);
+    addHelpText(variablesList);
+    addHelpText(userCommandList);
+    addHelpText(mathList);
+  }
+
+  private void addHelpText(ChoiceBox<String> typeList) {
+   // System.out.println("ahhh this should not be before printing done with create display method");
+    typeList.setOnAction(e-> {
+//      problem is changing the display labels when you
+//      change the language is an action/an event listener.
+//      System.out.println("this should be printed when creating the list");
+      Label helpDescription = new Label();
+      helpDescription.setText(resources.getString(typeList.getValue()));
+      helpDescription.setWrapText(true);;
+      vbox.getChildren().remove(list);
+      vbox.getChildren().add(helpDescription);
+      vbox.getChildren().add(backButton);
+
+    });
+  }
+
+  private void createButtonAction() {
+    backButton.setOnAction(e->
+    {
+      vbox.getChildren().clear();
+      vbox.getChildren().addAll(displayWindow,list);
+    });
   }
 
   private void createDisplayWindow() {
@@ -122,7 +162,6 @@ public class HelpPane extends Pane {
     searchBar.add(search, 1,0);
     searchBar.add(clearIcon, 2, 0);
 
-    //vbox.setId("helpWindow");
 
 
   }

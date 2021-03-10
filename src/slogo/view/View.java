@@ -172,7 +172,7 @@ public class View {
 		 */
 		public void setLanguage(String language) {
 					changeTextInstruction(language);
-				helpPane.createDisplayLanguages();
+				//helpPane.createDisplayLanguages();
 			environmentPane.createTitles();
 		}
 

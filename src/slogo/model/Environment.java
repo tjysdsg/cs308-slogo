@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
@@ -26,6 +27,7 @@ public class Environment implements TrackableEnvironment {
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
   private Parser myParser;
+  private ClearEnvironment clearEnvironmentCallback;
 
   private static final String DEFAULT_LANG = "English";
 
@@ -53,6 +55,10 @@ public class Environment implements TrackableEnvironment {
   public void runCommand(String command) {
     ASTNode commandTree = myParser.parseCommand(command);
     commandTree.evaluate(executionEnvironment);
+  }
+
+  public void setOnClear(ClearEnvironment callback) {
+    this.clearEnvironmentCallback = callback;
   }
 
   @Override

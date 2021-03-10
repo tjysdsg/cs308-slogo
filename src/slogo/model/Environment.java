@@ -22,7 +22,8 @@ public class Environment implements TrackableEnvironment {
   private List<Turtle> turtles;
   private int currTurtle;
   private ExecutionEnvironment executionEnvironment;
-  private Map<String, ASTNode> lookupTable;
+  private Map<String, ASTNode> variableTable;
+  private Map<String, ASTNode> commandTable;
   private UpdateTurtle updateTurtleCallback;
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
@@ -33,7 +34,8 @@ public class Environment implements TrackableEnvironment {
 
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
-    lookupTable = new HashMap<>();
+    variableTable = new HashMap<>();
+    commandTable = new HashMap<>();
     myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
     turtles = new ArrayList<>();
     turtles.add(new Turtle(currTurtle, executionEnvironment));
@@ -92,11 +94,6 @@ public class Environment implements TrackableEnvironment {
       return turtles.get(currTurtle);
     }
 
-    @Override
-    public Map<String, ASTNode> getLookupTable() {
-      return lookupTable;
-    }
-
     public void notifyTurtleUpdate(TurtleRecord info) {
       if (updateTurtleCallback != null) {
         updateTurtleCallback.execute(info);
@@ -107,6 +104,16 @@ public class Environment implements TrackableEnvironment {
       if (clearEnvironmentCallback != null) {
         clearEnvironmentCallback.execute();
       }
+    }
+
+    @Override
+    public Map<String, ASTNode> getVariableTable() {
+      return variableTable;
+    }
+
+    @Override
+    public Map<String, ASTNode> getCommandTable() {
+      return commandTable;
     }
 
     public void notifyCommandUpdate(CommandsRecord info) {

@@ -6,8 +6,8 @@ import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
- * Contains definition of a function, use {@link
- * ASTFunctionDefinition#getParameterNames()} to call the commands in this function
+ * Contains definition of a function, use {@link ASTFunctionDefinition#getParameterNames()} to call
+ * the commands in this function
  */
 public class ASTFunctionDefinition extends ASTDeclaration {
 

@@ -193,7 +193,8 @@ public class ASTNodeTest {
 
   class TestBundle implements InfoBundle {
 
-    private Map<String, ASTNode> lookupTable;
+    private Map<String, ASTNode> variableTable;
+    private Map<String, ASTNode> commandTable;
     private TurtleRecord info;
     private Turtle turtle;
 
@@ -202,7 +203,8 @@ public class ASTNodeTest {
     }
 
     public void reset() {
-      lookupTable = new HashMap<>();
+      variableTable = new HashMap<>();
+      commandTable = new HashMap<>();
       info = new TurtleRecord(0, 0, 0, 0, true, true);
       turtle = new Turtle(0, this);
     }
@@ -230,8 +232,13 @@ public class ASTNodeTest {
     }
 
     @Override
-    public Map<String, ASTNode> getLookupTable() {
-      return lookupTable;
+    public Map<String, ASTNode> getVariableTable() {
+      return variableTable;
+    }
+
+    @Override
+    public Map<String, ASTNode> getCommandTable() {
+      return commandTable;
     }
 
     public TurtleRecord getInfo() {

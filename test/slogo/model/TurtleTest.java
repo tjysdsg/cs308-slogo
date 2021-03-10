@@ -93,7 +93,12 @@ public class TurtleTest {
     }
 
     @Override
-    public Map<String, ASTNode> getLookupTable() {
+    public Map<String, ASTNode> getVariableTable() {
+      return null;
+    }
+
+    @Override
+    public Map<String, ASTNode> getCommandTable() {
       return null;
     }
 

@@ -14,7 +14,7 @@ public class ASTVariable extends ASTNamed {
 
   @Override
   public double doEvaluate(InfoBundle info) throws UnknownIdentifierException {
-    ASTNode referred = info.getLookupTable().get(getName());
+    ASTNode referred = info.getVariableTable().get(getName());
     if (referred == null) {
       throw new UnknownIdentifierException(getName());
     }

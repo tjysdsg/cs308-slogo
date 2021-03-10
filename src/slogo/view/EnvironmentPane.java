@@ -91,22 +91,20 @@ public class EnvironmentPane extends Pane {
     commandsTable.getItems().setAll(records.commands());
   }
 
-  /**
-   * Changes the color of the most recently run
-   * command if it resulted in an error.
-   */
-  public void previousError() {
-    if (lastRanCommand != null) {
-      lastRanCommand.setStyle("-fx-text-fill: red");
-    }
-  }
-
   public String getPreviousCommand() {
     return lastRanCommand != null ? lastRanCommand.getText() : "";
   }
 
   public void addPreviousCommand(String command) {
     lastRanCommand = new Label(command);
+    previousCommands.getItems().add(lastRanCommand);
+  }
+
+  public void addPreviousCommand(String command, boolean successful) {
+    lastRanCommand = new Label(command);
+    if (!successful) {
+      lastRanCommand.setStyle("-fx-text-fill: red");
+    }
     previousCommands.getItems().add(lastRanCommand);
   }
 }

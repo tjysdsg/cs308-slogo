@@ -144,9 +144,8 @@ public class View {
 
   private void sendTextBox() {
     String command = codeArea.getText();
-    environmentPane.addPreviousCommand(command);
-    //TODO: Maybe return true in if a command runs or false otherwise?
-    modelCon.sendCommand(command);
+    boolean executed = modelCon.sendCommand(command);
+    environmentPane.addPreviousCommand(command, executed);
     codeArea.clear();
   }
 
@@ -202,7 +201,6 @@ public class View {
               res -> {
                 System.out.println(res);
               });
-      environmentPane.previousError();
     }
 
     public void addTurtle() {

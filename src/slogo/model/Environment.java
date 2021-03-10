@@ -34,8 +34,6 @@ public class Environment implements TrackableEnvironment {
 
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
-    variableTable = new HashMap<>();
-    commandTable = new HashMap<>();
     myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
     turtles = new ArrayList<>();
     turtles.add(new Turtle(currTurtle, executionEnvironment));
@@ -88,6 +86,11 @@ public class Environment implements TrackableEnvironment {
   }
 
   private class ExecutionEnvironment implements InfoBundle {
+
+    public ExecutionEnvironment() {
+      variableTable = new VariableTable(this);
+      commandTable = new HashMap<>();
+    }
 
     @Override
     public Turtle getTurtle() {

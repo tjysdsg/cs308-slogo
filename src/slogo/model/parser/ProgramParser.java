@@ -29,8 +29,9 @@ public class ProgramParser implements Parser {
     Stack<Scope> scopeStack = new Stack<>();
     scopeStack.push(new Scope());
     boolean skipNext = false;
-
+    int cursor  = -1;
     for (String token : lines) {
+      cursor++;
       // trim all whitespaces
       // token.trim() doesn't work for symbols such as \t
       // https://stackoverflow.com/a/15633284/7730917
@@ -58,7 +59,7 @@ public class ProgramParser implements Parser {
 
             switch (commandName) {
               case "MakeUserInstruction" -> {
-                String identifier = lines.get(lines.indexOf(token) + 1);
+                String identifier = lines.get(cursor + 1);
                 newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
                 skipNext = true;
               }

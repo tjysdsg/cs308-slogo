@@ -1,11 +1,14 @@
 package slogo.view;
 
+import java.awt.MenuItem;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList; import javafx.geometry.Insets;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -15,6 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -122,6 +126,7 @@ public class HelpPane extends Pane {
       vbox.getChildren().remove(list);
       vbox.getChildren().add(helpDescription);
       vbox.getChildren().add(backButton);
+      typeList.setValue(typeList.getSelectionModel().selectedIndexProperty().toString());
 
     });
   }

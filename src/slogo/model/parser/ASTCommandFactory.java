@@ -2,8 +2,9 @@ package slogo.model.parser;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import slogo.model.ASTNodes.ASTCommand;
+import slogo.model.ASTNodes.ASTNode;
 
 /**
  * The ASTCommand factory class is used to convert a string into an ASTNode using reflection.
@@ -21,38 +22,45 @@ import slogo.model.ASTNodes.ASTCommand;
 public class ASTCommandFactory {
   public static final String packagePath = "slogo.model.ASTNodes.";
   public static final String dirPath = "src/" + packagePath.replace(".", "/") + "/";
+  public static final String classPrefix = "AST";
 
   /**
    * Get the ASTNode corresponding to the input string
    * @param command The command to find the node for
    * @return The command if found, null if not
    */
-  public static ASTCommand getCommand(String command) {
-    Class[] availNodes = getASTNodes();
-    for (Class node : availNodes) {
-
-      if (!isNodeDescendantOfClass(node, ASTCommand.class) | isNodeAbstract(node))
-        continue;
-
-      String name = "";
-      try {
-        Field nameField = node.getDeclaredField("NAME");
-        nameField.setAccessible(true);
-        name = (String) nameField.get(nameField);
-      } catch (NoSuchFieldException | IllegalAccessException e) {
-        System.out.printf("%s needs the private field NAME\n", node.getName());
-        continue;
-      }
-
-      if (name.equalsIgnoreCase(command)) {
-        try {
-          return (ASTCommand) node.getConstructor().newInstance();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
+  public static ASTNode getCommand(String command) {
+    try {
+      return (ASTNode) Class.forName(packagePath + classPrefix + command).getConstructor().newInstance();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     return null;
+//    Class[] availNodes = getASTNodes();
+//    for (Class node : availNodes) {
+//
+//      if (!isNodeDescendantOfClass(node, ASTCommand.class) | isNodeAbstract(node))
+//        continue;
+//
+//      String name = "";
+//      try {
+//        Field nameField = node.getDeclaredField("NAME");
+//        nameField.setAccessible(true);
+//        name = (String) nameField.get(nameField);
+//      } catch (NoSuchFieldException | IllegalAccessException e) {
+//        System.out.printf("%s needs the private field NAME\n", node.getName());
+//        continue;
+//      }
+//
+//      if (name.equalsIgnoreCase(command)) {
+//        try {
+//          return (ASTCommand) node.getConstructor().newInstance();
+//        } catch (Exception e) {
+//          e.printStackTrace();
+//        }
+//      }
+//    }
+//    return null;
   }
 
   private static Class[] getASTNodes() {

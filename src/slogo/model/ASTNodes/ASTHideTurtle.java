@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTHideTurtle extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "hideturtle";
+  private static final String NAME = "HideTurtle";
 
   public ASTHideTurtle() {
     super(NAME, NUM_PARAMS);

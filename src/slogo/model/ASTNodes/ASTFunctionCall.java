@@ -16,14 +16,14 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTNode body;
-  private static final String NAME = "func";
+  private static final String NAME = "Func";
 
   /**
    * Constructor
    *
    * @param function The function being called
    */
-//  public ASTFunctionCall(ASTFunctionDefinition function) {
+//  public Func(ASTFunctionDefinition function) {
 //    super(function.getIdentifier(), function.getParameterNames().size());
 //    identifier = function.getIdentifier();
 //    this.parameterNames = function.getParameterNames();

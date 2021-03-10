@@ -7,7 +7,7 @@ import slogo.model.Vec2D;
 public class ASTClearScreen extends ASTCommand {
 
   private static final int NUM_PARAMS = 0;
-  private static final String NAME = "clearscreen";
+  private static final String NAME = "ClearScreen";
 
   public ASTClearScreen() {
     super(NAME, NUM_PARAMS);

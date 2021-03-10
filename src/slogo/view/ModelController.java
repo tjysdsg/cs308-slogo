@@ -20,10 +20,11 @@ import slogo.exceptions.ModelException;
  */
 
 public class ModelController {
-  ViewController vc;
-  TrackableEnvironment env;
-  ResourceBundle exceptions;
-  ResourceBundle translation;
+  private static final String RESOURCES_PACKAGE = "resources.commands.";
+  private ViewController vc;
+  private TrackableEnvironment env;
+  private ResourceBundle exceptions;
+  private ResourceBundle translation;
 
   /**
    * This is the constryctor for the model controller class
@@ -31,6 +32,7 @@ public class ModelController {
    * specific obkects. It is an empty method
    */
   public ModelController() {
+    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE + "exceptions.English");
   }
 
   public void setController(ViewController vc) {
@@ -59,13 +61,12 @@ public class ModelController {
    */
   public void sendCommand(String command) {
     if (this.env != null) {
-      System.out.println("WE HEREREEREE");
       try {
         env.runCommand(command);
-        System.out.println("MADE IT");
       } catch(ModelException e) {
-        //String excp = buildException(e);
-        //vc.sendAlert("Error", excp);
+        System.out.println("Error: " + e.toString());
+        String message = e.buildException(exceptions.getString(e.getMessage()));
+        vc.sendAlert("Error", message);
       }
     } else {
 
@@ -79,9 +80,5 @@ public class ModelController {
    */
   public void setLanguage(String language) {
 
-  }
-
-  private String buildException(ModelException e) {
-    return e.buildException(exceptions.getString(e.getMessage()));
   }
 }

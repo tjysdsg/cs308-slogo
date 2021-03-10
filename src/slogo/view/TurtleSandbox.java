@@ -152,25 +152,24 @@ public class TurtleSandbox extends BorderPane {
     TurtleView turtle = turtles.get(info.id());
     double tx = turtle.getCurrX();
     double ty = turtle.getCurrY();
-    if (tx != info.xCoord() || ty != info.yCoord()) {
+    turtle.update(info);
+    if (info.penDown() && (tx != info.xCoord() || ty != info.yCoord())) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
       line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
-        line.setTranslateX(1 * tx / 2 + info.xCoord() / 3);
+        line.setTranslateX(1 * info.xCoord() / 2 + tx / 2);
       }
       if (ty != info.yCoord()) {
         line.setTranslateY(-1 * info.yCoord() / 2 - ty / 2);
       }
-
-      line.setStartX(tx);
+      line.setStartX(-tx);
       line.setStartY(ty);
-      line.setEndX(info.xCoord());
+      line.setEndX(-info.xCoord());
       line.setEndY(info.yCoord());
       line.setStrokeWidth(2);
       lines.getChildren().addAll(line);
     }
-    turtle.update(info);
   }
 }

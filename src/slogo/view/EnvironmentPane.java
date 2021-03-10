@@ -43,6 +43,7 @@ public class EnvironmentPane extends Pane {
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
     previousCommands = new JFXListView<Label>();
+    previousCommands.setPrefHeight(200);
     //TitledPane prevCommands = new TitledPane("Previous Commands", previousCommands);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
@@ -51,8 +52,6 @@ public class EnvironmentPane extends Pane {
 
     createTitles("English");
     createMockData();
-
-
   }
 
   public void createTitles(String language) {
@@ -101,7 +100,6 @@ public class EnvironmentPane extends Pane {
             new DisplayVariable("name1", "value1"),
             new DisplayVariable("name2", "value2"),
             new DisplayVariable("name3", "value3"));
-    for (int i = 0; i < 4; i++) addPreviousCommand("Prev command " + i);
   }
 
   public void updateVariables(VariablesRecord records) {

@@ -13,7 +13,7 @@ import slogo.model.InfoBundle;
 public class ASTFor extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "for";
+  private static final String NAME = "For";
 
   public ASTFor() {
     super(NAME, NUM_PARAMS);

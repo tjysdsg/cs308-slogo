@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTLog extends ASTUnaryOperator {
+public class ASTNaturalLog extends ASTUnaryOperator {
 
-  private static final String NAME = "naturallog";
+  private static final String NAME = "NaturalLog";
 
-  public ASTLog() {
+  public ASTNaturalLog() {
     super(NAME);
   }
 

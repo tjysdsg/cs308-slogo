@@ -6,7 +6,7 @@ import slogo.model.Turtle;
 public class ASTRight extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "right";
+  private static final String NAME = "Right";
 
   public ASTRight() {
     super(NAME, NUM_PARAMS);

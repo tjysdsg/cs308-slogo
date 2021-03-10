@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class ASTRandom extends ASTUnaryOperator {
 
-  private static final String NAME = "random";
+  private static final String NAME = "Random";
   private final Random rand;
 
   public ASTRandom() {

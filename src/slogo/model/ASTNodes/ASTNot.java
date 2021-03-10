@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTNot extends ASTUnaryOperator {
 
-  private static final String NAME = "not";
+  private static final String NAME = "Not";
 
   public ASTNot() {
     super(NAME);

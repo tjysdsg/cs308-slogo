@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTSin extends ASTUnaryOperator {
+public class ASTSine extends ASTUnaryOperator {
 
-  private static final String NAME = "sine";
+  private static final String NAME = "Sine";
 
-  public ASTSin() {
+  public ASTSine() {
     super(NAME);
   }
 

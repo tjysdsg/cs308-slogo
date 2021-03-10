@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTGreater extends ASTBinaryOperator {
+public class ASTGreaterThan extends ASTBinaryOperator {
 
-  private static final String NAME = "greaterthan";
+  private static final String NAME = "GreaterThan";
 
-  public ASTGreater() {
+  public ASTGreaterThan() {
     super(NAME);
   }
 

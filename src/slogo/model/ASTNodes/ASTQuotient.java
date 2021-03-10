@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTQuotient extends ASTBinaryOperator {
 
-  private static final String NAME = "quotient";
+  private static final String NAME = "Quotient";
 
   public ASTQuotient() {
     super(NAME);

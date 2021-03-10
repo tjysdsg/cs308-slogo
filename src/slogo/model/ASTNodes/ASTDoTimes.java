@@ -10,12 +10,12 @@ import slogo.model.InfoBundle;
  *
  * </ol>
  */
-public class ASTDotTimes extends ASTCommand {
+public class ASTDoTimes extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "dottimes";
+  private static final String NAME = "DoTimes";
 
-  public ASTDotTimes() {
+  public ASTDoTimes() {
     super(NAME, NUM_PARAMS);
   }
 

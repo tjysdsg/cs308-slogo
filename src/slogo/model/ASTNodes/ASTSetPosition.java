@@ -4,12 +4,12 @@ import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 import slogo.model.Vec2D;
 
-public class ASTSetXY extends ASTCommand {
+public class ASTSetPosition extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "setposition";
+  private static final String NAME = "SetPosition";
 
-  public ASTSetXY() {
+  public ASTSetPosition() {
     super(NAME, NUM_PARAMS);
   }
 

@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTMinus extends ASTUnaryOperator {
 
-  private static final String NAME = "minus";
+  private static final String NAME = "Minus";
 
   public ASTMinus() {
     super(NAME);

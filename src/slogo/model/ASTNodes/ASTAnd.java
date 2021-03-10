@@ -1,8 +1,8 @@
-package slogo.model.ASTNodes;
+ package slogo.model.ASTNodes;
 
 public class ASTAnd extends ASTBinaryOperator {
 
-  private static final String NAME = "and";
+  private static final String NAME = "And";
 
   public ASTAnd() {
     super(NAME);

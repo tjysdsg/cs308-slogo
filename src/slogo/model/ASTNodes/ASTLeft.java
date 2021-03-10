@@ -6,7 +6,7 @@ import slogo.model.Turtle;
 public class ASTLeft extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "left";
+  private static final String NAME = "Left";
 
   public ASTLeft() {
     super(NAME, NUM_PARAMS);

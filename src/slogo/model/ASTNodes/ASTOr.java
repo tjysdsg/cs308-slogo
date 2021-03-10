@@ -2,7 +2,7 @@ package slogo.model.ASTNodes;
 
 public class ASTOr extends ASTBinaryOperator {
 
-  private static final String NAME = "or";
+  private static final String NAME = "Or";
 
   public ASTOr() {
     super(NAME);

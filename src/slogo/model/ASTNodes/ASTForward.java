@@ -5,7 +5,7 @@ import slogo.model.InfoBundle;
 public class ASTForward extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "forward";
+  private static final String NAME = "Forward";
 
   public ASTForward() {
     super(NAME, NUM_PARAMS);

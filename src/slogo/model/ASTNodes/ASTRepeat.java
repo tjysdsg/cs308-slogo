@@ -12,7 +12,7 @@ import slogo.model.InfoBundle;
 public class ASTRepeat extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "repeat";
+  private static final String NAME = "Repeat";
   private static final String REPCOUNT_NAME = "repcount";
 
   public ASTRepeat() {

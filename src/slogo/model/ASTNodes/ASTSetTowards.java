@@ -3,12 +3,12 @@ package slogo.model.ASTNodes;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
-public class ASTTowards extends ASTCommand {
+public class ASTSetTowards extends ASTCommand {
 
   private static final int NUM_PARAMS = 2;
-  private static final String NAME = "settowards";
+  private static final String NAME = "SetTowards";
 
-  public ASTTowards() {
+  public ASTSetTowards() {
     super(NAME, NUM_PARAMS);
   }
 

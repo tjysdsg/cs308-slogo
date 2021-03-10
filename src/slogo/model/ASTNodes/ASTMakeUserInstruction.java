@@ -9,16 +9,16 @@ import slogo.model.InfoBundle;
  * Contains definition of a function, use {@link ASTFunctionDefinition#getParameterNames()} to call
  * the commands in this function
  */
-public class ASTFunctionDefinition extends ASTDeclaration {
+public class ASTMakeUserInstruction extends ASTDeclaration {
 
-  private static final String NAME = "makeuserinstruction";
+  private static final String NAME = "MakeUserInstruction";
   private static final int NUM_PARAMS = 2;
   private ASTNode vars; // contains a list of ASTVariable names
   private ASTNode commands;
   private Map<String, ASTFunctionCall> functionTable;
   private int result;
 
-  public ASTFunctionDefinition(String identifier, Map<String, ASTFunctionCall> functionTable) {
+  public ASTMakeUserInstruction(String identifier, Map<String, ASTFunctionCall> functionTable) {
     super(NAME, identifier, NUM_PARAMS);
     this.functionTable = functionTable;
   }

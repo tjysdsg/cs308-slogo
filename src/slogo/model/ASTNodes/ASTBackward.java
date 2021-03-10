@@ -3,12 +3,12 @@ package slogo.model.ASTNodes;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
-public class ASTBack extends ASTCommand {
+public class ASTBackward extends ASTCommand {
 
   private static final int NUM_PARAMS = 1;
-  private static final String NAME = "backward";
+  private static final String NAME = "Backward";
 
-  public ASTBack() {
+  public ASTBackward() {
     super(NAME, NUM_PARAMS);
   }
 

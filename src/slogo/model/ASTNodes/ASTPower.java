@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTPow extends ASTBinaryOperator {
+public class ASTPower extends ASTBinaryOperator {
 
-  private static final String NAME = "power";
+  private static final String NAME = "Power";
 
-  public ASTPow() {
+  public ASTPower() {
     super(NAME);
   }
 

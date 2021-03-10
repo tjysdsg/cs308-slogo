@@ -1,10 +1,10 @@
 package slogo.model.ASTNodes;
 
-public class ASTCos extends ASTUnaryOperator {
+public class ASTCosine extends ASTUnaryOperator {
 
-  private static final String NAME = "cosine";
+  private static final String NAME = "Cosine";
 
-  public ASTCos() {
+  public ASTCosine() {
     super(NAME);
   }
 

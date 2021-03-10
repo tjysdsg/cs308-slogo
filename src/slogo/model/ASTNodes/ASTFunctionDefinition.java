@@ -37,6 +37,8 @@ public class ASTFunctionDefinition extends ASTDeclaration {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
+    // add to runtime function table
+    info.getCommandTable().put(getIdentifier(), this);
     return result;
   }
 
@@ -61,5 +63,24 @@ public class ASTFunctionDefinition extends ASTDeclaration {
               commands));
     }
     return numChildren;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder ret = new StringBuilder();
+    ret.append(getIdentifier()).append(" [");
+
+    // parameters
+    int nParams = vars.getNumChildren();
+    for (int i = 0; i < nParams; ++i) {
+      ASTVariable variable = (ASTVariable) vars.getChildAt(i);
+      ret.append(variable.getName());
+      if (i < vars.getNumChildren() - 1) {
+        ret.append(", ");
+      }
+    }
+
+    ret.append("]");
+    return ret.toString();
   }
 }

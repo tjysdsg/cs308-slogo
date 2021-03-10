@@ -89,7 +89,7 @@ public class Environment implements TrackableEnvironment {
 
     public ExecutionEnvironment() {
       variableTable = new VariableTable(this);
-      commandTable = new HashMap<>();
+      commandTable = new CommandTable(this);
     }
 
     @Override

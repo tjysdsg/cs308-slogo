@@ -19,6 +19,7 @@ import slogo.events.VariablesRecord;
 public class EnvironmentPane extends Pane {
 
   public static final int TABLE_SIZE = 200;
+  private Label lastRanCommand;
   TableView<DisplayCommand> commandsTable;
   TableView<DisplayVariable> variablesTable;
   JFXListView<Label> previousCommands;
@@ -36,22 +37,18 @@ public class EnvironmentPane extends Pane {
     getChildren().add(vbox);
 
     createTableViews();
-//    TitledPane commandsToggle = new TitledPane("Commands", commandsTable);
     commandsToggle = new TitledPane();
     commandsToggle.setContent(commandsTable);
-//    TitledPane variablesToggle = new TitledPane("Variables", variablesTable);
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
-    //TitledPane prevCommands = new TitledPane("Previous Commands", previousCommands);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
 
     vbox.getChildren().addAll(variablesToggle, commandsToggle, prevCommands);
 
     createTitles("English");
-    createMockData();
   }
 
   public void createTitles(String language) {
@@ -72,7 +69,7 @@ public class EnvironmentPane extends Pane {
     comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
 
     commandsTable.getColumns().addAll(comNameCol, comValueCol);
-    commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    //commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
@@ -81,38 +78,32 @@ public class EnvironmentPane extends Pane {
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
 
-    variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    //variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     variablesTable.setPrefHeight(TABLE_SIZE);
     commandsTable.setPrefHeight(TABLE_SIZE);
   }
 
-  private void createMockData() {
-    commandsTable
-        .getItems()
-        .addAll(
-            new DisplayCommand("name", "signature"),
-            new DisplayCommand("name1", "signature1"),
-            new DisplayCommand("name2", "signature2"));
-    variablesTable
-        .getItems()
-        .addAll(
-            new DisplayVariable("name", "value"),
-            new DisplayVariable("name1", "value1"),
-            new DisplayVariable("name2", "value2"),
-            new DisplayVariable("name3", "value3"));
-  }
-
   public void updateVariables(VariablesRecord records) {
-    variablesTable.getItems().removeAll();
-    variablesTable.getItems().addAll(records.variables());
+    variablesTable.getItems().setAll(records.variables());
   }
 
   public void updateCommands(CommandsRecord records) {
-    commandsTable.getItems().removeAll();
-    commandsTable.getItems().addAll(records.commands());
+    commandsTable.getItems().setAll(records.commands());
+    int index = records.commands().size();
+    commandsTable.scrollTo(index);
   }
 
-  public void addPreviousCommand(String command) {
-    previousCommands.getItems().add(new Label(command));
+  public String getPreviousCommand() {
+    return lastRanCommand != null ? lastRanCommand.getText() : "";
+  }
+
+  public void addPreviousCommand(String command, boolean successful) {
+    lastRanCommand = new Label(command);
+    if (!successful) {
+      lastRanCommand.setStyle("-fx-text-fill: red");
+    }
+    previousCommands.getItems().add(lastRanCommand);
+    int index = previousCommands.getItems().size();
+    previousCommands.scrollTo(index);
   }
 }

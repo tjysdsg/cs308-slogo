@@ -58,18 +58,21 @@ public class ModelController {
    *
    * @param command
    * @throws Exception
+   * @return Whether the command was successfully executed.
    */
-  public void sendCommand(String command) {
+  public boolean sendCommand(String command) {
     if (this.env != null) {
       try {
         env.runCommand(command);
+        return true;
       } catch(ModelException e) {
         System.out.println("Error: " + e.toString());
         String message = e.buildException(exceptions.getString(e.getMessage()));
         vc.sendAlert("Error", message);
+        return false;
       }
     } else {
-
+      return false;
     }
   }
 
@@ -80,5 +83,13 @@ public class ModelController {
    */
   public void setLanguage(String language) {
 
+  }
+
+  public void addTurtle() {
+    env.addTurtle();
+  }
+
+  public void setCurrTurtle(int turtle) {
+    env.setCurrTurtle(turtle);
   }
 }

@@ -26,8 +26,7 @@ import slogo.model.TrackableEnvironment;
  */
 public class View {
   private static final int WIDTH = 1200;
-  private static final int HEIGHT = 750;
-  private Insets layoutPadding = new Insets(10);
+  private static final int HEIGHT = 720;
 
   private ModelController modelCon;
   private TrackableEnvironment environment;
@@ -70,7 +69,7 @@ public class View {
   public Scene createScene() {
     environmentPane = new EnvironmentPane();
     helpPane = new HelpPane();
-    turtleSandbox = new TurtleSandbox();
+    turtleSandbox = new TurtleSandbox(viewCon);
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
@@ -87,7 +86,6 @@ public class View {
     borderPane.setBottom(commandPane);
     borderPane.setLeft(environmentPane);
     borderPane.setRight(helpPane);
-    borderPane.setPadding(layoutPadding);
     newScene
         .getStylesheets()
         .add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
@@ -117,18 +115,17 @@ public class View {
     changeTextInstruction("English");
     run.setOnMouseClicked(
         event -> {
-          String command = codeArea.getText();
-          modelCon.sendCommand(command);
-          codeArea.clear();
+          sendTextBox();
         });
 
     codeArea.setOnKeyPressed(
         e -> {
           String command = codeArea.getText();
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
-            modelCon.sendCommand(command);
-            codeArea.clear();
-            environmentPane.addPreviousCommand(command);
+            sendTextBox();
+          } else if (e.getCode() == KeyCode.UP && codeArea.getText() == "") {
+            codeArea.setText(environmentPane.getPreviousCommand());
+            codeArea.end();
           }
         });
 
@@ -143,6 +140,13 @@ public class View {
     // TODO: Maybe say an instruction like shift+enter to run?
     codeArea.setPromptText(resources.getString("userCommand"));
     run.setText(resources.getString("runButton"));
+  }
+
+  private void sendTextBox() {
+    String command = codeArea.getText();
+    boolean executed = modelCon.sendCommand(command);
+    environmentPane.addPreviousCommand(command, executed);
+    codeArea.clear();
   }
 
   /**
@@ -199,12 +203,16 @@ public class View {
               });
     }
 
-    public void sendUserText() {
-      if (codeArea.getText() != null) {
-        modelCon.sendCommand(codeArea.getText());
-      } else {
-        viewCon.sendAlert("Error", "STOSAPSGI");
-      }
+    public void addTurtle() {
+      modelCon.addTurtle();
+    }
+
+    public void setCurrTurtle(int id) {
+      modelCon.setCurrTurtle(id);
+    }
+
+    public void sendCommand(String command) {
+
     }
   }
 }

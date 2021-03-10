@@ -49,5 +49,9 @@ public interface TrackableEnvironment {
    */
   void setBundle(ResourceBundle bundle);
 
+  void addTurtle();
+
+  void setCurrTurtle(int turtle);
+
   void setOnClear(ClearEnvironment callback);
 }

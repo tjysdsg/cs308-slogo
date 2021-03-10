@@ -6,7 +6,7 @@ import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
- * Contains definition of a function, use {@link ASTFunctionDefinition#getParameterNames()} to call
+ * Contains definition of a function, use {@link ASTMakeUserInstruction#getParameterNames()} to call
  * the commands in this function
  */
 public class ASTMakeUserInstruction extends ASTDeclaration {

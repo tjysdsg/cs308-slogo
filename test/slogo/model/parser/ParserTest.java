@@ -17,7 +17,7 @@ import org.junit.jupiter.api.function.Executable;
 import slogo.exceptions.IncorrectParameterCountException;
 import slogo.exceptions.InvalidSyntaxException;
 import slogo.exceptions.UnknownIdentifierException;
-import slogo.model.ASTNodes.ASTBack;
+import slogo.model.ASTNodes.ASTBackward;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTForward;
@@ -234,7 +234,7 @@ public class ParserTest {
     String TEST_STRING = "back 200\n# this is a comment\n fd 100";
     ASTNode actual = parser.parseCommand(TEST_STRING);
 
-    ASTBack back = new ASTBack();
+    ASTBackward back = new ASTBackward();
     back.addChild(new ASTNumberLiteral(200));
     ASTForward fd = new ASTForward();
     fd.addChild(new ASTNumberLiteral(100));

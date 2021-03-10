@@ -6,7 +6,7 @@ import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
 import slogo.events.VariablesRecord;
-import slogo.model.ASTNodes.ASTFunctionDefinition;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
 
 
@@ -25,7 +25,7 @@ public class CommandTable extends HashMap<String, ASTNode> {
 
     ArrayList<DisplayCommand> funcs = new ArrayList<>();
     for (var entry : this.entrySet()) {
-      ASTFunctionDefinition func = (ASTFunctionDefinition) entry.getValue();
+      ASTMakeUserInstruction func = (ASTMakeUserInstruction) entry.getValue();
       funcs.add(new DisplayCommand(entry.getKey(), func.toString()));
     }
     infoBundle.notifyCommandUpdate(new CommandsRecord(funcs));

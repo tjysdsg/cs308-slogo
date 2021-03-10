@@ -104,13 +104,11 @@ public class EnvironmentPane extends Pane {
   }
 
   public void updateVariables(VariablesRecord records) {
-    variablesTable.getItems().removeAll();
-    variablesTable.getItems().addAll(records.variables());
+    variablesTable.getItems().setAll(records.variables());
   }
 
   public void updateCommands(CommandsRecord records) {
-    commandsTable.getItems().removeAll();
-    commandsTable.getItems().addAll(records.commands());
+    commandsTable.getItems().setAll(records.commands());
   }
 
   /**

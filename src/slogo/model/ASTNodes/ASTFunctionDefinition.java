@@ -21,13 +21,7 @@ public class ASTFunctionDefinition extends ASTDeclaration {
   public ASTFunctionDefinition(String identifier, Map<String, ASTFunctionCall> functionTable) {
     super(NAME, identifier, NUM_PARAMS);
     this.functionTable = functionTable;
-//    this.vars = vars;
-//    this.commands = commands;
   }
-
-//  public ASTNode getFunctionBody() {
-//    return commands;
-//  }
 
   /**
    * Get a list of parameter names of the function

@@ -264,6 +264,37 @@ public class ParserTest {
   }
 
   @Test
+  void testMultipleUserCommands() {
+    String DEFINE_COMMAND = "to triangle [ ]\n"
+        + "[ \n"
+        + "  repeat 3 [\n"
+        + "    fd 50 \n"
+        + "    rt 120\n"
+        + "  ]\n"
+        + "]\n"
+        + "\n"
+        + "to circle [ ]\n"
+        + "[\n"
+        + "  repeat 360 [\n"
+        + "    fd 1 \n"
+        + "    rt 1\n"
+        + "  ]\n"
+        + "]\n"
+        + "\n"
+        + "to square [ ]\n"
+        + "[\n"
+        + "  repeat 4 [\n"
+        + "    fd 100\n"
+        + "    rt 90\n"
+        + "  ]\n"
+        + "  fd 100\n"
+        + "]\n";
+
+    ASTNode ret = parser.parseCommand(DEFINE_COMMAND);
+    assertEquals( 3, ret.getNumChildren());
+  }
+
+  @Test
   void testScopeNotEnded() {
     String TEST_STRING = "fd [[";
     assertThrows(InvalidSyntaxException.class, () -> {

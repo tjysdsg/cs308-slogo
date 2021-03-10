@@ -98,6 +98,10 @@ public class ProgramParser implements Parser {
 
     Scope currScope = scopeStack.peek();
     if (currScope.isIncomplete() || scopeStack.size() != 1) {
+      if (currScope.peek() == null) {
+        throw new InvalidSyntaxException(command, command);
+      }
+
       ASTNode problem = currScope.peek();
       throw new IncorrectParameterCountException(problem);
     }

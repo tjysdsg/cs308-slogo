@@ -22,6 +22,8 @@ public class Scope {
   }
 
   public ASTNode peek() {
+    if (myStack.isEmpty())
+      return null;
     return myStack.peek();
   }
 

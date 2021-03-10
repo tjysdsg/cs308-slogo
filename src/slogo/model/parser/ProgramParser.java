@@ -13,7 +13,8 @@ public class ProgramParser implements Parser {
 
   private final TokenClassifier tc = new TokenClassifier();
   private final CommandClassifier cc;
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
+  private static final String SPLITTER = "[ \\n]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])";
+  private static final String COMMENT_MATCHER = "#.*";
   private Map<String, ASTFunctionCall> lookUpTable;
 
   public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
@@ -23,6 +24,9 @@ public class ProgramParser implements Parser {
 
   public ASTNode parseCommand(String command)
       throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
+
+    // remove comments
+    command = command.replaceAll(COMMENT_MATCHER, "");
 
     List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
     lines.removeIf(String::isBlank);
@@ -126,16 +130,16 @@ public class ProgramParser implements Parser {
   public static void main(String[] args) {
     Parser parser = new ProgramParser("English", new HashMap<>());
     parser.parseCommand("""
-to dash [ :count ]
-[
-    repeat :count
+        to dash [ :count ]
         [
-        pu fd 4 pd fd 4
-  ]      
-]
+            repeat :count
+                [
+                pu fd 4 pd fd 4
+          ]      
+        ]
 
-    cs
-        home
-    dash 10""");
+            cs
+                home
+            dash 10""");
   }
 }

@@ -34,7 +34,7 @@ public class ASTDoTimes extends ASTCommand {
     for (double i = 1.0; i <= limit; i += 1.0) {
       // counter is set in the lookup table as a variable
       variable.setValue(i);
-      info.getLookupTable().put(counterName, variable);
+      info.getVariableTable().put(counterName, variable);
 
       ret = comp2.evaluate(info);
     }

@@ -2,7 +2,6 @@ package slogo.model.ASTNodes;
 
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
-import slogo.model.Vec2D;
 
 public class ASTSetTowards extends ASTCommand {
 
@@ -20,16 +19,19 @@ public class ASTSetTowards extends ASTCommand {
 
     Turtle turtle = info.getTurtle();
 
-    Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
-    Vec2D dest = new Vec2D(x, y);
-    double deg = Math.acos(dest.cosAngle(src)); // acos returns degree, not radian
-    if (deg < 0) {
-      deg = 180.0 - deg;
-    }
-    int clockwiseness = dest.clockwiseness(src);
+    double tan = x / y;
+    double deg = Math.toDegrees(Math.atan(tan));
 
-    deg *= clockwiseness;
-    turtle.rotate(deg);
-    return deg;
+    if (tan > 0 && x < 0) {
+      deg -= 180;
+    }
+
+    if (tan < 0 && x > 0) {
+      deg += 180;
+    }
+
+    double delta = deg - turtle.getRotation();
+    turtle.rotate(delta);
+    return delta;
   }
 }

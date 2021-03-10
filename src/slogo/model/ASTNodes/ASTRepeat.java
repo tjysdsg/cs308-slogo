@@ -27,7 +27,7 @@ public class ASTRepeat extends ASTCommand {
     for (int i = 0; i < count; ++i) {
       // `:repcount` value is set in the lookup table as a variable
       variable.setValue(i + 1); // repcount starts at 1
-      info.getLookupTable().put(REPCOUNT_NAME, variable);
+      info.getVariableTable().put(REPCOUNT_NAME, variable);
 
       ret = getChildAt(1).evaluate(info);
     }

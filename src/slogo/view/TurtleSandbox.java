@@ -1,16 +1,23 @@
 package slogo.view;
 
 import java.io.File;
+import javafx.scene.layout.Priority;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.geometry.Pos;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import java.util.List;
 import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -27,10 +34,11 @@ import slogo.events.TurtleRecord;
  *     <p>This class creates the window where the turtle moves. It extends the Pane class so that
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
-public class TurtleSandbox extends BorderPane {
+public class TurtleSandbox extends GridPane {
   public static final double MAX_ZOOM = 3;
   public static final double MIN_ZOOM = .3;
   public static final double ZOOM_INTENSITY = .05;
+  public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
   private StackPane lines;
   private StackPane sandbox;
@@ -45,12 +53,34 @@ public class TurtleSandbox extends BorderPane {
     this.lines = new StackPane();
     this.sandbox = new StackPane();
     this.viewController = viewController;
+    this.controls = createControls();
     sandbox.getChildren().add(lines);
-    addTurtle();
-    setCenter(sandbox);
     setSandboxColor("#03A9F4");
+    getChildren().addAll(sandbox, controls);
+    addTurtle();
+
+    controls.setAlignment(Pos.BOTTOM_LEFT);
+
+    RowConstraints row1 = new RowConstraints(DEFAULT_SIZE);
+    row1.setPercentHeight(95);
+    row1.setValignment(VPos.CENTER);
+    row1.setVgrow(Priority.NEVER);
+    getRowConstraints().addAll(row1);
+
+    ColumnConstraints col1 = new ColumnConstraints(DEFAULT_SIZE);
+    col1.setPercentWidth(100);
+    col1.setHalignment(HPos.CENTER);
+    col1.setHgrow(Priority.NEVER);
+    getColumnConstraints().addAll(col1);
+
+    GridPane.setRowIndex(sandbox, 0);
+    GridPane.setColumnIndex(sandbox, 0);
+
+    GridPane.setRowIndex(controls, 1);
+    GridPane.setColumnIndex(controls, 0);
+    setAlignment(Pos.CENTER);
+
     makeDraggable(sandbox);
-    createControls();
   }
 
   private void makeDraggable(Pane pane) {
@@ -87,8 +117,8 @@ public class TurtleSandbox extends BorderPane {
     });
   }
 
-  private void createControls() {
-    controls = new HBox();
+  private HBox createControls() {
+    HBox controls = new HBox();
     Button addTurtle = new Button("Add Turtle");
     addTurtle.setOnAction(
         e -> {
@@ -128,7 +158,7 @@ public class TurtleSandbox extends BorderPane {
           }
         });
     controls.getChildren().addAll(addTurtle, centerButton, saveImage);
-    setBottom(controls);
+    return controls;
   }
 
   private void addTurtle() {

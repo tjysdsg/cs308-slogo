@@ -89,15 +89,12 @@ public class EnvironmentPane extends Pane {
 
   public void updateCommands(CommandsRecord records) {
     commandsTable.getItems().setAll(records.commands());
+    int index = records.commands().size();
+    commandsTable.scrollTo(index);
   }
 
   public String getPreviousCommand() {
     return lastRanCommand != null ? lastRanCommand.getText() : "";
-  }
-
-  public void addPreviousCommand(String command) {
-    lastRanCommand = new Label(command);
-    previousCommands.getItems().add(lastRanCommand);
   }
 
   public void addPreviousCommand(String command, boolean successful) {
@@ -106,5 +103,7 @@ public class EnvironmentPane extends Pane {
       lastRanCommand.setStyle("-fx-text-fill: red");
     }
     previousCommands.getItems().add(lastRanCommand);
+    int index = previousCommands.getItems().size();
+    previousCommands.scrollTo(index);
   }
 }

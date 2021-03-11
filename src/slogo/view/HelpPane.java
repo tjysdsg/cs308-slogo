@@ -5,13 +5,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -22,6 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
 
 public class HelpPane extends Pane {
   public final static String RESOURCE_PACKAGE = View.RESOURCE_PACKAGE;
@@ -42,6 +50,7 @@ public class HelpPane extends Pane {
   private  ChoiceBox<String> booleanList = new ChoiceBox();
   private  ChoiceBox<String> variablesList = new ChoiceBox();
   private  ChoiceBox<String> userCommandList = new ChoiceBox();
+  //ChangeListener<? super String> listener;
   ViewController vcon;
   Button backButton;
 
@@ -95,17 +104,19 @@ public class HelpPane extends Pane {
   }
 
   private void addDefaultChoiceBoxTest() {
+    removeListener();
     commandList.setValue(resources.getString("command"));
     queriesList.setValue(resources.getString("queries"));
     mathList.setValue(resources.getString("math"));
     booleanList.setValue(resources.getString("boolean"));
     variablesList.setValue(resources.getString("variable"));
     userCommandList.setValue(resources.getString("user"));
+    createListAction();
+
 
   }
 
   private void createListAction() {
-    backButton = new Button("Back to Menu");
     addHelpText(commandList);
     addHelpText(queriesList);
     addHelpText(booleanList);
@@ -115,28 +126,38 @@ public class HelpPane extends Pane {
   }
 
   private void addHelpText(ChoiceBox<String> typeList) {
-   // System.out.println("ahhh this should not be before printing done with create display method");
-    typeList.setOnAction(e-> {
-//      problem is changing the display labels when you
-//      change the language is an action/an event listener.
-//      System.out.println("this should be printed when creating the list");
-      Label helpDescription = new Label();
-      helpDescription.setText(resources.getString(typeList.getValue()));
-      helpDescription.setWrapText(true);;
-      vbox.getChildren().remove(list);
-      vbox.getChildren().add(helpDescription);
-      vbox.getChildren().add(backButton);
-      typeList.setValue(typeList.getSelectionModel().selectedIndexProperty().toString());
 
-    });
-  }
+    typeList.setOnAction(e->{
+        Label helpDescription = new Label();
+        helpDescription.setText(resources.getString(typeList.getValue()));
+        helpDescription.setWrapText(true);
+        ;
+        vbox.getChildren().remove(list);
+        vbox.getChildren().add(helpDescription);
+        vbox.getChildren().add(backButton);
+      });
+
+
+    }
 
   private void createButtonAction() {
+    backButton = new Button("Back to Menu");
     backButton.setOnAction(e->
     {
       vbox.getChildren().clear();
       vbox.getChildren().addAll(displayWindow,list);
+      addDefaultChoiceBoxTest();
+
     });
+  }
+
+  private void removeListener() {
+    commandList.setOnAction(null);
+    queriesList.setOnAction(null);
+    mathList.setOnAction(null);
+    variablesList.setOnAction(null);
+    booleanList.setOnAction(null);
+    userCommandList.setOnAction(null);
   }
 
   private void createDisplayWindow() {

@@ -105,6 +105,10 @@ public class View {
           environmentPane.updateCommands(e);
         });
 
+    environment.setOnClear( () -> {
+      turtleSandbox.clearLines();
+    });
+
     return newScene;
   }
 

@@ -16,7 +16,7 @@ public class ASTBackward extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     double delta = getChildAt(0).evaluate(info);
     Turtle turtle = info.getTurtle();
-    turtle.rotate(180);
+//    turtle.rotate(180);
     turtle.move(delta);
     return delta;
   }

@@ -196,6 +196,10 @@ public class TurtleSandbox extends GridPane {
     setStyle("-fx-background-color: " + color);
   }
 
+  public void clearLines() {
+    lines.getChildren().clear();
+  }
+
   public void setPenColor(String color) {
     turtles.get(0).setPenColor(color);
   }

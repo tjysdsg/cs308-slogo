@@ -1,5 +1,7 @@
 package slogo.view;
 
+import com.jfoenix.controls.JFXButton;
+import javafx.scene.control.Tooltip;
 import java.io.File;
 import javafx.scene.layout.Priority;
 import java.io.IOException;
@@ -36,7 +38,7 @@ import slogo.events.TurtleRecord;
  */
 public class TurtleSandbox extends GridPane {
   public static final double MAX_ZOOM = 5;
-  public static final double MIN_ZOOM = .3;
+  public static final double MIN_ZOOM = .2;
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
@@ -122,12 +124,17 @@ public class TurtleSandbox extends GridPane {
     HBox controls = new HBox();
     controls.setSpacing(5);
     controls.setStyle("-fx-background-color: rgba(95, 84, 87, 0.74)");
-    Button addTurtle = new Button("Add Turtle");
+
+    Button addTurtle = createControlButton("Add Turtle");
     addTurtle.setOnAction(
         e -> {
           addTurtle();
         });
-    Button centerButton = new Button("Center");
+    Tooltip addTip = new Tooltip("Select turtle with Shift+Click");
+    addTip.setShowDelay(Duration.millis(200));
+    addTurtle.setTooltip(addTip);
+    Button centerButton = createControlButton("Center");
+
     TranslateTransition centerSandbox = new TranslateTransition();
     centerSandbox.setDuration(Duration.seconds(1));
     centerSandbox.setToX(0);
@@ -145,7 +152,8 @@ public class TurtleSandbox extends GridPane {
         (e) -> {
           center.play();
         });
-    Button saveImage = new Button("Save");
+    Button saveImage = createControlButton("Save");
+    saveImage.getStyleClass().add("control-button");
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     saveImage.setOnAction(
@@ -162,6 +170,14 @@ public class TurtleSandbox extends GridPane {
         });
     controls.getChildren().addAll(addTurtle, centerButton, saveImage);
     return controls;
+  }
+
+  private Button createControlButton(String name) {
+    JFXButton button = new JFXButton(name);
+    button.getStyleClass().add("control-button");
+    button.setMaxHeight(Double.MAX_VALUE);
+    button.setMaxWidth(Double.MAX_VALUE);
+    return button;
   }
 
   private void addTurtle() {

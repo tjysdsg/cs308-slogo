@@ -35,7 +35,7 @@ import slogo.events.TurtleRecord;
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
 public class TurtleSandbox extends GridPane {
-  public static final double MAX_ZOOM = 3;
+  public static final double MAX_ZOOM = 5;
   public static final double MIN_ZOOM = .3;
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
@@ -65,7 +65,12 @@ public class TurtleSandbox extends GridPane {
     row1.setPercentHeight(95);
     row1.setValignment(VPos.CENTER);
     row1.setVgrow(Priority.NEVER);
-    getRowConstraints().addAll(row1);
+
+    RowConstraints row2 = new RowConstraints();
+    row2.setValignment(VPos.BOTTOM);
+    row2.setVgrow(Priority.ALWAYS);
+
+    getRowConstraints().addAll(row1, row2);
 
     ColumnConstraints col1 = new ColumnConstraints(DEFAULT_SIZE);
     col1.setPercentWidth(100);
@@ -84,10 +89,6 @@ public class TurtleSandbox extends GridPane {
   }
 
   private void makeDraggable(Pane pane) {
-    pane.setOnMouseEntered(
-        e -> {
-          // pane.
-        });
     setOnMousePressed(
         e -> {
           dragX = e.getX();
@@ -119,6 +120,8 @@ public class TurtleSandbox extends GridPane {
 
   private HBox createControls() {
     HBox controls = new HBox();
+    controls.setSpacing(5);
+    controls.setStyle("-fx-background-color: rgba(95, 84, 87, 0.74)");
     Button addTurtle = new Button("Add Turtle");
     addTurtle.setOnAction(
         e -> {

@@ -1,40 +1,36 @@
 package slogo.view;
 
 import com.jfoenix.controls.JFXListView;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.geometry.Pos;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
-import slogo.events.CommandsRecord;
 import slogo.events.VariablesRecord;
 
-public class EnvironmentPane extends Pane {
+public class EnvironmentPane extends GridPane {
 
   public static final int TABLE_SIZE = 200;
   private Label lastRanCommand;
-  TableView<DisplayCommand> commandsTable;
-  TableView<DisplayVariable> variablesTable;
-  JFXListView<Label> previousCommands;
+  private TableView<DisplayCommand> commandsTable;
+  private TableView<DisplayVariable> variablesTable;
+  private JFXListView<Label> previousCommands;
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  ResourceBundle resources;
-  TitledPane commandsToggle;
-  TitledPane variablesToggle;
-  TitledPane prevCommands;
+  private ResourceBundle resources;
+  private TitledPane commandsToggle;
+  private TitledPane variablesToggle;
+  private TitledPane prevCommands;
 
   public EnvironmentPane() {
-    VBox vbox = new VBox();
     variablesTable = new TableView<>();
     commandsTable = new TableView<>();
-    vbox.setAlignment(Pos.CENTER_LEFT);
-    getChildren().add(vbox);
 
     createTableViews();
     commandsToggle = new TitledPane();
@@ -44,9 +40,17 @@ public class EnvironmentPane extends Pane {
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
     prevCommands = new TitledPane();
-    prevCommands.setContent(previousCommands);
 
-    vbox.getChildren().addAll(variablesToggle, commandsToggle, prevCommands);
+    prevCommands.setContent(previousCommands);
+    variablesToggle.setMaxHeight(Double.MAX_VALUE);
+
+    add(variablesToggle, 0, 0);
+    add(commandsToggle, 0, 1);
+    add(prevCommands, 0, 2);
+
+    RowConstraints row1 = new RowConstraints();
+    row1.setVgrow(Priority.ALWAYS);
+    getRowConstraints().add(row1);
 
     createTitles("English");
   }
@@ -56,8 +60,6 @@ public class EnvironmentPane extends Pane {
     commandsToggle.setText(resources.getString("command"));
     variablesToggle.setText(resources.getString("variable"));
     prevCommands.setText(resources.getString("prevCommand"));
-
-
   }
 
   public void createTableViews() {
@@ -69,7 +71,7 @@ public class EnvironmentPane extends Pane {
     comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
 
     commandsTable.getColumns().addAll(comNameCol, comValueCol);
-    //commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
@@ -78,7 +80,7 @@ public class EnvironmentPane extends Pane {
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
 
-    //variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     variablesTable.setPrefHeight(TABLE_SIZE);
     commandsTable.setPrefHeight(TABLE_SIZE);
   }

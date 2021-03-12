@@ -82,7 +82,7 @@ public class ModelController {
    * @param language - The language to use
    */
   public void setLanguage(String language) {
-
+    env.setLanguage(language);
   }
 
   public void addTurtle() {

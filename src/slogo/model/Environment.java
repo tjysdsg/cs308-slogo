@@ -61,9 +61,8 @@ public class Environment implements TrackableEnvironment {
     this.clearEnvironmentCallback = callback;
   }
 
-  @Override
-  public void setBundle(ResourceBundle bundle) {
-    // TODO
+  public void setLanguage(String language) {
+    myParser.changeLanguage(language);
   }
 
   /**

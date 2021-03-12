@@ -47,7 +47,7 @@ public interface TrackableEnvironment {
    * Sets the bundle to use for translating commands
    * @param bundle - The bundle to use.
    */
-  void setBundle(ResourceBundle bundle);
+  void setLanguage(String language);
 
   void addTurtle();
 

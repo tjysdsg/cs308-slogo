@@ -174,6 +174,7 @@ public class View {
       changeTextInstruction(language);
       helpPane.createDisplayLanguages(language);
       environmentPane.createTitles(language);
+      modelCon.setLanguage(language);
     }
 
     /**

@@ -319,7 +319,7 @@ public class ParserTest {
   }
 
 
-  void assertNodeStructure(ASTNode expected, ASTNode actual) {
+  public static void assertNodeStructure(ASTNode expected, ASTNode actual) {
     assertEquals(expected.getToken(), actual.getToken());
     assertEquals(expected.getNumChildren(), actual.getNumChildren());
 

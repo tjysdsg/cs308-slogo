@@ -1,5 +1,6 @@
 package slogo.model.parser;
 
+import java.lang.reflect.InvocationTargetException;
 import slogo.model.ASTNodes.ASTNode;
 
 /**
@@ -29,8 +30,16 @@ public class ASTCommandFactory {
     try {
       return (ASTNode) Class.forName(packagePath + classPrefix + command).getConstructor()
           .newInstance();
-    } catch (Exception e) {
+    } catch (InstantiationException e) {
       e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      System.out.printf("Class %s not found\n", command);
     }
     return null;
   }

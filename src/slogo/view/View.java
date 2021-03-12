@@ -40,6 +40,7 @@ public class View {
   private BorderPane borderPane;
   private TextArea codeArea;
   private Button run;
+  private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
   public static final String RESOURCE_PACKAGE = "resources.";
   public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
@@ -57,6 +58,7 @@ public class View {
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
     this.environment = EnvironmentFactory.createEnvironment();
+    this.resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + "English");
 
     viewCon = new ViewBundle();
     modelCon.setController(viewCon);
@@ -67,13 +69,14 @@ public class View {
   }
 
   public Scene createScene() {
+    helpPane = new HelpPane(resources);
     environmentPane = new EnvironmentPane();
-    helpPane = new HelpPane();
     turtleSandbox = new TurtleSandbox(viewCon);
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
     Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
+
 
     environmentPane.setStyle("-fx-background-color: white");
     commandPane.setStyle("-fx-background-color: white");
@@ -140,9 +143,10 @@ public class View {
   }
 
   private void changeTextInstruction(String language) {
-    ResourceBundle resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
+    this.resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
     // TODO: Maybe say an instruction like shift+enter to run?
     codeArea.setPromptText(resources.getString("userCommand"));
+    helpPane.setResources(resources);
     run.setText(resources.getString("runButton"));
   }
 
@@ -176,7 +180,6 @@ public class View {
      */
     public void setLanguage(String language) {
       changeTextInstruction(language);
-      helpPane.createDisplayLanguages(language);
       environmentPane.createTitles(language);
       modelCon.setLanguage(language);
     }

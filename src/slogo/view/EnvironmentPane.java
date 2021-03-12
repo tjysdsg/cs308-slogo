@@ -102,7 +102,7 @@ public class EnvironmentPane extends GridPane {
   public void addPreviousCommand(String command, boolean successful) {
     lastRanCommand = new Label(command);
     if (!successful) {
-      lastRanCommand.setStyle("-fx-text-fill: red");
+      lastRanCommand.getStyleClass().add("command-error");
     }
     previousCommands.getItems().add(lastRanCommand);
     int index = previousCommands.getItems().size();

@@ -32,4 +32,6 @@
   -fx-text-fill: black;
 }
 
-
+.command-error {
+  -fx-text-fill: #ff0033;
+}

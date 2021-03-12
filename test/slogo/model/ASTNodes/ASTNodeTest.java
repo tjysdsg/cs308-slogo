@@ -191,6 +191,17 @@ public class ASTNodeTest {
     assertTurtleXY(20, 10);
   }
 
+  @Test
+  void testVariableDefaultValue() {
+    String definition = "FD :aaa";
+
+    ASTNode node = parser.parseCommand(definition);
+    double res = node.evaluate(infoBundle);
+    assertEquals(0, res, 1E-5);
+
+    assertTurtleXY(0, 0);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;

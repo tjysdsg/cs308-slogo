@@ -15,8 +15,10 @@ public class ASTVariable extends ASTNamed {
   @Override
   public double doEvaluate(InfoBundle info) throws UnknownIdentifierException {
     ASTNode referred = info.getVariableTable().get(getName());
-    if (referred == null) {
-      throw new UnknownIdentifierException(getName());
+    if (referred == null) { // default to 0
+      ASTNumberLiteral value = new ASTNumberLiteral(0);
+      info.getVariableTable().put(getName(), value);
+      return 0;
     }
     return referred.evaluate(info);
   }

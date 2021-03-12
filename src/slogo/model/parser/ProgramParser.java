@@ -96,13 +96,11 @@ public class ProgramParser implements Parser {
 
             Scope prevScope = scopeStack.pop();
             currScope = scopeStack.peek();
-            currScope.peek().addChild(prevScope.getCommands());
+            currScope.push(prevScope.getCommands());
           }
 
           default -> throw new InvalidSyntaxException(token, command);
         }
-
-        currScope.collapse();
       }
     }
 

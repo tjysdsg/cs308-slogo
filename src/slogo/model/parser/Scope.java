@@ -10,11 +10,10 @@ public class Scope {
   private Stack<ASTNode> myStack = new Stack<>();
   private List<ASTNode> commands = new ArrayList<>();
 
-  public void collapse() {
+  private void collapse() {
     while (myStack.size() > 1 && myStack.peek().isDone()) {
       myStack.pop();
     }
-
 
     if (!myStack.isEmpty() && myStack.peek().isDone()) {
       commands.add(myStack.pop());
@@ -32,6 +31,7 @@ public class Scope {
       myStack.peek().addChild(command);
     }
     myStack.push(command);
+    collapse();
   }
 
   public ASTNode getCommands() {

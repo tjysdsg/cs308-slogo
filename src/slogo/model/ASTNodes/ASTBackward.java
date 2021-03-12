@@ -17,7 +17,7 @@ public class ASTBackward extends ASTCommand {
     double delta = getChildAt(0).evaluate(info);
     Turtle turtle = info.getTurtle();
 //    turtle.rotate(180);
-    turtle.move(delta);
+    turtle.move(-delta);
     return delta;
   }
 }

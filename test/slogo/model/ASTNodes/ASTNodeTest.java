@@ -1,6 +1,7 @@
 package slogo.model.ASTNodes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -214,11 +215,18 @@ public class ASTNodeTest {
     assertEquals(0, res, 1E-5);
 
     assertTurtleXY(0, 0);
+
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":aaa");
+    assertNotNull(literal);
+    assertEquals(0, literal.getValue(), 1E-5);
   }
 
   @Test
   void testMakeVariable() {
     assertEquals(308.0, parseAndEvaluateCommands("MAKE :a", 308), 1E-5);
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":a");
+    assertNotNull(literal);
+    assertEquals(308, literal.getValue(), 1E-5);
   }
 
   @Test

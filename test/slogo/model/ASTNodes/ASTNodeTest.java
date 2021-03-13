@@ -319,6 +319,18 @@ public class ASTNodeTest {
     assertVariableLookUp(":a", 9);
   }
 
+  @Test
+  void testDotTimes() {
+    double res = parseAndEvaluateCommands("""
+        DOTTIMES [:a 10] [fd :a]
+        """);
+
+    assertEquals(10, res, 1E-5);
+    assertTurtleXY(0, 55);
+
+    assertVariableLookUp(":a", 10);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;

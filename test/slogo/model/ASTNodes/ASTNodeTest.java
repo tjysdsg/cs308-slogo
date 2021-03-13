@@ -121,11 +121,13 @@ public class ASTNodeTest {
   }
 
   @Test
-  void testSetHeading() {
+  void testHeadingSetHeading() {
     double a = 123.21;
     double res = parseAndEvaluateCommands("SETHEADING", a);
     assertEquals(a, res);
     assertTurtleRotation(a);
+
+    assertEquals(a, parseAndEvaluateCommands("HEADING"), 1E-5);
   }
 
   @Test

@@ -35,6 +35,11 @@ public class ASTNodeTest {
     infoBundle = new TestBundle();
   }
 
+  double parseAndEvaluateCommands(String cmd) {
+    ASTNode node = parser.parseCommand(cmd);
+    return node.evaluate(infoBundle);
+  }
+
   double parseAndEvaluateCommands(String cmd, double param) {
     String str = String.format("%s %f", cmd, param);
     ASTNode node = parser.parseCommand(str);
@@ -200,6 +205,26 @@ public class ASTNodeTest {
     assertEquals(0, res, 1E-5);
 
     assertTurtleXY(0, 0);
+  }
+
+  @Test
+  void testMathOperators() {
+    assertEquals(69 + 96, parseAndEvaluateCommands("SUM", 69, 96), 1E-5);
+    assertEquals(69 - 96, parseAndEvaluateCommands("DIFFERENCE", 69, 96), 1E-5);
+    assertEquals(69 * 96, parseAndEvaluateCommands("PRODUCT", 69, 96), 1E-5);
+    assertEquals(69.0 / 96.0, parseAndEvaluateCommands("QUOTIENT", 69, 96), 1E-5);
+    assertEquals(69 % 96, parseAndEvaluateCommands("REMAINDER", 69, 96), 1E-5);
+    assertEquals(-69, parseAndEvaluateCommands("MINUS", 69), 1E-5);
+    assertEquals(0.5, parseAndEvaluateCommands("SIN", 30), 1E-5);
+    assertEquals(0.5, parseAndEvaluateCommands("COS", 60), 1E-5);
+    assertEquals(45, parseAndEvaluateCommands("ATAN", 1), 1E-5);
+
+    assertEquals(0, parseAndEvaluateCommands("LOG", 1), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("LOG", Math.E), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("POW", 999, 0), 1E-5);
+    assertEquals(1024, parseAndEvaluateCommands("POW", 2, 10), 1E-5);
+
+    assertEquals(Math.PI, parseAndEvaluateCommands("PI"), 1E-5);
   }
 
   class TestBundle implements InfoBundle {

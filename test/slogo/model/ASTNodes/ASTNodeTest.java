@@ -208,6 +208,11 @@ public class ASTNodeTest {
   }
 
   @Test
+  void testMakeVariable() {
+    assertEquals(308.0, parseAndEvaluateCommands("MAKE :a", 308), 1E-5);
+  }
+
+  @Test
   void testMathOperators() {
     assertEquals(69 + 96, parseAndEvaluateCommands("SUM", 69, 96), 1E-5);
     assertEquals(69 - 96, parseAndEvaluateCommands("DIFFERENCE", 69, 96), 1E-5);

@@ -10,6 +10,6 @@ public class ASTCosine extends ASTUnaryOperator {
 
   @Override
   protected double calculate(double ret1) {
-    return Math.cos(ret1);
+    return Math.cos(Math.toRadians(ret1));
   }
 }

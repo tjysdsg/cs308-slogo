@@ -183,6 +183,13 @@ public class ASTNodeTest {
   }
 
   @Test
+  void testClearScreen() {
+    parseAndEvaluateCommands("SETXY", 3, 4);
+    assertEquals(5, parseAndEvaluateCommands("CS"), 1E-5);
+    assertTrue(infoBundle.getEnvironmentCleared());
+  }
+
+  @Test
   void testFunctions() {
     String definition = "TO translate [:dForward :dRight] [FORWARD :dForward RIGHT 90 FORWARD :dRight]";
     String call = "translate 10 20";
@@ -272,6 +279,7 @@ public class ASTNodeTest {
     private Map<String, ASTNode> commandTable;
     private TurtleRecord info;
     private Turtle turtle;
+    private boolean environmentCleared = false;
 
     public TestBundle() {
       reset();
@@ -304,6 +312,7 @@ public class ASTNodeTest {
 
     @Override
     public void notifyEnvironmentClear() {
+      environmentCleared = true;
     }
 
     @Override
@@ -318,6 +327,10 @@ public class ASTNodeTest {
 
     public TurtleRecord getInfo() {
       return info;
+    }
+
+    public boolean getEnvironmentCleared() {
+      return environmentCleared;
     }
   }
 }

@@ -334,7 +334,7 @@ public class ASTNodeTest {
   @Test
   void testRepeat() {
     double res = parseAndEvaluateCommands("""
-        DOTTIMES 10 [fd :repcount]
+        REPEAT 10 [fd :repcount]
         """);
 
     assertEquals(10, res, 1E-5);

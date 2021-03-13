@@ -227,6 +227,38 @@ public class ASTNodeTest {
     assertEquals(Math.PI, parseAndEvaluateCommands("PI"), 1E-5);
   }
 
+  @Test
+  void testBoolOperators() {
+    assertEquals(0, parseAndEvaluateCommands("LESS?", 2, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("LESS?", 1, 1), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("LESS?", 1, 2), 1E-5);
+
+    assertEquals(1, parseAndEvaluateCommands("GREATER?", 2, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("GREATER?", 1, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("GREATER?", 1, 2), 1E-5);
+
+    assertEquals(0, parseAndEvaluateCommands("EQUAL?", 2, 1), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("EQUAL?", 1, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("EQUAL?", 1, 2), 1E-5);
+
+    assertEquals(1, parseAndEvaluateCommands("NOTEQUAL?", 2, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("NOTEQUAL?", 1, 1), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("NOTEQUAL?", 1, 2), 1E-5);
+
+    assertEquals(0, parseAndEvaluateCommands("AND", 0, 0), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("AND", 0, 1), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("AND", 1, 0), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("AND", 1, 1), 1E-5);
+
+    assertEquals(0, parseAndEvaluateCommands("OR", 0, 0), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("OR", 0, 1), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("OR", 1, 0), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("OR", 1, 1), 1E-5);
+
+    assertEquals(1, parseAndEvaluateCommands("NOT", 0), 1E-5);
+    assertEquals(0, parseAndEvaluateCommands("NOT", 1), 1E-5);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;

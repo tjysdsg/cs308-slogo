@@ -53,8 +53,8 @@ public class TurtleTest {
   void testRotateAndMove() {
     testRotateAndMoveHelper(45.0, 100.0, 100.0 / Math.sqrt(2.0), 100.0 / Math.sqrt(2.0));
     testRotateAndMoveHelper(120.0, 100.0, 50 * Math.sqrt(3.0), -50.0);
-    testRotateAndMoveHelper(240.0, 100.0, -50 * Math.sqrt(3.0), -50.0);
-    testRotateAndMoveHelper(330.0, 100.0, -50.0, 50 * Math.sqrt(3.0));
+    testRotateAndMoveHelper(-120.0, 100.0, -50 * Math.sqrt(3.0), -50.0);
+    testRotateAndMoveHelper(-30.0, 100.0, -50.0, 50 * Math.sqrt(3.0));
   }
 
   @Test

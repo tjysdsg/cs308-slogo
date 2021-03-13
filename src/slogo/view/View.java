@@ -75,6 +75,7 @@ public class View {
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
+    setId();
     Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
 
 
@@ -157,6 +158,16 @@ public class View {
     codeArea.clear();
   }
 
+  private void setId(){
+    helpPane.setId("helpPane");
+    commandPane.setId("commandPane");
+    environmentPane.setId("environmentPane");
+    settingsPane.setId("settingsPane");
+    turtleSandbox.setId("turtlePane");
+    run.setId("runButton");
+    codeArea.setId("codeArea");
+  }
+
   /**
    * This class implements the ViewController class. It implements setBackground and setLanguages
    * methods for when a user changes the background color and the language for the display.
@@ -223,4 +234,5 @@ public class View {
 
     }
   }
+
 }

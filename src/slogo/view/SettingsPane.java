@@ -63,17 +63,17 @@ public class SettingsPane extends Pane {
 
   private void createHbox(){
     title = new Label();
-    title.setId("guiname");
     createLanguageList();
     createPenAndBackground();
     createTurtleOptions();
     createTurtleUpload();
-    hbox = new HBox(title, languageList,  turtleList, penPane,
-            backgroundPane,uploadTurtle);
+    hbox = new HBox(title, languageList, penPane,
+            backgroundPane);
     hbox.setAlignment(Pos.CENTER);
     displayLabels("English");
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
+    setID();
   }
 
   private void createTurtleUpload() {
@@ -96,7 +96,6 @@ public class SettingsPane extends Pane {
   private void createPenAndBackground() {
     penPane = new GridPane();
     penColorLabel = new Label();
-    penColorLabel.setId("penColorText");
     penColorPicker = new ColorPicker();
     penColorPicker.setOnAction(e-> {
       vcon.setPenColor(penColorPicker.getValue().toString());
@@ -151,6 +150,15 @@ public class SettingsPane extends Pane {
     penColorLabel.setText(resources.getString("penColorLabel"));
     backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));
     uploadTurtle.setText(resources.getString("turtleUpload"));
+
+  }
+
+  private void setID(){
+    penColorPicker.setId("penColor");
+    title.setId("guiname");
+    penColorLabel.setId("penColorText");
+    backgroundColorPicker.setId("backgroundColor");
+    languageList.setId("languagePicker");
 
   }
 

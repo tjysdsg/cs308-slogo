@@ -122,13 +122,11 @@ public class ASTNodeTest {
   }
 
   @Test
-  void testHeadingSetHeading() {
+  void testSetHeading() {
     double a = 123.21;
     double res = parseAndEvaluateCommands("SETHEADING", a);
     assertEquals(a, res);
     assertTurtleRotation(a);
-
-    assertEquals(a, parseAndEvaluateCommands("HEADING"), 1E-5);
   }
 
   @Test
@@ -188,6 +186,29 @@ public class ASTNodeTest {
     parseAndEvaluateCommands("SETXY", 3, 4);
     assertEquals(5, parseAndEvaluateCommands("CS"), 1E-5);
     assertTrue(infoBundle.getEnvironmentCleared());
+  }
+
+  @Test
+  void testQueryOperators() {
+    double x = 69;
+    double y = 96;
+    double angle = -30;
+    parseAndEvaluateCommands("SETXY", x, y);
+    parseAndEvaluateCommands("SETHEADING", angle);
+
+    assertEquals(x, parseAndEvaluateCommands("XCOR"), 1E-5);
+    assertEquals(y, parseAndEvaluateCommands("YCOR"), 1E-5);
+    assertEquals(angle, parseAndEvaluateCommands("HEADING"), 1E-5);
+
+    parseAndEvaluateCommands("PENDOWN");
+    assertEquals(1.0, parseAndEvaluateCommands("PENDOWN?"), 1E-5);
+    parseAndEvaluateCommands("PENUP");
+    assertEquals(0, parseAndEvaluateCommands("PENDOWN?"), 1E-5);
+
+    parseAndEvaluateCommands("SHOWTURTLE");
+    assertEquals(1.0, parseAndEvaluateCommands("SHOWING?"), 1E-5);
+    parseAndEvaluateCommands("HIDETURTLE");
+    assertEquals(0, parseAndEvaluateCommands("SHOWING?"), 1E-5);
   }
 
   @Test

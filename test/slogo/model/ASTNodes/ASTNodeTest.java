@@ -62,6 +62,12 @@ public class ASTNodeTest {
     assertEquals(rotation, infoBundle.getTurtle().getRotation(), 1E-5);
   }
 
+  void assertVariableLookUp(String name, double val) {
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(name);
+    assertNotNull(literal);
+    assertEquals(val, literal.getValue(), 1E-5);
+  }
+
   @Test
   void testForwardBackwardCommands() {
     Random rand = new Random();
@@ -236,10 +242,7 @@ public class ASTNodeTest {
     assertEquals(0, res, 1E-5);
 
     assertTurtleXY(0, 0);
-
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":aaa");
-    assertNotNull(literal);
-    assertEquals(0, literal.getValue(), 1E-5);
+    assertVariableLookUp(":aaa", 0);
   }
 
   @Test
@@ -248,6 +251,7 @@ public class ASTNodeTest {
     ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":a");
     assertNotNull(literal);
     assertEquals(308, literal.getValue(), 1E-5);
+    assertVariableLookUp(":a", 308);
   }
 
   @Test
@@ -301,6 +305,18 @@ public class ASTNodeTest {
 
     assertEquals(1, parseAndEvaluateCommands("NOT", 0), 1E-5);
     assertEquals(0, parseAndEvaluateCommands("NOT", 1), 1E-5);
+  }
+
+  @Test
+  void testForLoop() {
+    double res = parseAndEvaluateCommands("""
+        FOR [:a 1 10 2] [fd :a]
+        """);
+
+    assertEquals(9, res, 1E-5);
+    assertTurtleXY(0, 25);
+
+    assertVariableLookUp(":a", 9);
   }
 
   class TestBundle implements InfoBundle {

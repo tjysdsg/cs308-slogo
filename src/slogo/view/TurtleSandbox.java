@@ -88,6 +88,11 @@ public class TurtleSandbox extends GridPane {
     setAlignment(Pos.CENTER);
 
     makeDraggable(sandbox);
+    setID();
+  }
+
+  private void setID() {
+
   }
 
   private void makeDraggable(Pane pane) {

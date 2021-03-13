@@ -42,6 +42,7 @@ public class TurtleView extends Group {
     getChildren().add(name);
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
+    setID();
     setupContextMenu();
   }
 
@@ -162,5 +163,9 @@ public class TurtleView extends Group {
     if (animationQueue.size() == 1) {
       an.play();
     }
+  }
+
+  private void setID(){
+    turtleImage.setId("turtleImage");
   }
 }

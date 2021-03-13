@@ -331,6 +331,18 @@ public class ASTNodeTest {
     assertVariableLookUp(":a", 10);
   }
 
+  @Test
+  void testRepeat() {
+    double res = parseAndEvaluateCommands("""
+        DOTTIMES 10 [fd :repcount]
+        """);
+
+    assertEquals(10, res, 1E-5);
+    assertTurtleXY(0, 55);
+
+    assertVariableLookUp(":repcount", 10);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;

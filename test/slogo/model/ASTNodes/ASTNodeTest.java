@@ -231,6 +231,7 @@ public class ASTNodeTest {
     assertEquals(-69, parseAndEvaluateCommands("MINUS", 69), 1E-5);
     assertEquals(0.5, parseAndEvaluateCommands("SIN", 30), 1E-5);
     assertEquals(0.5, parseAndEvaluateCommands("COS", 60), 1E-5);
+    assertEquals(1, parseAndEvaluateCommands("TAN", 45), 1E-5);
     assertEquals(45, parseAndEvaluateCommands("ATAN", 1), 1E-5);
 
     assertEquals(0, parseAndEvaluateCommands("LOG", 1), 1E-5);

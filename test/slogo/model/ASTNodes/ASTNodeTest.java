@@ -343,6 +343,38 @@ public class ASTNodeTest {
     assertVariableLookUp(":repcount", 10);
   }
 
+  @Test
+  void testIf() {
+    double res = parseAndEvaluateCommands("""
+        IF SUM 1 1 [fd 1]
+        """);
+    assertEquals(1, res, 1E-5);
+    assertTurtleXY(0, 1);
+
+    infoBundle.reset();
+    res = parseAndEvaluateCommands("""
+        IF 0 [fd 1]
+        """);
+    assertEquals(0, res, 1E-5);
+    assertTurtleXY(0, 0);
+  }
+
+  @Test
+  void testIfElse() {
+    double res = parseAndEvaluateCommands("""
+        IFELSE SUM 1 1 [fd 1] [back 1]
+        """);
+    assertEquals(1, res, 1E-5);
+    assertTurtleXY(0, 1);
+
+    infoBundle.reset();
+    res = parseAndEvaluateCommands("""
+        IFELSE - 1 1 [fd 1] [back 1]
+        """);
+    assertEquals(1, res, 1E-5);
+    assertTurtleXY(0, -1);
+  }
+
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;

@@ -10,6 +10,6 @@ public class ASTTangent extends ASTUnaryOperator {
 
   @Override
   protected double calculate(double ret1) {
-    return Math.tan(ret1);
+    return Math.tan(Math.toRadians(ret1));
   }
 }

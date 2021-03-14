@@ -10,6 +10,6 @@ public class ASTArcTangent extends ASTUnaryOperator {
 
   @Override
   protected double calculate(double ret1) {
-    return Math.atan(ret1);
+    return Math.toDegrees(Math.atan(ret1));
   }
 }

@@ -13,7 +13,6 @@ public class ASTIsPenDown extends ASTCommand {
 
   @Override
   protected double doEvaluate(InfoBundle info) {
-    info.getTurtle().isPenDown();
-    return 1;
+    return info.getTurtle().isPenDown() ? 1.0 : 0.0;
   }
 }

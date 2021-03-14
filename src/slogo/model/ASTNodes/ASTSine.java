@@ -10,6 +10,6 @@ public class ASTSine extends ASTUnaryOperator {
 
   @Override
   protected double calculate(double ret1) {
-    return Math.sin(ret1);
+    return Math.sin(Math.toRadians(ret1));
   }
 }

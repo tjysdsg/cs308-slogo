@@ -15,8 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class HelpPane extends Pane {
-  public static final String RESOURCE_PACKAGE = View.RESOURCE_PACKAGE;
-  public static final String RESOURCE_FOLDER = View.RESOURCE_FOLDER;
+  public static final String RESOURCE_FOLDER = "resources/";
   private static final int SIZE = 200;
   private static final String SEARCH_ICON = "images/searchicon.png";
   private static final String CLEAR_ICON = "images/clearicon.png";

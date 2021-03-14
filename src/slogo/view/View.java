@@ -42,9 +42,8 @@ public class View {
   private Button run;
   private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
-  public static final String RESOURCE_PACKAGE = "resources.";
+  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
   public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
-  public static final String LANGUAGE_FOLDER = RESOURCE_FOLDER + "languages/";
 
   /**
    * This is teh constructor for the View class. It needs to be initIalized with a stage which
@@ -58,7 +57,7 @@ public class View {
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
     this.environment = EnvironmentFactory.createEnvironment();
-    this.resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + "English");
+    this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "English");
 
     viewCon = new ViewBundle();
     modelCon.setController(viewCon);
@@ -92,7 +91,7 @@ public class View {
     borderPane.setRight(helpPane);
     newScene
         .getStylesheets()
-        .add(getClass().getResource(RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        .add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
 
     environment.setOnTurtleUpdate(
         e -> {
@@ -144,7 +143,7 @@ public class View {
   }
 
   private void changeTextInstruction(String language) {
-    this.resources = ResourceBundle.getBundle(LANGUAGE_FOLDER + language);
+    this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
     // TODO: Maybe say an instruction like shift+enter to run?
     codeArea.setPromptText(resources.getString("userCommand"));
     helpPane.setResources(resources);

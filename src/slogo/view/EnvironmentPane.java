@@ -53,6 +53,11 @@ public class EnvironmentPane extends GridPane {
     getRowConstraints().add(row1);
 
     createTitles("English");
+    setID();
+  }
+
+  private void setID() {
+    previousCommands.setId("prevCommands");
   }
 
   public void createTitles(String language) {

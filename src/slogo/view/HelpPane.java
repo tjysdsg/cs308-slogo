@@ -33,7 +33,9 @@ public class HelpPane extends Pane {
   private ChoiceBox<String> booleanList = new ChoiceBox();
   private ChoiceBox<String> variablesList = new ChoiceBox();
   private ChoiceBox<String> userCommandList = new ChoiceBox();
+  private Label helpDescription = new Label();
   Button backButton;
+  ImageView helpIcon;
 
   public HelpPane(ResourceBundle resource) {
     this.resources = resource;
@@ -48,6 +50,7 @@ public class HelpPane extends Pane {
     createDisplayLanguages();
     createListAction();
     createButtonAction();
+    setId();
     vbox = new VBox(displayWindow, list);
     vbox.setPadding(new Insets(0, 0, 0, 2));
     vbox.setPrefSize(SIZE, 3 * SIZE);
@@ -104,7 +107,6 @@ public class HelpPane extends Pane {
 
     typeList.setOnAction(
         e -> {
-          Label helpDescription = new Label();
           helpDescription.setText(resources.getString(typeList.getValue()));
           helpDescription.setWrapText(true);
           ;
@@ -135,12 +137,11 @@ public class HelpPane extends Pane {
 
   private void createDisplayWindow() {
     displayWindow = new GridPane();
-    ImageView helpIcon =
+    helpIcon =
         new ImageView(getClass().getResource(RESOURCE_FOLDER + HELP_ICON).toExternalForm());
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();
-    helpLabel.setId("helpLabel");
     displayWindow.add(helpIcon, 0, 0);
     displayWindow.add(helpLabel, 1, 0);
     displayWindow.setHgap(10);
@@ -167,5 +168,14 @@ public class HelpPane extends Pane {
     this.resources = resource;
     addDefaultChoiceBoxTest();
     createDisplayLanguages();
+  }
+
+  private void setId(){
+    commandList.setId("commandList");
+    helpLabel.setId("helpLabel");
+    helpIcon.setId("helpIcon");
+    backButton.setId("backButton");
+    helpDescription.setId("helpText");
+
   }
 }

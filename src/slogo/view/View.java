@@ -19,11 +19,12 @@ import slogo.model.TrackableEnvironment;
 /**
  * @author Joshua Pettima
  * @author marthaaboagye This class coordinates between all other classes from the view package. It
- *     needs to be initialized with a stage and a model controller object. It also contains a
- *     private View bundle class that implements the view controller and allows the user to change
- *     the color for the pen and background.
+ * needs to be initialized with a stage and a model controller object. It also contains a private
+ * View bundle class that implements the view controller and allows the user to change the color for
+ * the pen and background.
  */
 public class View {
+
   private static final int WIDTH = 1200;
   private static final int HEIGHT = 720;
 
@@ -42,7 +43,6 @@ public class View {
   private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  public static final String RESOURCE_FOLDER = RESOURCE_PACKAGE.replace(".", "/");
 
   /**
    * This is teh constructor for the View class. It needs to be initIalized with a stage which
@@ -73,7 +73,7 @@ public class View {
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
-    setId();
+    setPaneIDs();
     Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
 
     environmentPane.setStyle("-fx-background-color: white");
@@ -92,11 +92,8 @@ public class View {
         .add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
 
     environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
-
     environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
-
     environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
-
     environment.setOnClear(() -> turtleSandbox.clearLines());
 
     return newScene;
@@ -113,7 +110,7 @@ public class View {
         e -> {
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendCodeArea();
-          } else if (e.getCode() == KeyCode.UP && codeArea.getText() == "") {
+          } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
             codeArea.setText(environmentPane.getPreviousCommand());
             codeArea.end();
           }
@@ -127,7 +124,7 @@ public class View {
 
   public void sendCodeArea() {
     String command = codeArea.getText();
-    sendCommand(command);
+    viewCon.sendCommand(command);
     codeArea.clear();
   }
 
@@ -139,12 +136,7 @@ public class View {
     run.setText(resources.getString("runButton"));
   }
 
-  private void sendCommand(String command) {
-    boolean executed = modelCon.sendCommand(command);
-    environmentPane.addPreviousCommand(command, executed);
-  }
-
-  private void setId() {
+  private void setPaneIDs() {
     helpPane.setId("helpPane");
     commandPane.setId("commandPane");
     environmentPane.setId("environmentPane");
@@ -197,15 +189,13 @@ public class View {
      *
      * @param turtleLogo - the turtle logo the user picked.
      */
-    public void setTurtleLogo(String turtleLogo) {}
+    public void setTurtleLogo(String turtleLogo) {
+    }
 
     public void sendAlert(String title, String message) {
       Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);
       a.showAndWait()
-          .ifPresent(
-              res -> {
-                System.out.println(res);
-              });
+          .ifPresent(System.out::println);
     }
 
     public void addTurtle() {
@@ -216,6 +206,9 @@ public class View {
       modelCon.setCurrTurtle(id);
     }
 
-    public void sendCommand(String command) {}
+    public void sendCommand(String command) {
+      boolean executed = modelCon.sendCommand(command);
+      environmentPane.addPreviousCommand(command, executed);
+    }
   }
 }

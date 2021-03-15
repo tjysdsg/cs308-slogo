@@ -1,7 +1,6 @@
 package slogo.view;
 
 import java.util.ResourceBundle;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -77,7 +76,6 @@ public class View {
     setId();
     Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
 
-
     environmentPane.setStyle("-fx-background-color: white");
     commandPane.setStyle("-fx-background-color: white");
     settingsPane.setStyle("-fx-background-color: white");
@@ -93,24 +91,13 @@ public class View {
         .getStylesheets()
         .add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
 
-    environment.setOnTurtleUpdate(
-        e -> {
-          turtleSandbox.updateTurtle(e);
-        });
+    environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
 
-    environment.setOnVariableUpdate(
-        e -> {
-          environmentPane.updateVariables(e);
-        });
+    environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
 
-    environment.setOnCommandUpdate(
-        e -> {
-          environmentPane.updateCommands(e);
-        });
+    environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
 
-    environment.setOnClear( () -> {
-      turtleSandbox.clearLines();
-    });
+    environment.setOnClear(() -> turtleSandbox.clearLines());
 
     return newScene;
   }
@@ -120,16 +107,12 @@ public class View {
     codeArea = new TextArea();
     run = new Button();
     changeTextInstruction("English");
-    run.setOnMouseClicked(
-        event -> {
-          sendTextBox();
-        });
+    run.setOnMouseClicked(e -> sendCodeArea());
 
     codeArea.setOnKeyPressed(
         e -> {
-          String command = codeArea.getText();
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
-            sendTextBox();
+            sendCodeArea();
           } else if (e.getCode() == KeyCode.UP && codeArea.getText() == "") {
             codeArea.setText(environmentPane.getPreviousCommand());
             codeArea.end();
@@ -142,6 +125,12 @@ public class View {
     return pane;
   }
 
+  public void sendCodeArea() {
+    String command = codeArea.getText();
+    sendCommand(command);
+    codeArea.clear();
+  }
+
   private void changeTextInstruction(String language) {
     this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
     // TODO: Maybe say an instruction like shift+enter to run?
@@ -150,14 +139,12 @@ public class View {
     run.setText(resources.getString("runButton"));
   }
 
-  private void sendTextBox() {
-    String command = codeArea.getText();
+  private void sendCommand(String command) {
     boolean executed = modelCon.sendCommand(command);
     environmentPane.addPreviousCommand(command, executed);
-    codeArea.clear();
   }
 
-  private void setId(){
+  private void setId() {
     helpPane.setId("helpPane");
     commandPane.setId("commandPane");
     environmentPane.setId("environmentPane");
@@ -229,9 +216,6 @@ public class View {
       modelCon.setCurrTurtle(id);
     }
 
-    public void sendCommand(String command) {
-
-    }
+    public void sendCommand(String command) {}
   }
-
 }

@@ -48,7 +48,6 @@ public class EnvironmentPane extends GridPane {
     createVariableDialog();
 
     previousCommands = new JFXListView<Label>();
-    previousCommands.setPrefHeight(200);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
     previousCommands.setOnMouseClicked(
@@ -64,14 +63,9 @@ public class EnvironmentPane extends GridPane {
           }
         });
 
-    variablesToggle.setMaxHeight(Double.MAX_VALUE);
     add(variablesToggle, 0, 0);
     add(commandsToggle, 0, 1);
     add(prevCommands, 0, 2);
-
-    RowConstraints row1 = new RowConstraints();
-    row1.setVgrow(Priority.ALWAYS);
-    getRowConstraints().add(row1);
 
     setResources(resources);
     setID();
@@ -121,7 +115,6 @@ public class EnvironmentPane extends GridPane {
     comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
 
     commandsTable.getColumns().addAll(comNameCol, comValueCol);
-    commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
@@ -143,10 +136,6 @@ public class EnvironmentPane extends GridPane {
 
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
-
-    variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    variablesTable.setPrefHeight(TABLE_SIZE);
-    commandsTable.setPrefHeight(TABLE_SIZE);
   }
 
   public void updateVariables(VariablesRecord records) {

@@ -42,8 +42,16 @@ public class EnvironmentPane extends GridPane {
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
     prevCommands = new TitledPane();
-
     prevCommands.setContent(previousCommands);
+
+    previousCommands.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            Label selectedLabel = previousCommands.getSelectionModel().getSelectedItem();
+            String command = selectedLabel.getText();
+            viewController.sendCommand(command);
+          }
+        });
     variablesToggle.setMaxHeight(Double.MAX_VALUE);
 
     add(variablesToggle, 0, 0);

@@ -63,12 +63,13 @@ public class View {
     modelCon.setModel(environment);
     scene = createScene();
     stage.setScene(scene);
+    refreshBundle();
     stage.show();
   }
 
   public Scene createScene() {
     helpPane = new HelpPane(resources);
-    environmentPane = new EnvironmentPane();
+    environmentPane = new EnvironmentPane(viewCon);
     turtleSandbox = new TurtleSandbox(viewCon);
     commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
@@ -103,7 +104,6 @@ public class View {
     GridPane pane = new GridPane();
     codeArea = new TextArea();
     run = new Button();
-    changeTextInstruction("English");
     run.setOnMouseClicked(e -> sendCodeArea());
 
     codeArea.setOnKeyPressed(
@@ -128,11 +128,11 @@ public class View {
     codeArea.clear();
   }
 
-  private void changeTextInstruction(String language) {
-    this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  private void refreshBundle() {
     // TODO: Maybe say an instruction like shift+enter to run?
     codeArea.setPromptText(resources.getString("userCommand"));
     helpPane.setResources(resources);
+    environmentPane.setResources(resources);
     run.setText(resources.getString("runButton"));
   }
 
@@ -168,8 +168,8 @@ public class View {
      * @param language - The language locale to use.
      */
     public void setLanguage(String language) {
-      changeTextInstruction(language);
-      environmentPane.createTitles(language);
+      resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+      refreshBundle();
       modelCon.setLanguage(language);
     }
 
@@ -204,6 +204,10 @@ public class View {
 
     public void setCurrTurtle(int id) {
       modelCon.setCurrTurtle(id);
+    }
+
+    public ResourceBundle getResources() {
+      return resources;
     }
 
     public void sendCommand(String command) {

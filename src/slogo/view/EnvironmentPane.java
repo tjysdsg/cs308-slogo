@@ -27,11 +27,13 @@ public class EnvironmentPane extends GridPane {
   private TitledPane commandsToggle;
   private TitledPane variablesToggle;
   private TitledPane prevCommands;
+  private ViewController viewController;
 
-  public EnvironmentPane() {
+  public EnvironmentPane(ViewController viewController) {
+    this.viewController = viewController;
+    this.resources = viewController.getResources();
     variablesTable = new TableView<>();
     commandsTable = new TableView<>();
-
     createTableViews();
     commandsToggle = new TitledPane();
     commandsToggle.setContent(commandsTable);
@@ -52,7 +54,7 @@ public class EnvironmentPane extends GridPane {
     row1.setVgrow(Priority.ALWAYS);
     getRowConstraints().add(row1);
 
-    createTitles("English");
+    setResources(resources);
     setID();
   }
 
@@ -60,8 +62,8 @@ public class EnvironmentPane extends GridPane {
     previousCommands.setId("prevCommands");
   }
 
-  public void createTitles(String language) {
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  public void setResources(ResourceBundle resources) {
+    this.resources = resources;
     commandsToggle.setText(resources.getString("command"));
     variablesToggle.setText(resources.getString("variable"));
     prevCommands.setText(resources.getString("prevCommand"));

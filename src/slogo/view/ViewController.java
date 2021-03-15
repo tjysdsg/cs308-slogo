@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.ResourceBundle;
+
 /** A controller to manipulate the current view. */
 public interface ViewController {
 
@@ -39,4 +41,6 @@ public interface ViewController {
   void addTurtle();
 
   void setCurrTurtle(int id);
+
+  ResourceBundle getResources();
 }

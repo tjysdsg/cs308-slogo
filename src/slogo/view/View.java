@@ -214,6 +214,14 @@ public class View {
       codeArea.setText(text);
     }
 
+    public void changeVariable(String variable, double newValue) {
+      System.out.println(String.format("Change: %s to %.2f", variable, newValue));
+    }
+
+    public void changeCommand(String command, String newValue) {
+
+    }
+
     public void sendCommand(String command) {
       boolean executed = modelCon.sendCommand(command);
       environmentPane.addPreviousCommand(command, executed);

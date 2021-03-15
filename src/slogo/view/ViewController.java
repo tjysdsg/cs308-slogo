@@ -42,6 +42,8 @@ public interface ViewController {
 
   void setCurrTurtle(int id);
 
+  void changeVariable(String name, double newValue);
+
   void fillCommandArea(String text);
 
   ResourceBundle getResources();

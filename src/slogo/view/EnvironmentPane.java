@@ -1,11 +1,17 @@
 package slogo.view;
 
 import com.jfoenix.controls.JFXListView;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -22,12 +28,12 @@ public class EnvironmentPane extends GridPane {
   private TableView<DisplayCommand> commandsTable;
   private TableView<DisplayVariable> variablesTable;
   private JFXListView<Label> previousCommands;
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
   private ResourceBundle resources;
   private TitledPane commandsToggle;
   private TitledPane variablesToggle;
   private TitledPane prevCommands;
   private ViewController viewController;
+  private TextInputDialog changeVarDialog;
 
   public EnvironmentPane(ViewController viewController) {
     this.viewController = viewController;
@@ -39,6 +45,21 @@ public class EnvironmentPane extends GridPane {
     commandsToggle.setContent(commandsTable);
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
+    createVariableDialog();
+    variablesTable.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            DisplayVariable variable = variablesTable.getSelectionModel().getSelectedItem();
+            changeVarDialog.setContentText(String.format("Set Value of %s", variable.name()));
+            String variableName = variable.name();
+            Optional<String> res = changeVarDialog.showAndWait();
+            if (res.isPresent()) {
+              double value = Double.parseDouble(res.get());
+              viewController.changeVariable(variableName, value);
+            }
+          }
+        });
+
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
     prevCommands = new TitledPane();
@@ -68,6 +89,30 @@ public class EnvironmentPane extends GridPane {
 
     setResources(resources);
     setID();
+  }
+
+  private void createVariableDialog() {
+    this.changeVarDialog = new TextInputDialog();
+    changeVarDialog.setHeaderText("Refactor");
+    TextField inputField = changeVarDialog.getEditor();
+    Button okButton = (Button) changeVarDialog.getDialogPane().lookupButton(ButtonType.OK);
+    okButton.addEventFilter(
+        ActionEvent.ACTION,
+        ae -> {
+          if (isNotNumber(inputField.getText())) {
+            ae.consume();
+            viewController.sendAlert("Invalid Input", "Please enter a Number");
+          }
+        });
+  }
+
+  private boolean isNotNumber(String text) {
+    try {
+      double d = Double.parseDouble(text);
+    } catch (NumberFormatException e) {
+      return true;
+    }
+    return false;
   }
 
   private void setID() {

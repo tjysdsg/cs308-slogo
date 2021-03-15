@@ -46,25 +46,11 @@ public class EnvironmentPane extends GridPane {
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
     createVariableDialog();
-    variablesTable.setOnMouseClicked(
-        e -> {
-          if (e.getClickCount() == 2) {
-            DisplayVariable variable = variablesTable.getSelectionModel().getSelectedItem();
-            changeVarDialog.setContentText(String.format("Set Value of %s", variable.name()));
-            String variableName = variable.name();
-            Optional<String> res = changeVarDialog.showAndWait();
-            if (res.isPresent()) {
-              double value = Double.parseDouble(res.get());
-              viewController.changeVariable(variableName, value);
-            }
-          }
-        });
 
     previousCommands = new JFXListView<Label>();
     previousCommands.setPrefHeight(200);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
-
     previousCommands.setOnMouseClicked(
         e -> {
           if (e.getClickCount() == 2) {
@@ -77,8 +63,8 @@ public class EnvironmentPane extends GridPane {
             viewController.fillCommandArea(command);
           }
         });
-    variablesToggle.setMaxHeight(Double.MAX_VALUE);
 
+    variablesToggle.setMaxHeight(Double.MAX_VALUE);
     add(variablesToggle, 0, 0);
     add(commandsToggle, 0, 1);
     add(prevCommands, 0, 2);
@@ -140,6 +126,20 @@ public class EnvironmentPane extends GridPane {
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
     variablesTable.getColumns().addAll(varNameCol, varValueCol);
+
+    variablesTable.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            DisplayVariable variable = variablesTable.getSelectionModel().getSelectedItem();
+            changeVarDialog.setContentText(String.format("Set Value of %s", variable.name()));
+            String variableName = variable.name();
+            Optional<String> res = changeVarDialog.showAndWait();
+            if (res.isPresent()) {
+              double value = Double.parseDouble(res.get());
+              viewController.changeVariable(variableName, value);
+            }
+          }
+        });
 
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));

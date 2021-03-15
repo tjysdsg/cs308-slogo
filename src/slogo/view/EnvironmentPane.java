@@ -50,6 +50,10 @@ public class EnvironmentPane extends GridPane {
             Label selectedLabel = previousCommands.getSelectionModel().getSelectedItem();
             String command = selectedLabel.getText();
             viewController.sendCommand(command);
+          } else if (e.isShiftDown()) {
+            Label selectedLabel = previousCommands.getSelectionModel().getSelectedItem();
+            String command = selectedLabel.getText();
+            viewController.fillCommandArea(command);
           }
         });
     variablesToggle.setMaxHeight(Double.MAX_VALUE);

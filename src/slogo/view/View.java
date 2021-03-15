@@ -210,6 +210,10 @@ public class View {
       return resources;
     }
 
+    public void fillCommandArea(String text) {
+      codeArea.setText(text);
+    }
+
     public void sendCommand(String command) {
       boolean executed = modelCon.sendCommand(command);
       environmentPane.addPreviousCommand(command, executed);

@@ -48,6 +48,7 @@ public class EnvironmentPane extends GridPane {
     createVariableDialog();
 
     previousCommands = new JFXListView<Label>();
+    previousCommands.setMinHeight(TABLE_SIZE);
     prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
     previousCommands.setOnMouseClicked(

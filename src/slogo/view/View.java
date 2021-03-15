@@ -223,6 +223,7 @@ public class View {
     }
 
     public void sendCommand(String command) {
+      if (command.isBlank()) return;
       boolean executed = modelCon.sendCommand(command);
       environmentPane.addPreviousCommand(command, executed);
     }

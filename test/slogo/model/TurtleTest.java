@@ -65,47 +65,4 @@ public class TurtleTest {
     assertEquals(0.0, record.xCoord());
     assertEquals(0.0, record.yCoord());
   }
-
-  class TestBundle implements InfoBundle {
-
-    TurtleRecord info;
-
-    @Override
-    public Turtle getTurtle() {
-      return null;
-    }
-
-    @Override
-    public void notifyTurtleUpdate(TurtleRecord info) {
-      this.info = info;
-    }
-
-    @Override
-    public void notifyCommandUpdate(CommandsRecord info) {
-    }
-
-    @Override
-    public void notifyVariableUpdate(VariablesRecord info) {
-    }
-
-    @Override
-    public void notifyEnvironmentClear() {
-    }
-
-    @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return null;
-    }
-
-    @Override
-    public Map<String, ASTNode> getCommandTable() {
-      return null;
-    }
-
-    public TurtleRecord getInfo() {
-      return info;
-    }
-  }
-
-  ;
 }

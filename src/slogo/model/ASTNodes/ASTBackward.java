@@ -16,8 +16,8 @@ public class ASTBackward extends ASTTurtleCommand {
   @Override
   protected double evaluateForTurtle(Turtle turtle, List<Double> parameters,
       InfoBundle info) {
-    double delta = -parameters.get(0);
-    turtle.move(delta);
+    double delta = parameters.get(0);
+    turtle.move(-delta);
     return delta;
   }
 }

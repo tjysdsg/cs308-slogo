@@ -322,7 +322,7 @@ public class ASTNodeTest {
   @Test
   void testDotTimes() {
     double res = parseAndEvaluateCommands("""
-        DOTTIMES [:a 10] [fd :a]
+        DOTIMES [:a 10] [fd :a]
         """);
 
     assertEquals(10, res, 1E-5);

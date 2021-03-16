@@ -86,7 +86,6 @@ public class TurtleSandbox extends GridPane {
     GridPane.setRowIndex(controls, 1);
     GridPane.setColumnIndex(controls, 0);
     setAlignment(Pos.CENTER);
-
     makeDraggable(sandbox);
     setID();
   }
@@ -191,10 +190,20 @@ public class TurtleSandbox extends GridPane {
     if (turtles.size() > 1) viewController.addTurtle();
     turtle.setOnMouseClicked( e -> {
       if (e.isShiftDown()) {
-        viewController.setCurrTurtle(turtles.indexOf(turtle));
+        setTurtle(turtles.indexOf(turtle));
       }
     });
+    turtle.getStyleClass().add("turtle");
+    setTurtle(turtles.size() - 1);
     sandbox.getChildren().addAll(turtle);
+  }
+
+  public void setTurtle(int index) {
+      viewController.setCurrTurtle(index);
+      for (TurtleView turtle : turtles) {
+        turtle.setStyle("-fx-opacity: .5");
+      }
+      turtles.get(index).setStyle("-fx-opacity: 1");
   }
 
   public void setSandboxColor(String color) {

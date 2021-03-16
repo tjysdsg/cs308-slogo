@@ -1,11 +1,17 @@
 package slogo.view;
 
 import com.jfoenix.controls.JFXListView;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -22,46 +28,80 @@ public class EnvironmentPane extends GridPane {
   private TableView<DisplayCommand> commandsTable;
   private TableView<DisplayVariable> variablesTable;
   private JFXListView<Label> previousCommands;
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
   private ResourceBundle resources;
   private TitledPane commandsToggle;
   private TitledPane variablesToggle;
   private TitledPane prevCommands;
+  private ViewController viewController;
+  private TextInputDialog changeVarDialog;
 
-  public EnvironmentPane() {
+  public EnvironmentPane(ViewController viewController) {
+    this.viewController = viewController;
+    this.resources = viewController.getResources();
     variablesTable = new TableView<>();
     commandsTable = new TableView<>();
-
     createTableViews();
     commandsToggle = new TitledPane();
     commandsToggle.setContent(commandsTable);
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
-    previousCommands = new JFXListView<Label>();
-    previousCommands.setPrefHeight(200);
-    prevCommands = new TitledPane();
+    createVariableDialog();
 
+    previousCommands = new JFXListView<Label>();
+    previousCommands.setMinHeight(TABLE_SIZE);
+    prevCommands = new TitledPane();
     prevCommands.setContent(previousCommands);
-    variablesToggle.setMaxHeight(Double.MAX_VALUE);
+    previousCommands.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            Label selectedLabel = previousCommands.getSelectionModel().getSelectedItem();
+            String command = selectedLabel.getText();
+            viewController.sendCommand(command);
+          } else if (e.isShiftDown()) {
+            Label selectedLabel = previousCommands.getSelectionModel().getSelectedItem();
+            String command = selectedLabel.getText();
+            viewController.fillCommandArea(command);
+          }
+        });
 
     add(variablesToggle, 0, 0);
     add(commandsToggle, 0, 1);
     add(prevCommands, 0, 2);
 
-    RowConstraints row1 = new RowConstraints();
-    row1.setVgrow(Priority.ALWAYS);
-    getRowConstraints().add(row1);
-
-    createTitles("English");
+    setResources(resources);
     setID();
+  }
+
+  private void createVariableDialog() {
+    this.changeVarDialog = new TextInputDialog();
+    changeVarDialog.setHeaderText("Refactor");
+    TextField inputField = changeVarDialog.getEditor();
+    Button okButton = (Button) changeVarDialog.getDialogPane().lookupButton(ButtonType.OK);
+    okButton.addEventFilter(
+        ActionEvent.ACTION,
+        ae -> {
+          if (isNotNumber(inputField.getText())) {
+            ae.consume();
+            viewController.sendAlert("Invalid Input", "Please enter a Number");
+          }
+        });
+  }
+
+  private boolean isNotNumber(String text) {
+    try {
+      double d = Double.parseDouble(text);
+    } catch (NumberFormatException e) {
+      return true;
+    }
+    return false;
   }
 
   private void setID() {
     previousCommands.setId("prevCommands");
   }
 
-  public void createTitles(String language) {
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  public void setResources(ResourceBundle resources) {
+    this.resources = resources;
     commandsToggle.setText(resources.getString("command"));
     variablesToggle.setText(resources.getString("variable"));
     prevCommands.setText(resources.getString("prevCommand"));
@@ -76,18 +116,27 @@ public class EnvironmentPane extends GridPane {
     comValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().signature()));
 
     commandsTable.getColumns().addAll(comNameCol, comValueCol);
-    commandsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DisplayVariable, String> varNameCol = new TableColumn<>("Identifier");
     TableColumn<DisplayVariable, String> varValueCol = new TableColumn<>("Value");
     variablesTable.getColumns().addAll(varNameCol, varValueCol);
 
+    variablesTable.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            DisplayVariable variable = variablesTable.getSelectionModel().getSelectedItem();
+            changeVarDialog.setContentText(String.format("Set Value of %s", variable.name()));
+            String variableName = variable.name();
+            Optional<String> res = changeVarDialog.showAndWait();
+            if (res.isPresent()) {
+              double value = Double.parseDouble(res.get());
+              viewController.changeVariable(variableName, value);
+            }
+          }
+        });
+
     varNameCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().name()));
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
-
-    variablesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    variablesTable.setPrefHeight(TABLE_SIZE);
-    commandsTable.setPrefHeight(TABLE_SIZE);
   }
 
   public void updateVariables(VariablesRecord records) {

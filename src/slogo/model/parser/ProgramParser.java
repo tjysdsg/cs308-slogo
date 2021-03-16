@@ -23,7 +23,12 @@ public class ProgramParser implements Parser {
   }
 
   public ASTNode parseCommand(String command)
-      throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
+      throws
+        UnknownIdentifierException,
+        InvalidSyntaxException,
+        IncorrectParameterCountException,
+        InvalidCommandIdentifierException,
+        UnmatchedSquareBracketException {
 
     // remove comments
     command = command.replaceAll(COMMENT_MATCHER, "");
@@ -64,6 +69,10 @@ public class ProgramParser implements Parser {
             switch (commandName) {
               case "MakeUserInstruction" -> {
                 String identifier = lines.get(cursor + 1);
+                if (!tc.getSymbol(identifier).equals("Command")) {
+                  throw new InvalidCommandIdentifierException(identifier);
+                }
+
                 newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
                 skipNext = true;
               }
@@ -112,17 +121,11 @@ public class ProgramParser implements Parser {
       }
     }
 
-    Scope currScope = scopeStack.peek();
     if (scopeStack.size() != 1) {
-      if (currScope.peek() == null) {
-        throw new InvalidSyntaxException(command, command);
-      }
-
-      ASTNode problem = currScope.peek();
-      throw new IncorrectParameterCountException(problem);
+      throw new UnmatchedSquareBracketException();
     }
 
-    ASTNode out = currScope.getCommands();
+    ASTNode out = scopeStack.pop().getCommands();
     if (out.getNumChildren() == 1)
       return out.getChildAt(0);
     return out;

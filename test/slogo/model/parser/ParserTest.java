@@ -199,8 +199,8 @@ public class ParserTest {
     commands.add(next);
 
     ASTNode body = new ASTCompoundStatement(commands);
-    ASTNode expected = new ASTFunctionCall("test", params);
-    expected.addChild(body);
+    ASTFunctionCall expected = new ASTFunctionCall("test", params);
+    expected.setBody(body);
 
     String TEST_STRING = """
         To test\s

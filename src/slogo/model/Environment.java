@@ -20,7 +20,7 @@ import slogo.model.parser.ProgramParser;
 public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles;
-  private int currTurtle;
+  private List<Integer> currTurtles;
   private ExecutionEnvironment executionEnvironment;
   private Map<String, ASTNode> variableTable;
   private Map<String, ASTNode> commandTable;
@@ -36,8 +36,9 @@ public class Environment implements TrackableEnvironment {
     executionEnvironment = new ExecutionEnvironment();
     myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
     turtles = new ArrayList<>();
-    turtles.add(new Turtle(currTurtle, executionEnvironment));
-    currTurtle = 0;
+    turtles.add(new Turtle(0, executionEnvironment));
+    currTurtles = new ArrayList<>();
+    currTurtles.add(0);
   }
 
   public void setOnTurtleUpdate(UpdateTurtle callback) {
@@ -65,23 +66,30 @@ public class Environment implements TrackableEnvironment {
     myParser.changeLanguage(language);
   }
 
-  /**
-   * Add a new turtle and switch to it
-   */
-  public void addTurtle() {
-    int size = turtles.size();
-    Turtle turtle = new Turtle(size, executionEnvironment);
-    turtles.add(turtle);
-    currTurtle = size;
-  }
-
   public void setCurrTurtle(int currTurtle) {
     if (currTurtle >= turtles.size()) {
-      // FIXME: exception class
-      throw new RuntimeException(
-          String.format("Unable to set current turtle index to %d", currTurtle));
+      for (int i = turtles.size(); i <= currTurtle; ++i) {
+        Turtle turtle = new Turtle(i, executionEnvironment);
+        this.turtles.add(turtle);
+      }
     }
-    this.currTurtle = currTurtle;
+
+    this.currTurtles.clear();
+    this.currTurtles.add(currTurtle);
+  }
+
+  public void setCurrTurtle(List<Integer> currTurtles) {
+    for (int currTurtle : currTurtles) {
+      if (currTurtle >= turtles.size()) {
+        for (int i = turtles.size(); i <= currTurtle; ++i) {
+          Turtle turtle = new Turtle(i, executionEnvironment);
+          this.turtles.add(turtle);
+        }
+      }
+    }
+
+    this.currTurtles.clear();
+    this.currTurtles.addAll(currTurtles);
   }
 
   private class ExecutionEnvironment implements InfoBundle {
@@ -92,8 +100,12 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public Turtle getTurtle() {
-      return turtles.get(currTurtle);
+    public List<Turtle> getActiveTurtles() {
+      ArrayList<Turtle> ret = new ArrayList<>();
+      for (int idx : currTurtles) {
+        ret.add(turtles.get(idx));
+      }
+      return ret;
     }
 
     public void notifyTurtleUpdate(TurtleRecord info) {

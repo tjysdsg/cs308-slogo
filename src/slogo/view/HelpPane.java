@@ -32,6 +32,7 @@ public class HelpPane extends Pane {
   private Label helpDescription = new Label();
   Button backButton;
   ImageView helpIcon;
+  private final String helpIconLocation = "src/slogo/view/resources/images/helpicon.png";
 
   public HelpPane(ResourceBundle resource) {
     this.resources = resource;
@@ -133,7 +134,7 @@ public class HelpPane extends Pane {
   private void createDisplayWindow() {
     displayWindow = new GridPane();
     helpIcon =
-        new ImageView(new Image(new File("data/images/helpicon.png").toURI().toString()));
+        new ImageView(new Image(new File(helpIconLocation).toURI().toString()));
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();

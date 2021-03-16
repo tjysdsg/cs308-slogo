@@ -47,7 +47,8 @@ public class CommandPane extends Pane {
     uploadToTextArea = new Button();
     run.setOnMouseClicked(e -> sendCodeArea());
     fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Text Files",  "*.txt")
+        new ExtensionFilter("Slogo files",  "*.*logo"),
+        new ExtensionFilter("All files", "*.*" )
     );
     uploadToRun.setOnMouseClicked(e->{
       File file = fileChooser.showOpenDialog(getScene().getWindow());
@@ -94,8 +95,7 @@ public class CommandPane extends Pane {
             sendCodeArea();
           } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
            //fix this.
-            //codeArea.setText(environmentPane.getPreviousCommand());
-            //codeArea.end();
+            vcon.fillCommandArea("");
           }
         });
 

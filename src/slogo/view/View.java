@@ -182,6 +182,7 @@ public class View {
     }
 
     public void fillCommandArea(String text) {
+      commandPane.fillCodeArea(environmentPane.getPreviousCommand());
     }
 
     public void changeVariable(String variable, double newValue) {

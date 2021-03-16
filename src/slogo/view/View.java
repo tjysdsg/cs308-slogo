@@ -35,9 +35,11 @@ public class View {
   private HelpPane helpPane;
   private TurtleSandbox turtleSandbox;
   private SettingsPane settingsPane;
-  private CommandPane commandPane;
+  private Pane commandPane;
   private Scene scene;
   private BorderPane borderPane;
+  private TextArea codeArea;
+  private Button run;
   private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
@@ -69,7 +71,7 @@ public class View {
     helpPane = new HelpPane(resources);
     environmentPane = new EnvironmentPane(viewCon);
     turtleSandbox = new TurtleSandbox(viewCon);
-    commandPane = new CommandPane(viewCon);
+    commandPane = makeBottomPane();
     settingsPane = new SettingsPane(viewCon);
     borderPane = new BorderPane();
     setPaneIDs();
@@ -94,18 +96,44 @@ public class View {
     environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
     environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
     environment.setOnClear(() -> turtleSandbox.clearLines());
+
     return newScene;
   }
 
+  public Pane makeBottomPane() {
+    GridPane pane = new GridPane();
+    codeArea = new TextArea();
+    run = new Button();
+    run.setOnMouseClicked(e -> sendCodeArea());
 
+    codeArea.setOnKeyPressed(
+        e -> {
+          if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
+            sendCodeArea();
+          } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
+            codeArea.setText(environmentPane.getPreviousCommand());
+            codeArea.end();
+          }
+        });
+
+    pane.add(codeArea, 0, 0);
+    pane.add(run, 1, 0);
+    pane.setAlignment(Pos.CENTER);
+    return pane;
+  }
+
+  public void sendCodeArea() {
+    String command = codeArea.getText();
+    viewCon.sendCommand(command);
+    codeArea.clear();
+  }
 
   private void refreshBundle() {
     // TODO: Maybe say an instruction like shift+enter to run?
+    codeArea.setPromptText(resources.getString("userCommand"));
     helpPane.setResources(resources);
     environmentPane.setResources(resources);
-    commandPane.setResources(resources);
-    settingsPane.setResources(resources);
-
+    run.setText(resources.getString("runButton"));
   }
 
   private void setPaneIDs() {
@@ -114,7 +142,8 @@ public class View {
     environmentPane.setId("environmentPane");
     settingsPane.setId("settingsPane");
     turtleSandbox.setId("turtlePane");
-
+    run.setId("runButton");
+    codeArea.setId("codeArea");
   }
 
   /**
@@ -182,6 +211,7 @@ public class View {
     }
 
     public void fillCommandArea(String text) {
+      codeArea.setText(text);
     }
 
     public void changeVariable(String variable, double newValue) {

@@ -1,5 +1,6 @@
 package slogo.view;
 
+import java.io.File;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,19 +10,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class HelpPane extends Pane {
-  public static final String RESOURCE_FOLDER = "resources/";
   private static final int SIZE = 200;
-  private static final String SEARCH_ICON = "images/searchicon.png";
-  private static final String CLEAR_ICON = "images/clearicon.png";
-  private static final String HELP_ICON = "images/helpicon.png";
   private VBox vbox;
-  private GridPane searchBar;
   private GridPane displayWindow;
   private Label helpLabel;
   private ListView<ChoiceBox<String>> list;
@@ -44,7 +41,6 @@ public class HelpPane extends Pane {
 
   private void createHelpWindow() {
     createDisplayWindow();
-    createSearchBar();
     createList();
     createDisplayLanguages();
     createListAction();
@@ -137,7 +133,7 @@ public class HelpPane extends Pane {
   private void createDisplayWindow() {
     displayWindow = new GridPane();
     helpIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + HELP_ICON).toExternalForm());
+        new ImageView(new Image(new File("data/images/helpicon.png").toURI().toString()));
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();
@@ -146,28 +142,13 @@ public class HelpPane extends Pane {
     displayWindow.setHgap(10);
   }
 
-  private void createSearchBar() {
-    searchBar = new GridPane();
-    TextField search = new TextField();
-    search.setPrefWidth(.8 * SIZE);
-    ImageView searchIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + SEARCH_ICON).toExternalForm());
-    searchIcon.setFitWidth(.1 * SIZE);
-    searchIcon.setFitHeight(.1 * SIZE);
-    ImageView clearIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + CLEAR_ICON).toExternalForm());
-    clearIcon.setFitWidth(.1 * SIZE);
-    clearIcon.setFitHeight(.1 * SIZE);
-    searchBar.add(searchIcon, 0, 0);
-    searchBar.add(search, 1, 0);
-    searchBar.add(clearIcon, 2, 0);
-  }
 
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     addDefaultChoiceBoxTest();
     createDisplayLanguages();
   }
+
 
   private void setId(){
     commandList.setId("commandList");

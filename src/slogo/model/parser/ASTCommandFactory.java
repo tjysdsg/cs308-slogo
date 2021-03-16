@@ -30,16 +30,10 @@ public class ASTCommandFactory {
     try {
       return (ASTNode) Class.forName(packagePath + classPrefix + command).getConstructor()
           .newInstance();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
-      System.out.printf("Class %s not found\n", command);
+      System.out.printf("DEBUG: Class %s not found\n", command);
     }
     return null;
   }

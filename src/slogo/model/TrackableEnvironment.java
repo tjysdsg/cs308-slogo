@@ -51,6 +51,8 @@ public interface TrackableEnvironment {
    */
   void setLanguage(String language);
 
+  void addTurtle();
+
   void setCurrTurtle(int turtle);
 
   void setCurrTurtle(List<Integer> turtle);

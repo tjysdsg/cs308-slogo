@@ -66,6 +66,12 @@ public class Environment implements TrackableEnvironment {
     myParser.changeLanguage(language);
   }
 
+  public void addTurtle() {
+    Turtle turtle = new Turtle(turtles.size(), executionEnvironment);
+    currTurtles.add(turtles.size());
+    turtles.add(turtle);
+  }
+
   public void setCurrTurtle(int currTurtle) {
     if (currTurtle >= turtles.size()) {
       for (int i = turtles.size(); i <= currTurtle; ++i) {

@@ -21,10 +21,11 @@ public abstract class ASTTurtleCommand extends ASTCommand {
     double ret = 0;
     List<Turtle> turtles = info.getActiveTurtles();
     for (Turtle t : turtles) {
-      ret = evaluateForTurtle(t, params);
+      ret = evaluateForTurtle(t, params, info);
     }
     return ret;
   }
 
-  protected abstract double evaluateForTurtle(Turtle turtle, List<Double> parameters);
+  protected abstract double evaluateForTurtle(Turtle turtle, List<Double> parameters,
+      InfoBundle info);
 }

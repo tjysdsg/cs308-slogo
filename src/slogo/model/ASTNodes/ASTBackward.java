@@ -1,9 +1,10 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
-public class ASTBackward extends ASTCommand {
+public class ASTBackward extends ASTTurtleCommand {
 
   private static final int NUM_PARAMS = 1;
   private static final String NAME = "Backward";
@@ -13,11 +14,10 @@ public class ASTBackward extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    double delta = getChildAt(0).evaluate(info);
-    Turtle turtle = info.getTurtle();
-//    turtle.rotate(180);
-    turtle.move(-delta);
+  protected double evaluateForTurtle(Turtle turtle, List<Double> parameters,
+      InfoBundle info) {
+    double delta = -parameters.get(0);
+    turtle.move(delta);
     return delta;
   }
 }

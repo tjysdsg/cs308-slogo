@@ -90,14 +90,22 @@ public class ProgramParser implements Parser {
           case "ListStart" -> scopeStack.push(new Scope());
 
           case "ListEnd" -> {
-            if (currScope.isIncomplete()) {
-              throw new IncorrectParameterCountException(currScope.peek());
-            }
+//            if (currScope.isIncomplete()) {
+//              throw new IncorrectParameterCountException(currScope.peek());
+//            }
 
             Scope prevScope = scopeStack.pop();
             currScope = scopeStack.peek();
             currScope.push(prevScope.getCommands());
           }
+
+//          case "GroupStart" -> {
+//            beginGroup = true;
+//          }
+//
+//          case "GroupEnd" -> {
+//            beginGroup = false;
+//          }
 
           default -> throw new InvalidSyntaxException(token, command);
         }
@@ -105,7 +113,7 @@ public class ProgramParser implements Parser {
     }
 
     Scope currScope = scopeStack.peek();
-    if (currScope.isIncomplete() || scopeStack.size() != 1) {
+    if (scopeStack.size() != 1) {
       if (currScope.peek() == null) {
         throw new InvalidSyntaxException(command, command);
       }
@@ -127,21 +135,5 @@ public class ProgramParser implements Parser {
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
-  }
-
-  public static void main(String[] args) {
-    Parser parser = new ProgramParser("English", new HashMap<>());
-    parser.parseCommand("""
-        to dash [ :count ]
-        [
-            repeat :count
-                [
-                pu fd 4 pd fd 4
-          ]      
-        ]
-
-            cs
-                home
-            dash 10""");
   }
 }

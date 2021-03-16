@@ -47,9 +47,6 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     int numChildren = super.addChild(newChild);
     if (numChildren == 1) {
       vars = newChild;
-    } else {
-      commands = newChild;
-
       ASTNode prev = functionTable.getOrDefault(getIdentifier(), null);
       if (prev != null) {
         result = 0;
@@ -59,8 +56,11 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
 
       functionTable.put(getIdentifier(),
           new ASTFunctionCall(getIdentifier(),
-              getParameterNames(),
-              commands));
+              getParameterNames()));
+    } else {
+      if (result == 1) {
+        functionTable.get(getIdentifier()).setBody(newChild);
+      }
     }
     return numChildren;
   }

@@ -1,17 +1,18 @@
 package slogo.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
@@ -19,16 +20,17 @@ import slogo.model.TrackableEnvironment;
 /**
  * @author Joshua Pettima
  * @author marthaaboagye This class coordinates between all other classes from the view package. It
- * needs to be initialized with a stage and a model controller object. It also contains a private
- * View bundle class that implements the view controller and allows the user to change the color for
- * the pen and background.
+ *     needs to be initialized with a stage and a model controller object. It also contains a
+ *     private View bundle class that implements the view controller and allows the user to change
+ *     the color for the pen and background.
  */
 public class View {
 
   private static final int WIDTH = 1200;
-  private static final int HEIGHT = 720;
+  private static final int HEIGHT = 800;
 
   private ModelController modelCon;
+  private List<Workspace> workspaces;
   private TrackableEnvironment environment;
   private ViewController viewCon;
   private EnvironmentPane environmentPane;
@@ -36,7 +38,9 @@ public class View {
   private TurtleSandbox turtleSandbox;
   private SettingsPane settingsPane;
   private CommandPane commandPane;
+  private HBox topPane;
   private Scene scene;
+  private Label workspaceLabel;
   private BorderPane borderPane;
   private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
@@ -53,51 +57,101 @@ public class View {
   public View(Stage stage, ModelController modelCon) {
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
-    this.environment = EnvironmentFactory.createEnvironment();
+    this.viewCon = new ViewBundle();
     this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "English");
+    this.borderPane = new BorderPane();
+    this.scene = new Scene(borderPane, WIDTH, HEIGHT);
+    this.helpPane = new HelpPane(resources);
+    this.settingsPane = new SettingsPane(viewCon);
+    this.topPane = new HBox();
+    this.workspaces = new ArrayList<>();
 
-    viewCon = new ViewBundle();
+    scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
+    stage.setScene(scene);
+    stage.setMinHeight(HEIGHT);
+    stage.setMinWidth(WIDTH);
+
+    topPane.getChildren().addAll(settingsPane);
+    topPane.setStyle("-fx-background-color: white");
+    topPane.setAlignment(Pos.CENTER_LEFT);
+    createWorkspaceSelector(topPane);
+    borderPane.setTop(topPane);
+
+    Workspace mainWorkspace = createWorkspace();
+    setWorkspace(mainWorkspace);
+
     modelCon.setController(viewCon);
     modelCon.setModel(environment);
-    scene = createScene();
-    stage.setScene(scene);
     refreshBundle();
     stage.show();
   }
 
-  public Scene createScene() {
-    helpPane = new HelpPane(resources);
-    environmentPane = new EnvironmentPane(viewCon);
-    turtleSandbox = new TurtleSandbox(viewCon);
-    commandPane = new CommandPane(viewCon);
-    settingsPane = new SettingsPane(viewCon);
-    borderPane = new BorderPane();
-    setPaneIDs();
-    Scene newScene = new Scene(borderPane, WIDTH, HEIGHT);
+  public void createWorkspaceSelector(HBox topPane) {
+    this.workspaceLabel = new Label("Workspace: ");
+    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0);
+    Spinner<Integer> workspacesChoice = new Spinner<>(spinValFac);
+    workspacesChoice.setPrefWidth(100);
+    workspacesChoice
+        .valueProperty()
+        .addListener(
+            (obs, old, newValue) -> {
+              updateWorkspace(newValue);
+            });
+    topPane.getChildren().addAll(workspaceLabel, workspacesChoice);
+  }
 
+  public void updateWorkspace(int space) {
+    Workspace workspace = null;
+    if (space > workspaces.size() - 1) {
+      workspace = createWorkspace();
+    } else {
+      workspace = workspaces.get(space);
+    }
+    setWorkspace(workspace);
+  }
+
+  public Workspace createWorkspace() {
+    TrackableEnvironment environment = EnvironmentFactory.createEnvironment();
+    EnvironmentPane environmentPane = new EnvironmentPane(viewCon);
+    TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon);
+    CommandPane commandPane = new CommandPane(viewCon);
+    Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);
+
+    // Doesn't work within css for some reason :/
     environmentPane.setStyle("-fx-background-color: white");
     commandPane.setStyle("-fx-background-color: white");
     settingsPane.setStyle("-fx-background-color: white");
     helpPane.setStyle("-fx-background-color: white");
-
     borderPane.setStyle("-fx-background-color: white");
-    borderPane.setCenter(turtleSandbox);
-    borderPane.setTop(settingsPane);
-    borderPane.setBottom(commandPane);
-    borderPane.setLeft(environmentPane);
-    borderPane.setRight(helpPane);
-    newScene
-        .getStylesheets()
-        .add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
 
     environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
     environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
     environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
     environment.setOnClear(() -> turtleSandbox.clearLines());
-    return newScene;
+
+    workspaces.add(workspace);
+    return workspace;
   }
 
+  protected void setWorkspace(Workspace workspace) {
+    this.environment = workspace.environment();
+    this.turtleSandbox = workspace.turtleSandbox();
+    this.commandPane = workspace.commandPane();
+    this.environmentPane = workspace.environmentPane();
+    modelCon.setModel(environment);
 
+    refreshBundle();
+    borderPane.setCenter(turtleSandbox);
+    borderPane.setBottom(commandPane);
+    borderPane.setLeft(environmentPane);
+    // Have to do this so the sandbox remains on the bottom
+    borderPane.setTop(null);
+    borderPane.setRight(null);
+    borderPane.setTop(topPane);
+    borderPane.setRight(helpPane);
+
+    setPaneIDs();
+  }
 
   private void refreshBundle() {
     // TODO: Maybe say an instruction like shift+enter to run?
@@ -113,7 +167,6 @@ public class View {
     environmentPane.setId("environmentPane");
     settingsPane.setId("settingsPane");
     turtleSandbox.setId("turtlePane");
-
   }
 
   /**
@@ -159,13 +212,11 @@ public class View {
      *
      * @param turtleLogo - the turtle logo the user picked.
      */
-    public void setTurtleLogo(String turtleLogo) {
-    }
+    public void setTurtleLogo(String turtleLogo) {}
 
     public void sendAlert(String title, String message) {
       Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);
-      a.showAndWait()
-          .ifPresent(System.out::println);
+      a.showAndWait().ifPresent(System.out::println);
     }
 
     public void addTurtle() {
@@ -188,9 +239,7 @@ public class View {
       System.out.println(String.format("Change: %s to %.2f", variable, newValue));
     }
 
-    public void changeCommand(String command, String newValue) {
-
-    }
+    public void changeCommand(String command, String newValue) {}
 
     public void sendCommand(String command) {
       if (command.isBlank()) return;
@@ -199,3 +248,9 @@ public class View {
     }
   }
 }
+
+record Workspace(
+    TrackableEnvironment environment,
+    CommandPane commandPane,
+    TurtleSandbox turtleSandbox,
+    EnvironmentPane environmentPane) {}

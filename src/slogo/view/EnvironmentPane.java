@@ -14,8 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
 import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
@@ -34,6 +32,7 @@ public class EnvironmentPane extends GridPane {
   private TitledPane prevCommands;
   private ViewController viewController;
   private TextInputDialog changeVarDialog;
+  int keycodeUpCount = 0;
 
   public EnvironmentPane(ViewController viewController) {
     this.viewController = viewController;
@@ -150,7 +149,13 @@ public class EnvironmentPane extends GridPane {
   }
 
   public String getPreviousCommand() {
-    return lastRanCommand != null ? lastRanCommand.getText() : "";
+    keycodeUpCount++;
+    while (keycodeUpCount <=previousCommands.getItems().size()) {
+      int index = previousCommands.getItems().size() - keycodeUpCount;
+      return lastRanCommand != null ? previousCommands.getItems().get(index).getText() : "";
+    };
+    keycodeUpCount =0;
+    return previousCommands.getItems().get(0).getText();
   }
 
   public void addPreviousCommand(String command, boolean successful) {

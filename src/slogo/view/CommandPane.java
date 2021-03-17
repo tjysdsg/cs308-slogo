@@ -29,7 +29,7 @@ public class CommandPane extends Pane {
   FileChooser fileChooser = new FileChooser();
 
 
-  public CommandPane(ViewController viewcon){
+  public CommandPane(ViewController viewcon) {
     vcon = viewcon;
     makeBottomPane();
     getChildren().add(pane);
@@ -39,7 +39,7 @@ public class CommandPane extends Pane {
   }
 
 
-  private  Pane makeBottomPane() {
+  private Pane makeBottomPane() {
     codeArea = new TextArea();
 
     run = new Button();
@@ -47,20 +47,20 @@ public class CommandPane extends Pane {
     uploadToTextArea = new Button();
     run.setOnMouseClicked(e -> sendCodeArea());
     fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Slogo files",  "*.*logo"),
-        new ExtensionFilter("All files", "*.*" )
+        new ExtensionFilter("All Files", "*.*"),
+        new ExtensionFilter("Slogo files", "*.*logo")
     );
-    uploadToRun.setOnMouseClicked(e->{
-      File file = fileChooser.showOpenDialog(getScene().getWindow());
+    uploadToRun.setOnMouseClicked(e -> {
+          File file = fileChooser.showOpenDialog(getScene().getWindow());
 
-          if (file!=null){
+          if (file != null) {
             try {
               Scanner fileReader = new Scanner(file);
               fileReader.useDelimiter("\\Z");
               String command = fileReader.next();
               vcon.sendCommand(command);
 
-          } catch (FileNotFoundException fileNotFoundException) {
+            } catch (FileNotFoundException fileNotFoundException) {
               fileNotFoundException.printStackTrace();
             }
 
@@ -68,12 +68,12 @@ public class CommandPane extends Pane {
 
 
         }
-        );
-    uploadToTextArea.setOnMouseClicked(e->
+    );
+    uploadToTextArea.setOnMouseClicked(e ->
     {
       File file = fileChooser.showOpenDialog(getScene().getWindow());
 
-      if (file!=null){
+      if (file != null) {
         try {
           Scanner fileReader = new Scanner(file);
           fileReader.useDelimiter("\\Z");
@@ -93,12 +93,11 @@ public class CommandPane extends Pane {
         e -> {
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendCodeArea();
-          } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
-           //fix this.
+          } else if (e.getCode() == KeyCode.UP) {
             vcon.fillCommandArea("");
+
           }
         });
-
     vbox = new VBox(run, uploadToRun, uploadToTextArea);
     vbox.setSpacing(10);
 
@@ -113,17 +112,17 @@ public class CommandPane extends Pane {
     codeArea.clear();
   }
 
-  private void setChildrenIDs(){
+  private void setChildrenIDs() {
     run.setId("runButton");
     codeArea.setId("codeArea");
 
-    
+
   }
-  
-  public void setResources(ResourceBundle resource){
+
+  public void setResources(ResourceBundle resource) {
     this.resources = resource;
     createDisplayText();
-    
+
   }
 
   private void createDisplayText() {
@@ -135,10 +134,12 @@ public class CommandPane extends Pane {
 
   }
 
-  public void fillCodeArea(String text){
+  public void fillCodeArea(String text) {
     codeArea.setText(text);
 
-  };
+  }
+
+  ;
 
 
 }

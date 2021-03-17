@@ -182,6 +182,7 @@ public class View {
     }
 
     public void fillCommandArea(String text) {
+      //mostly using this for the keycode up feature 
       commandPane.fillCodeArea(environmentPane.getPreviousCommand());
     }
 

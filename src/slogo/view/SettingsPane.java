@@ -45,8 +45,6 @@ public class SettingsPane extends Pane {
 
   ViewController vcon;
 
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
-  //public static final String RESOURCE_FOLDER = "/" + RESOURCE_PACKAGE.replace(".", "/");
 
   /**
    * This method intializes a viewController object which defines method
@@ -70,7 +68,6 @@ public class SettingsPane extends Pane {
     hbox = new HBox(title, languageList, penPane,
             backgroundPane);
     hbox.setAlignment(Pos.CENTER);
-    displayLabels("English");
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
     setID();
@@ -136,16 +133,18 @@ public class SettingsPane extends Pane {
     languageList.getItems().addAll(languages);
     languageList.setValue("English");
     languageList.setOnAction(e->{
-      displayLabels(languageList.getValue().toString());
-      vcon.setLanguage(languageList.getValue().toString());
-
+      vcon.setLanguage(languageList.getValue());
 
     });
 
   }
 
-  private void displayLabels(String language){
-    resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + language);
+  public void setResources(ResourceBundle resource){
+    this.resources = resource;
+    displayLabels();
+  }
+
+  private void displayLabels( ){
     title.setText(resources.getString("title"));
     penColorLabel.setText(resources.getString("penColorLabel"));
     backgroundColorLabel.setText(resources.getString("backgroundColorLabel"));

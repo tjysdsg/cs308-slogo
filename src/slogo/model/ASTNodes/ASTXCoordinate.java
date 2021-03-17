@@ -1,8 +1,10 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
+import slogo.model.Turtle;
 
-public class ASTXCoordinate extends ASTCommand {
+public class ASTXCoordinate extends ASTTurtleCommand {
 
   private static final int NUM_PARAMS = 0;
   private static final String NAME = "XCoordinate";
@@ -12,7 +14,7 @@ public class ASTXCoordinate extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    return info.getTurtle().getX();
+  protected double evaluateForTurtle(Turtle turtle, List<Double> parameters, InfoBundle info) {
+    return turtle.getX();
   }
 }

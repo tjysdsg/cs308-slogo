@@ -1,5 +1,6 @@
 package slogo.model;
 
+import java.util.List;
 import java.util.Map;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
@@ -13,9 +14,9 @@ import slogo.model.ASTNodes.ASTNode;
 public interface InfoBundle {
 
   /**
-   * @return The turtle within the environment
+   * @return The active turtles
    */
-  Turtle getTurtle();
+  List<Turtle> getActiveTurtles();
 
   /**
    * Notifies the listener of an update to the turtle.

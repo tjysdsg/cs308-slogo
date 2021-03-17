@@ -1,8 +1,10 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
+import slogo.model.Turtle;
 
-public class ASTIsShowing extends ASTCommand {
+public class ASTIsShowing extends ASTTurtleCommand {
 
   private static final int NUM_PARAMS = 0;
   private static final String NAME = "IsShowing";
@@ -12,7 +14,7 @@ public class ASTIsShowing extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    return info.getTurtle().isVisible() ? 1.0 : 0.0;
+  protected double evaluateForTurtle(Turtle turtle, List<Double> parameters, InfoBundle info) {
+    return turtle.isVisible() ? 1.0 : 0.0;
   }
 }

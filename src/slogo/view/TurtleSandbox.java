@@ -199,7 +199,7 @@ public class TurtleSandbox extends GridPane {
   }
 
   public void setTurtle(int index) {
-      viewController.setCurrTurtle(index);
+      if (turtles.size() > 1) viewController.setCurrTurtle(index);
       for (TurtleView turtle : turtles) {
         turtle.setStyle("-fx-opacity: .5");
       }

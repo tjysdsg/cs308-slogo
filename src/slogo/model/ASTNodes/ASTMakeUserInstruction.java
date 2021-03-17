@@ -38,7 +38,7 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   @Override
   protected double doEvaluate(InfoBundle info) {
     // add to runtime function table
-    info.getCommandTable().put(getIdentifier(), this);
+    //info.getCommandTable().put(getIdentifier(), this);
     return result;
   }
 

@@ -3,11 +3,16 @@ package slogo.view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
@@ -22,7 +27,7 @@ import slogo.model.TrackableEnvironment;
 public class View {
 
   private static final int WIDTH = 1200;
-  private static final int HEIGHT = 720;
+  private static final int HEIGHT = 800;
 
   private ModelController modelCon;
   private List<Workspace> workspaces;
@@ -33,7 +38,9 @@ public class View {
   private TurtleSandbox turtleSandbox;
   private SettingsPane settingsPane;
   private CommandPane commandPane;
+  private HBox topPane;
   private Scene scene;
+  private Label workspaceLabel;
   private BorderPane borderPane;
   private ResourceBundle resources;
   private static final String STYLESHEET = "gui.css";
@@ -50,22 +57,57 @@ public class View {
   public View(Stage stage, ModelController modelCon) {
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
+    this.viewCon = new ViewBundle();
     this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "English");
-    borderPane = new BorderPane();
+    this.borderPane = new BorderPane();
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
     this.helpPane = new HelpPane(resources);
     this.settingsPane = new SettingsPane(viewCon);
-    viewCon = new ViewBundle();
+    this.topPane = new HBox();
+    this.workspaces = new ArrayList<>();
+
     scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
     stage.setScene(scene);
+    stage.setMinHeight(HEIGHT);
+    stage.setMinWidth(WIDTH);
 
-    this.workspaces = new ArrayList<>();
+    topPane.getChildren().addAll(settingsPane);
+    topPane.setStyle("-fx-background-color: white");
+    topPane.setAlignment(Pos.CENTER_LEFT);
+    createWorkspaceSelector(topPane);
+    borderPane.setTop(topPane);
+
     Workspace mainWorkspace = createWorkspace();
     setWorkspace(mainWorkspace);
+
     modelCon.setController(viewCon);
     modelCon.setModel(environment);
     refreshBundle();
     stage.show();
+  }
+
+  public void createWorkspaceSelector(HBox topPane) {
+    this.workspaceLabel = new Label("Workspace: ");
+    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0);
+    Spinner<Integer> workspacesChoice = new Spinner<>(spinValFac);
+    workspacesChoice.setPrefWidth(100);
+    workspacesChoice
+        .valueProperty()
+        .addListener(
+            (obs, old, newValue) -> {
+              updateWorkspace(newValue);
+            });
+    topPane.getChildren().addAll(workspaceLabel, workspacesChoice);
+  }
+
+  public void updateWorkspace(int space) {
+    Workspace workspace = null;
+    if (space > workspaces.size() - 1) {
+      workspace = createWorkspace();
+    } else {
+      workspace = workspaces.get(space);
+    }
+    setWorkspace(workspace);
   }
 
   public Workspace createWorkspace() {
@@ -87,6 +129,7 @@ public class View {
     environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
     environment.setOnClear(() -> turtleSandbox.clearLines());
 
+    workspaces.add(workspace);
     return workspace;
   }
 
@@ -97,13 +140,17 @@ public class View {
     this.environmentPane = workspace.environmentPane();
     modelCon.setModel(environment);
 
+    refreshBundle();
     borderPane.setCenter(turtleSandbox);
-    borderPane.setTop(settingsPane);
     borderPane.setBottom(commandPane);
     borderPane.setLeft(environmentPane);
+    // Have to do this so the sandbox remains on the bottom
+    borderPane.setTop(null);
+    borderPane.setRight(null);
+    borderPane.setTop(topPane);
     borderPane.setRight(helpPane);
+
     setPaneIDs();
-    refreshBundle();
   }
 
   private void refreshBundle() {

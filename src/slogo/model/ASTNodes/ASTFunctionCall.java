@@ -23,7 +23,6 @@ public class ASTFunctionCall extends ASTCommand {
    *
    * @param identifier     Name of the function being called
    * @param parameterNames Parameter names
-   * @param body           Function body
    */
   public ASTFunctionCall(String identifier, List<String> parameterNames) {
     super(identifier, parameterNames.size());
@@ -55,5 +54,24 @@ public class ASTFunctionCall extends ASTCommand {
 
   public ASTFunctionCall clone() {
     return new ASTFunctionCall(getName(), parameterNames, body);
+  }
+
+  // TODO: func.toString() doesn't return signature
+  @Override
+  public String toString() {
+    StringBuilder ret = new StringBuilder();
+    ret.append(getName()).append(" [");
+
+    // parameters
+    int nParams = parameterNames.size();
+    for (int i = 0; i < nParams; ++i) {
+      ret.append(parameterNames.get(i));
+      if (i < nParams - 1) {
+        ret.append(", ");
+      }
+    }
+
+    ret.append("]");
+    return ret.toString();
   }
 }

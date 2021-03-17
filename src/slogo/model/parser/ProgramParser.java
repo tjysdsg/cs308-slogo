@@ -1,7 +1,6 @@
 package slogo.model.parser;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +10,14 @@ import slogo.model.ASTNodes.*;
 
 public class ProgramParser implements Parser {
 
-  private final TokenClassifier tc = new TokenClassifier();
+  private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
   private final CommandClassifier cc;
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
   private Map<String, ASTFunctionCall> lookUpTable;
 
   public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
-    cc = new CommandClassifier(language);
+    cc = ClassifierFactory.buildCommandClassifier(language);
     lookUpTable = table;
   }
 
@@ -137,6 +136,6 @@ public class ProgramParser implements Parser {
   }
 
   public void changeLanguage(String language) {
-    cc.changeLanguage(language);
+    cc.changePatterns(language);
   }
 }

@@ -22,13 +22,11 @@ public class Environment implements TrackableEnvironment {
   private List<Turtle> turtles;
   private int currTurtle;
   private ExecutionEnvironment executionEnvironment;
-  private Map<String, ASTNode> variableTable;
-  private Map<String, ASTNode> commandTable;
   private UpdateTurtle updateTurtleCallback;
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
-  private Parser myParser;
   private ClearEnvironment clearEnvironmentCallback;
+  private Parser myParser;
 
   private static final String DEFAULT_LANG = "English";
 
@@ -85,10 +83,29 @@ public class Environment implements TrackableEnvironment {
   }
 
   private class ExecutionEnvironment implements InfoBundle {
+    private Map<String, ASTNode> variableTable;
+    private Map<String, ASTFunctionCall> commandTable;
+    private boolean isOuterScope = false;
 
     public ExecutionEnvironment() {
-      variableTable = new VariableTable(this);
-      commandTable = new CommandTable(this);
+      variableTable = new HashMap<String, ASTNode>();
+      commandTable = new HashMap<String, ASTFunctionCall>();
+    }
+
+    public ExecutionEnvironment(Map<String, ASTNode> variableTable, Map<String, ASTFunctionCall> commandTable) {
+      this.variableTable = variableTable;
+      this.commandTable = commandTable;
+    }
+
+//    public void addVariable(String idenfier, ASTNode newThing) {
+//      variableTable.put(idenfier, newThing);
+//      notifyVariableUpdate(null);
+//    }
+
+    public ExecutionEnvironment clone() {
+     ExecutionEnvironment instance = new ExecutionEnvironment(new HashMap<String, ASTNode> (variableTable), new HashMap<String, ASTFunctionCall>(commandTable));
+     instance.isOuterScope = false;
+     return instance;
     }
 
     @Override
@@ -100,6 +117,10 @@ public class Environment implements TrackableEnvironment {
       if (updateTurtleCallback != null) {
         updateTurtleCallback.execute(info);
       }
+    }
+
+    public void setCurrTurtle() {
+
     }
 
     public void notifyEnvironmentClear() {
@@ -114,7 +135,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public Map<String, ASTNode> getCommandTable() {
+    public Map<String, ASTFunctionCall> getCommandTable() {
       return commandTable;
     }
 
@@ -125,7 +146,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     public void notifyVariableUpdate(VariablesRecord info) {
-      if (updateVariablesCallback != null) {
+      if (isOuterScope && updateVariablesCallback != null) {
         updateVariablesCallback.execute(info);
       }
     }

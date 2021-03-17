@@ -46,7 +46,7 @@ public class ParserTest {
   void setUp() {
     functionTable = new HashMap<>();
     parser = new ProgramParser("English", functionTable);
-    commandClassifier = new CommandClassifier("English");
+    commandClassifier = ClassifierFactory.buildCommandClassifier("English");
   }
 
   void printTestCommand(String command) {

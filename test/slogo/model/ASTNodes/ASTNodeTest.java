@@ -378,7 +378,7 @@ public class ASTNodeTest {
   class TestBundle implements InfoBundle {
 
     private Map<String, ASTNode> variableTable;
-    private Map<String, ASTNode> commandTable;
+    private Map<String, ASTFunctionCall> commandTable;
     private TurtleRecord info;
     private Turtle turtle;
     private boolean environmentCleared = false;
@@ -423,8 +423,13 @@ public class ASTNodeTest {
     }
 
     @Override
-    public Map<String, ASTNode> getCommandTable() {
+    public Map<String, ASTFunctionCall> getCommandTable() {
       return commandTable;
+    }
+
+    @Override
+    public InfoBundle clone() {
+      return null;
     }
 
     public TurtleRecord getInfo() {

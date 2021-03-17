@@ -49,7 +49,8 @@ public class ASTFunctionCall extends ASTCommand {
       table.put(parameterNames.get(i), getChildAt(i));
     }
 
-    return body.evaluate(info);
+    // TODO: Create Clone
+    return body.evaluate(info.clone());
   }
 
   public ASTFunctionCall clone() {

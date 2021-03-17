@@ -1,9 +1,11 @@
 package slogo.model;
 
+import java.util.List;
 import java.util.Map;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
+import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 
 /**
@@ -12,9 +14,9 @@ import slogo.model.ASTNodes.ASTNode;
 public interface InfoBundle {
 
   /**
-   * @return The turtle within the environment
+   * @return The active turtles
    */
-  Turtle getTurtle();
+  List<Turtle> getActiveTurtles();
 
   /**
    * Notifies the listener of an update to the turtle.
@@ -54,5 +56,7 @@ public interface InfoBundle {
   /**
    * Returns the mapping of command names to command node.
    */
-  Map<String, ASTNode> getCommandTable();
+  Map<String, ASTFunctionCall> getCommandTable();
+
+  InfoBundle clone();
 }

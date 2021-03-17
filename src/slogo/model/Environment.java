@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
@@ -20,15 +19,13 @@ import slogo.model.parser.ProgramParser;
 public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles;
-  private int currTurtle;
+  private List<Integer> currTurtles;
   private ExecutionEnvironment executionEnvironment;
-  private Map<String, ASTNode> variableTable;
-  private Map<String, ASTNode> commandTable;
   private UpdateTurtle updateTurtleCallback;
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
-  private Parser myParser;
   private ClearEnvironment clearEnvironmentCallback;
+  private Parser myParser;
 
   private static final String DEFAULT_LANG = "English";
 
@@ -36,8 +33,9 @@ public class Environment implements TrackableEnvironment {
     executionEnvironment = new ExecutionEnvironment();
     myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
     turtles = new ArrayList<>();
-    turtles.add(new Turtle(currTurtle, executionEnvironment));
-    currTurtle = 0;
+    turtles.add(new Turtle(0, executionEnvironment));
+    currTurtles = new ArrayList<>();
+    currTurtles.add(0);
   }
 
   public void setOnTurtleUpdate(UpdateTurtle callback) {
@@ -65,41 +63,81 @@ public class Environment implements TrackableEnvironment {
     myParser.changeLanguage(language);
   }
 
-  /**
-   * Add a new turtle and switch to it
-   */
   public void addTurtle() {
-    int size = turtles.size();
-    Turtle turtle = new Turtle(size, executionEnvironment);
+    Turtle turtle = new Turtle(turtles.size(), executionEnvironment);
+    currTurtles.add(turtles.size());
     turtles.add(turtle);
-    currTurtle = size;
   }
 
   public void setCurrTurtle(int currTurtle) {
     if (currTurtle >= turtles.size()) {
-      // FIXME: exception class
-      throw new RuntimeException(
-          String.format("Unable to set current turtle index to %d", currTurtle));
+      for (int i = turtles.size(); i <= currTurtle; ++i) {
+        Turtle turtle = new Turtle(i, executionEnvironment);
+        this.turtles.add(turtle);
+      }
     }
-    this.currTurtle = currTurtle;
+
+    this.currTurtles.clear();
+    this.currTurtles.add(currTurtle);
+  }
+
+  public void setCurrTurtle(List<Integer> currTurtles) {
+    for (int currTurtle : currTurtles) {
+      if (currTurtle >= turtles.size()) {
+        for (int i = turtles.size(); i <= currTurtle; ++i) {
+          Turtle turtle = new Turtle(i, executionEnvironment);
+          this.turtles.add(turtle);
+        }
+      }
+    }
+
+    this.currTurtles.clear();
+    this.currTurtles.addAll(currTurtles);
   }
 
   private class ExecutionEnvironment implements InfoBundle {
+    private Map<String, ASTNode> variableTable;
+    private Map<String, ASTFunctionCall> commandTable;
+    private boolean isOuterScope = false;
 
     public ExecutionEnvironment() {
-      variableTable = new VariableTable(this);
-      commandTable = new CommandTable(this);
+      variableTable = new HashMap<String, ASTNode>();
+      commandTable = new HashMap<String, ASTFunctionCall>();
+    }
+
+    public ExecutionEnvironment(Map<String, ASTNode> variableTable, Map<String, ASTFunctionCall> commandTable) {
+      this.variableTable = variableTable;
+      this.commandTable = commandTable;
+    }
+
+//    public void addVariable(String idenfier, ASTNode newThing) {
+//      variableTable.put(idenfier, newThing);
+//      notifyVariableUpdate(null);
+//    }
+
+    public ExecutionEnvironment clone() {
+     ExecutionEnvironment instance = new ExecutionEnvironment(new HashMap<String, ASTNode> (variableTable), new HashMap<String, ASTFunctionCall>(commandTable));
+     instance.isOuterScope = false;
+     return instance;
     }
 
     @Override
-    public Turtle getTurtle() {
-      return turtles.get(currTurtle);
+    public List<Turtle> getActiveTurtles() {
+      ArrayList<Turtle> ret = new ArrayList<>();
+      for (int idx : currTurtles) {
+        ret.add(turtles.get(idx));
+      }
+      return ret;
     }
 
     public void notifyTurtleUpdate(TurtleRecord info) {
       if (updateTurtleCallback != null) {
         updateTurtleCallback.execute(info);
       }
+    }
+
+    public void setCurrTurtle() {
+
     }
 
     public void notifyEnvironmentClear() {
@@ -114,7 +152,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public Map<String, ASTNode> getCommandTable() {
+    public Map<String, ASTFunctionCall> getCommandTable() {
       return commandTable;
     }
 
@@ -125,7 +163,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     public void notifyVariableUpdate(VariablesRecord info) {
-      if (updateVariablesCallback != null) {
+      if (isOuterScope && updateVariablesCallback != null) {
         updateVariablesCallback.execute(info);
       }
     }

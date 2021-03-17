@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,13 +22,13 @@ public class CommandClassifierTest {
 
   @BeforeEach
   void setUp() {
-    cc = new CommandClassifier("English");
+    cc = ClassifierFactory.buildCommandClassifier("English");
   }
 
   @Test
   void testChangeLanguage() {
     for (String lang : languages) {
-      assertDoesNotThrow(() -> cc.changeLanguage(lang));
+      assertDoesNotThrow(() -> cc.changePatterns(lang));
       assertDoesNotThrow(() -> checkBundle(lang));
     }
   }

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 *
 * @author Robert C. Duvall
 */
-public class TokenParser {
+public class TokenParser implements SyntaxClassifier, CommandClassifier {
   // where to find resources specifically for this class
   private static final String RESOURCES_PACKAGE = "resources.commands.";
   // "types" and the regular expression patterns that recognize those types
@@ -40,7 +40,7 @@ public class TokenParser {
       }
   }
 
-  protected void changePatterns (String newSyntax) {
+  public void changePatterns (String newSyntax) {
     mySymbols.clear();
     addPatterns(newSyntax);
   }

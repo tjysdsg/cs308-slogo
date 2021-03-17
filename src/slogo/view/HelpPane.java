@@ -1,5 +1,7 @@
 package slogo.view;
 
+import javafx.scene.image.Image;
+import java.io.File;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +37,7 @@ public class HelpPane extends Pane {
   private Label helpDescription = new Label();
   Button backButton;
   ImageView helpIcon;
+  private final String helpIconLocation = "src/slogo/view/resources/images/helpicon.png";
 
   public HelpPane(ResourceBundle resource) {
     this.resources = resource;
@@ -137,7 +140,7 @@ public class HelpPane extends Pane {
   private void createDisplayWindow() {
     displayWindow = new GridPane();
     helpIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + HELP_ICON).toExternalForm());
+        new ImageView(new Image(new File(helpIconLocation).toURI().toString()));
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();

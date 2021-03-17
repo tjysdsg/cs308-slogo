@@ -44,9 +44,9 @@ public class ASTFunctionCall extends ASTCommand {
   @Override
   protected double doEvaluate(InfoBundle info) {
     // insert actual parameters into the lookup table
-    Map<String, ASTNode> table = info.getVariableTable();
     for (int i = 0; i < getNumParams(); ++i) {
-      table.put(parameterNames.get(i), getChildAt(i));
+      ASTNumberLiteral value = (ASTNumberLiteral) getChildAt(i);
+      info.setVariable(parameterNames.get(i), value);
     }
 
     // TODO: Create Clone

@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Map;
 import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
+import slogo.events.DisplayVariable;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
@@ -96,29 +100,29 @@ public class Environment implements TrackableEnvironment {
   }
 
   private class ExecutionEnvironment implements InfoBundle {
-    private Map<String, ASTNode> variableTable;
+
+    private Map<String, ASTNumberLiteral> variableTable;
     private Map<String, ASTFunctionCall> commandTable;
     private boolean isOuterScope = false;
 
     public ExecutionEnvironment() {
-      variableTable = new HashMap<String, ASTNode>();
-      commandTable = new HashMap<String, ASTFunctionCall>();
+      variableTable = new HashMap<>();
+      commandTable = new HashMap<>();
+      isOuterScope = true;
     }
 
-    public ExecutionEnvironment(Map<String, ASTNode> variableTable, Map<String, ASTFunctionCall> commandTable) {
+    public ExecutionEnvironment(Map<String, ASTNumberLiteral> variableTable,
+        Map<String, ASTFunctionCall> commandTable) {
       this.variableTable = variableTable;
       this.commandTable = commandTable;
     }
 
-//    public void addVariable(String idenfier, ASTNode newThing) {
-//      variableTable.put(idenfier, newThing);
-//      notifyVariableUpdate(null);
-//    }
-
     public ExecutionEnvironment clone() {
-     ExecutionEnvironment instance = new ExecutionEnvironment(new HashMap<String, ASTNode> (variableTable), new HashMap<String, ASTFunctionCall>(commandTable));
-     instance.isOuterScope = false;
-     return instance;
+      ExecutionEnvironment instance = new ExecutionEnvironment(
+          new HashMap<>(variableTable),
+          new HashMap<>(commandTable));
+      instance.isOuterScope = false;
+      return instance;
     }
 
     @Override
@@ -137,7 +141,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     public void setCurrTurtle() {
-
+      // TODO: implement this
     }
 
     public void notifyEnvironmentClear() {
@@ -147,13 +151,33 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return variableTable;
+    public ASTNumberLiteral getVariable(String name) {
+      return variableTable.get(name);
+    }
+
+    @Override
+    public boolean setVariable(String name, ASTNumberLiteral value) {
+      boolean ret = !variableTable.containsKey(name);
+      variableTable.put(name, value);
+      if (isOuterScope) {
+        ArrayList<DisplayVariable> vars = new ArrayList<>();
+        for (var entry : variableTable.entrySet()) {
+          double val = entry.getValue().evaluate(this);
+          vars.add(new DisplayVariable(entry.getKey(), Double.toString(val)));
+        }
+        notifyVariableUpdate(new VariablesRecord(vars));
+      }
+      return ret;
     }
 
     @Override
     public Map<String, ASTFunctionCall> getCommandTable() {
       return commandTable;
+    }
+
+    @Override
+    public ASTMakeUserInstruction getCommand(String name) {
+      return null;
     }
 
     public void notifyCommandUpdate(CommandsRecord info) {

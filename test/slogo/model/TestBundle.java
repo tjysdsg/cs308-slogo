@@ -8,11 +8,13 @@ import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTNumberLiteral;
 
 public class TestBundle implements InfoBundle {
 
-  private Map<String, ASTNode> variableTable;
+  private Map<String, ASTNumberLiteral> variableTable;
   private Map<String, ASTFunctionCall> commandTable;
   private TurtleRecord info;
   private Turtle turtle;
@@ -55,13 +57,29 @@ public class TestBundle implements InfoBundle {
   }
 
   @Override
-  public Map<String, ASTNode> getVariableTable() {
+  public ASTNumberLiteral getVariable(String name) {
+    return variableTable.get(name);
+  }
+
+  @Override
+  public boolean setVariable(String name, ASTNumberLiteral value) {
+    boolean ret = !variableTable.containsKey(name);
+    variableTable.put(name, value);
+    return ret;
+  }
+
+  public Map<String, ASTNumberLiteral> getVariableTable() {
     return variableTable;
   }
 
   @Override
   public Map<String, ASTFunctionCall> getCommandTable() {
     return commandTable;
+  }
+
+  @Override
+  public ASTMakeUserInstruction getCommand(String name) {
+    return null;
   }
 
   @Override

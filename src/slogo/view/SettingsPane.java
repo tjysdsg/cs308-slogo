@@ -35,15 +35,14 @@ public class SettingsPane extends Pane {
   private Label penColorLabel;
   private Label backgroundColorLabel;
   private Label title;
-  GridPane penPane;
-  GridPane backgroundPane;
-  ResourceBundle resources;
+  private GridPane penPane;
+  private GridPane backgroundPane;
+  private ResourceBundle resources;
   private Button uploadTurtle;
-  FileChooser fileChooser;
-  File userFile;
-  Node node;
-
-  ViewController vcon;
+  private FileChooser fileChooser;
+  private File userFile;
+  private Node node;
+  private ViewController vcon;
 
 
   /**

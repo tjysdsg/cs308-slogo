@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
-import slogo.events.DisplayVariable;
-import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTMakeUserInstruction;
-import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTFunctionCall;
 
 
-public class CommandTable extends HashMap<String, ASTNode> {
+public class CommandTable extends HashMap<String, ASTFunctionCall> {
 
   InfoBundle infoBundle;
 
@@ -20,12 +18,12 @@ public class CommandTable extends HashMap<String, ASTNode> {
   }
 
   @Override
-  public ASTNode put(String key, ASTNode value) {
-    ASTNode ret = super.put(key, value);
+  public ASTFunctionCall put(String key, ASTFunctionCall value) {
+    ASTFunctionCall ret = super.put(key, value);
 
     ArrayList<DisplayCommand> funcs = new ArrayList<>();
     for (var entry : this.entrySet()) {
-      ASTMakeUserInstruction func = (ASTMakeUserInstruction) entry.getValue();
+      ASTFunctionCall func = entry.getValue();
       funcs.add(new DisplayCommand(entry.getKey(), func.toString()));
     }
     infoBundle.notifyCommandUpdate(new CommandsRecord(funcs));

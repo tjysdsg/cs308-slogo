@@ -105,7 +105,6 @@ public class View {
     environmentPane.setResources(resources);
     commandPane.setResources(resources);
     settingsPane.setResources(resources);
-
   }
 
   private void setPaneIDs() {

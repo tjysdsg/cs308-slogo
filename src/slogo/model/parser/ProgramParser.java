@@ -1,7 +1,6 @@
 package slogo.model.parser;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,19 +10,24 @@ import slogo.model.ASTNodes.*;
 
 public class ProgramParser implements Parser {
 
-  private final TokenClassifier tc = new TokenClassifier();
+  private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
   private final CommandClassifier cc;
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
   private Map<String, ASTFunctionCall> lookUpTable;
 
   public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
-    cc = new CommandClassifier(language);
+    cc = ClassifierFactory.buildCommandClassifier(language);
     lookUpTable = table;
   }
 
   public ASTNode parseCommand(String command)
-      throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
+      throws
+        UnknownIdentifierException,
+        InvalidSyntaxException,
+        IncorrectParameterCountException,
+        InvalidCommandIdentifierException,
+        UnmatchedSquareBracketException {
 
     // remove comments
     command = command.replaceAll(COMMENT_MATCHER, "");
@@ -64,6 +68,10 @@ public class ProgramParser implements Parser {
             switch (commandName) {
               case "MakeUserInstruction" -> {
                 String identifier = lines.get(cursor + 1);
+                if (!tc.getSymbol(identifier).equals("Command")) {
+                  throw new InvalidCommandIdentifierException(identifier);
+                }
+
                 newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
                 skipNext = true;
               }
@@ -90,31 +98,33 @@ public class ProgramParser implements Parser {
           case "ListStart" -> scopeStack.push(new Scope());
 
           case "ListEnd" -> {
-            if (currScope.isIncomplete()) {
-              throw new IncorrectParameterCountException(currScope.peek());
-            }
+//            if (currScope.isIncomplete()) {
+//              throw new IncorrectParameterCountException(currScope.peek());
+//            }
 
             Scope prevScope = scopeStack.pop();
             currScope = scopeStack.peek();
             currScope.push(prevScope.getCommands());
           }
 
+//          case "GroupStart" -> {
+//            beginGroup = true;
+//          }
+//
+//          case "GroupEnd" -> {
+//            beginGroup = false;
+//          }
+
           default -> throw new InvalidSyntaxException(token, command);
         }
       }
     }
 
-    Scope currScope = scopeStack.peek();
-    if (currScope.isIncomplete() || scopeStack.size() != 1) {
-      if (currScope.peek() == null) {
-        throw new InvalidSyntaxException(command, command);
-      }
-
-      ASTNode problem = currScope.peek();
-      throw new IncorrectParameterCountException(problem);
+    if (scopeStack.size() != 1) {
+      throw new UnmatchedSquareBracketException();
     }
 
-    ASTNode out = currScope.getCommands();
+    ASTNode out = scopeStack.pop().getCommands();
     if (out.getNumChildren() == 1)
       return out.getChildAt(0);
     return out;
@@ -127,21 +137,5 @@ public class ProgramParser implements Parser {
 
   public void changeLanguage(String language) {
     cc.changeLanguage(language);
-  }
-
-  public static void main(String[] args) {
-    Parser parser = new ProgramParser("English", new HashMap<>());
-    parser.parseCommand("""
-        to dash [ :count ]
-        [
-            repeat :count
-                [
-                pu fd 4 pd fd 4
-          ]      
-        ]
-
-            cs
-                home
-            dash 10""");
   }
 }

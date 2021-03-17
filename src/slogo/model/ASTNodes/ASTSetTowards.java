@@ -1,9 +1,10 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
-public class ASTSetTowards extends ASTCommand {
+public class ASTSetTowards extends ASTTurtleCommand {
 
   private static final int NUM_PARAMS = 2;
   private static final String NAME = "SetTowards";
@@ -13,11 +14,9 @@ public class ASTSetTowards extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    double x = getChildAt(0).evaluate(info);
-    double y = getChildAt(1).evaluate(info);
-
-    Turtle turtle = info.getTurtle();
+  protected double evaluateForTurtle(Turtle turtle, List<Double> parameters, InfoBundle info) {
+    double x = parameters.get(0);
+    double y = parameters.get(1);
 
     double tan = x / y;
     double deg = Math.toDegrees(Math.atan(tan));

@@ -4,40 +4,43 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
+import slogo.events.DisplayVariable;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
 public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles;
-  private int currTurtle;
+  private List<Integer> currTurtles;
   private ExecutionEnvironment executionEnvironment;
-  private Map<String, ASTNode> variableTable;
-  private Map<String, ASTNode> commandTable;
   private UpdateTurtle updateTurtleCallback;
   private UpdateVariables updateVariablesCallback;
   private UpdateCommands updateCommandsCallback;
-  private Parser myParser;
   private ClearEnvironment clearEnvironmentCallback;
+  private Parser myParser;
 
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
-    myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
+
+    myParser = new ProgramParser(DEFAULT_LANG, new CommandTable(executionEnvironment));
     turtles = new ArrayList<>();
-    turtles.add(new Turtle(currTurtle, executionEnvironment));
-    currTurtle = 0;
+    turtles.add(new Turtle(0, executionEnvironment));
+    currTurtles = new ArrayList<>();
+    currTurtles.add(0);
   }
 
   public void setOnTurtleUpdate(UpdateTurtle callback) {
@@ -65,41 +68,81 @@ public class Environment implements TrackableEnvironment {
     myParser.changeLanguage(language);
   }
 
-  /**
-   * Add a new turtle and switch to it
-   */
   public void addTurtle() {
-    int size = turtles.size();
-    Turtle turtle = new Turtle(size, executionEnvironment);
+    Turtle turtle = new Turtle(turtles.size(), executionEnvironment);
+    currTurtles.add(turtles.size());
     turtles.add(turtle);
-    currTurtle = size;
   }
 
   public void setCurrTurtle(int currTurtle) {
     if (currTurtle >= turtles.size()) {
-      // FIXME: exception class
-      throw new RuntimeException(
-          String.format("Unable to set current turtle index to %d", currTurtle));
+      for (int i = turtles.size(); i <= currTurtle; ++i) {
+        Turtle turtle = new Turtle(i, executionEnvironment);
+        this.turtles.add(turtle);
+      }
     }
-    this.currTurtle = currTurtle;
+
+    this.currTurtles.clear();
+    this.currTurtles.add(currTurtle);
+  }
+
+  public void setCurrTurtle(List<Integer> currTurtles) {
+    for (int currTurtle : currTurtles) {
+      if (currTurtle >= turtles.size()) {
+        for (int i = turtles.size(); i <= currTurtle; ++i) {
+          Turtle turtle = new Turtle(i, executionEnvironment);
+          this.turtles.add(turtle);
+        }
+      }
+    }
+
+    this.currTurtles.clear();
+    this.currTurtles.addAll(currTurtles);
   }
 
   private class ExecutionEnvironment implements InfoBundle {
 
+    private Map<String, ASTNumberLiteral> variableTable;
+    private Map<String, ASTFunctionCall> commandTable;
+    private boolean isOuterScope = false;
+
     public ExecutionEnvironment() {
-      variableTable = new VariableTable(this);
-      commandTable = new CommandTable(this);
+      variableTable = new HashMap<>();
+      commandTable = new HashMap<>();
+      isOuterScope = true;
+    }
+
+    public ExecutionEnvironment(Map<String, ASTNumberLiteral> variableTable,
+        Map<String, ASTFunctionCall> commandTable) {
+      this.variableTable = variableTable;
+      this.commandTable = commandTable;
+    }
+
+    public ExecutionEnvironment clone() {
+      ExecutionEnvironment instance = new ExecutionEnvironment(
+          new HashMap<>(variableTable),
+          new HashMap<>(commandTable));
+      instance.isOuterScope = false;
+      return instance;
     }
 
     @Override
-    public Turtle getTurtle() {
-      return turtles.get(currTurtle);
+    public List<Turtle> getActiveTurtles() {
+      ArrayList<Turtle> ret = new ArrayList<>();
+      for (int idx : currTurtles) {
+        ret.add(turtles.get(idx));
+      }
+      return ret;
     }
 
     public void notifyTurtleUpdate(TurtleRecord info) {
       if (updateTurtleCallback != null) {
         updateTurtleCallback.execute(info);
       }
+    }
+
+    public void setCurrTurtle() {
+      // TODO: implement this
     }
 
     public void notifyEnvironmentClear() {
@@ -109,13 +152,33 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return variableTable;
+    public ASTNumberLiteral getVariable(String name) {
+      return variableTable.get(name);
     }
 
     @Override
-    public Map<String, ASTNode> getCommandTable() {
+    public boolean setVariable(String name, ASTNumberLiteral value) {
+      boolean ret = !variableTable.containsKey(name);
+      variableTable.put(name, value);
+      if (isOuterScope) {
+        ArrayList<DisplayVariable> vars = new ArrayList<>();
+        for (var entry : variableTable.entrySet()) {
+          double val = entry.getValue().evaluate(this);
+          vars.add(new DisplayVariable(entry.getKey(), Double.toString(val)));
+        }
+        notifyVariableUpdate(new VariablesRecord(vars));
+      }
+      return ret;
+    }
+
+    @Override
+    public Map<String, ASTFunctionCall> getCommandTable() {
       return commandTable;
+    }
+
+    @Override
+    public ASTMakeUserInstruction getCommand(String name) {
+      return null;
     }
 
     public void notifyCommandUpdate(CommandsRecord info) {
@@ -125,7 +188,7 @@ public class Environment implements TrackableEnvironment {
     }
 
     public void notifyVariableUpdate(VariablesRecord info) {
-      if (updateVariablesCallback != null) {
+      if (isOuterScope && updateVariablesCallback != null) {
         updateVariablesCallback.execute(info);
       }
     }

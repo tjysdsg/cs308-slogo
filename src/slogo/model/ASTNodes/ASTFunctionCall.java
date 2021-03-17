@@ -23,27 +23,55 @@ public class ASTFunctionCall extends ASTCommand {
    *
    * @param identifier     Name of the function being called
    * @param parameterNames Parameter names
-   * @param body           Function body
    */
-  public ASTFunctionCall(String identifier, List<String> parameterNames,
-      ASTNode body) {
+  public ASTFunctionCall(String identifier, List<String> parameterNames) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
+    //this.body = body;
+  }
+
+  public ASTFunctionCall(String identifier, List<String> parameterNames, ASTNode body) {
+    super(identifier, parameterNames.size());
+    this.parameterNames = parameterNames;
+    this.body = body;
+  }
+
+  public void setBody(ASTNode body) {
     this.body = body;
   }
 
   @Override
   protected double doEvaluate(InfoBundle info) {
     // insert actual parameters into the lookup table
-    Map<String, ASTNode> table = info.getVariableTable();
     for (int i = 0; i < getNumParams(); ++i) {
-      table.put(parameterNames.get(i), getChildAt(i));
+      ASTNumberLiteral value = (ASTNumberLiteral) getChildAt(i);
+      info.setVariable(parameterNames.get(i), value);
     }
 
+    // TODO: Create Clone
     return body.evaluate(info);
   }
 
   public ASTFunctionCall clone() {
     return new ASTFunctionCall(getName(), parameterNames, body);
+  }
+
+  // TODO: func.toString() doesn't return signature
+  @Override
+  public String toString() {
+    StringBuilder ret = new StringBuilder();
+    ret.append(getName()).append(" [");
+
+    // parameters
+    int nParams = parameterNames.size();
+    for (int i = 0; i < nParams; ++i) {
+      ret.append(parameterNames.get(i));
+      if (i < nParams - 1) {
+        ret.append(", ");
+      }
+    }
+
+    ret.append("]");
+    return ret.toString();
   }
 }

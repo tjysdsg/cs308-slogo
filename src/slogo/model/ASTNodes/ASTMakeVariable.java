@@ -25,7 +25,7 @@ public class ASTMakeVariable extends ASTDeclaration {
 
     double value = getChildAt(1).evaluate(info);
     ASTNumberLiteral numberLiteral = new ASTNumberLiteral(value);
-    info.getVariableTable().put(name, numberLiteral);
+    info.setVariable(name, numberLiteral);
 
     return value;
   }

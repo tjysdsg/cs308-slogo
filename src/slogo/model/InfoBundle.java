@@ -5,6 +5,7 @@ import java.util.Map;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
+import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 
 /**
@@ -55,5 +56,7 @@ public interface InfoBundle {
   /**
    * Returns the mapping of command names to command node.
    */
-  Map<String, ASTNode> getCommandTable();
+  Map<String, ASTFunctionCall> getCommandTable();
+
+  InfoBundle clone();
 }

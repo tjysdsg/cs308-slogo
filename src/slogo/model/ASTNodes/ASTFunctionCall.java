@@ -25,10 +25,19 @@ public class ASTFunctionCall extends ASTCommand {
    * @param parameterNames Parameter names
    * @param body           Function body
    */
-  public ASTFunctionCall(String identifier, List<String> parameterNames,
-      ASTNode body) {
+  public ASTFunctionCall(String identifier, List<String> parameterNames) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
+    //this.body = body;
+  }
+
+  public ASTFunctionCall(String identifier, List<String> parameterNames, ASTNode body) {
+    super(identifier, parameterNames.size());
+    this.parameterNames = parameterNames;
+    this.body = body;
+  }
+
+  public void setBody(ASTNode body) {
     this.body = body;
   }
 
@@ -40,6 +49,7 @@ public class ASTFunctionCall extends ASTCommand {
       table.put(parameterNames.get(i), getChildAt(i));
     }
 
+    // TODO: Create Clone
     return body.evaluate(info);
   }
 

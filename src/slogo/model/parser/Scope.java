@@ -3,6 +3,7 @@ package slogo.model.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTNode;
 
@@ -35,11 +36,14 @@ public class Scope {
   }
 
   public ASTNode getCommands() {
+    if (isIncomplete()) {
+      throw new IncorrectParameterCountException(myStack.peek());
+    }
     return new ASTCompoundStatement(commands);
   }
 
-  public boolean isIncomplete() {
-    return !myStack.isEmpty() || !getCommands().isDone();
+  private boolean isIncomplete() {
+    return !myStack.isEmpty();
   }
 
   public boolean addNextAsChild() {

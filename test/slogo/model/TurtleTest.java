@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
+import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 
 

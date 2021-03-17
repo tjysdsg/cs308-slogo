@@ -136,6 +136,6 @@ public class ProgramParser implements Parser {
   }
 
   public void changeLanguage(String language) {
-    cc.changePatterns(language);
+    cc.changeLanguage(language);
   }
 }

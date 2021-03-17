@@ -28,7 +28,7 @@ public class CommandClassifierTest {
   @Test
   void testChangeLanguage() {
     for (String lang : languages) {
-      assertDoesNotThrow(() -> cc.changePatterns(lang));
+      assertDoesNotThrow(() -> cc.changeLanguage(lang));
       assertDoesNotThrow(() -> checkBundle(lang));
     }
   }

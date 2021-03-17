@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 */
 public class TokenParser implements SyntaxClassifier, CommandClassifier {
   // where to find resources specifically for this class
+  private static final String LANGUAGES = "languages.";
   private static final String RESOURCES_PACKAGE = "resources.commands.";
   // "types" and the regular expression patterns that recognize those types
   // note, it is a list because order matters (some patterns may be more generic)
@@ -43,6 +44,11 @@ public class TokenParser implements SyntaxClassifier, CommandClassifier {
   public void changePatterns (String newSyntax) {
     mySymbols.clear();
     addPatterns(newSyntax);
+  }
+
+  @Override
+  public void changeLanguage(String language) {
+    changePatterns(LANGUAGES + language);
   }
 
   /**

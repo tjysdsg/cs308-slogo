@@ -6,7 +6,10 @@ import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 
 /**
  * Information that ASTNodes required in order to evaluate.
@@ -41,22 +44,19 @@ public interface InfoBundle {
 
   void notifyEnvironmentClear();
 
-  /**
-   * Returns the mapping of names to AST trees.
-   *
-   * @return The table of command names to AST tree.
-   */
-  // Map<String, ASTNode> getLookupTable();
+  ASTNumberLiteral getVariable(String name);
 
   /**
-   * Returns the mapping of variable names to variable values.
+   * @return Returns true if a new entry is added to the variable table, otherwise false
    */
-  Map<String, ASTNode> getVariableTable();
+  boolean setVariable(String name, ASTNumberLiteral value);
 
   /**
    * Returns the mapping of command names to command node.
    */
   Map<String, ASTFunctionCall> getCommandTable();
+
+  ASTMakeUserInstruction getCommand(String name);
 
   InfoBundle clone();
 }

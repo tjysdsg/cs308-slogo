@@ -52,11 +52,11 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
         result = 0;
       } else {
         result = 1;
+        functionTable.put(getIdentifier(),
+            new ASTFunctionCall(getIdentifier(),
+                getParameterNames()));
       }
 
-      functionTable.put(getIdentifier(),
-          new ASTFunctionCall(getIdentifier(),
-              getParameterNames()));
     } else {
       if (result == 1) {
         functionTable.get(getIdentifier()).setBody(newChild);

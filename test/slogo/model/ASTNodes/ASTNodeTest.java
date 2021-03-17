@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.InfoBundle;
+import slogo.model.TestBundle;
 import slogo.model.Turtle;
 import slogo.model.parser.CommandClassifier;
 import slogo.model.parser.Parser;
@@ -54,12 +56,12 @@ public class ASTNodeTest {
   }
 
   void assertTurtleXY(double x, double y) {
-    assertEquals(x, infoBundle.getTurtle().getX(), 1E-5);
-    assertEquals(y, infoBundle.getTurtle().getY(), 1E-5);
+    assertEquals(x, infoBundle.getActiveTurtles().get(0).getX(), 1E-5);
+    assertEquals(y, infoBundle.getActiveTurtles().get(0).getY(), 1E-5);
   }
 
   void assertTurtleRotation(double rotation) {
-    assertEquals(rotation, infoBundle.getTurtle().getRotation(), 1E-5);
+    assertEquals(rotation, infoBundle.getActiveTurtles().get(0).getRotation(), 1E-5);
   }
 
   void assertVariableLookUp(String name, double val) {
@@ -373,66 +375,5 @@ public class ASTNodeTest {
         """);
     assertEquals(1, res, 1E-5);
     assertTurtleXY(0, -1);
-  }
-
-  class TestBundle implements InfoBundle {
-
-    private Map<String, ASTNode> variableTable;
-    private Map<String, ASTNode> commandTable;
-    private TurtleRecord info;
-    private Turtle turtle;
-    private boolean environmentCleared = false;
-
-    public TestBundle() {
-      reset();
-    }
-
-    public void reset() {
-      variableTable = new HashMap<>();
-      commandTable = new HashMap<>();
-      info = new TurtleRecord(0, 0, 0, 0, true, true);
-      turtle = new Turtle(0, this);
-    }
-
-    @Override
-    public Turtle getTurtle() {
-      return turtle;
-    }
-
-    @Override
-    public void notifyTurtleUpdate(TurtleRecord info) {
-      this.info = info;
-    }
-
-    @Override
-    public void notifyCommandUpdate(CommandsRecord info) {
-    }
-
-    @Override
-    public void notifyVariableUpdate(VariablesRecord info) {
-    }
-
-    @Override
-    public void notifyEnvironmentClear() {
-      environmentCleared = true;
-    }
-
-    @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return variableTable;
-    }
-
-    @Override
-    public Map<String, ASTNode> getCommandTable() {
-      return commandTable;
-    }
-
-    public TurtleRecord getInfo() {
-      return info;
-    }
-
-    public boolean getEnvironmentCleared() {
-      return environmentCleared;
-    }
   }
 }

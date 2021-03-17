@@ -38,7 +38,7 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   @Override
   protected double doEvaluate(InfoBundle info) {
     // add to runtime function table
-    info.getCommandTable().put(getIdentifier(), this);
+    //info.getCommandTable().put(getIdentifier(), this);
     return result;
   }
 
@@ -47,20 +47,20 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     int numChildren = super.addChild(newChild);
     if (numChildren == 1) {
       vars = newChild;
-    } else {
-      commands = newChild;
-
       ASTNode prev = functionTable.getOrDefault(getIdentifier(), null);
       if (prev != null) {
         result = 0;
       } else {
         result = 1;
+        functionTable.put(getIdentifier(),
+            new ASTFunctionCall(getIdentifier(),
+                getParameterNames()));
       }
 
-      functionTable.put(getIdentifier(),
-          new ASTFunctionCall(getIdentifier(),
-              getParameterNames(),
-              commands));
+    } else {
+      if (result == 1) {
+        functionTable.get(getIdentifier()).setBody(newChild);
+      }
     }
     return numChildren;
   }

@@ -42,7 +42,8 @@ public class TurtleView extends Group {
     this.currX = 0;
     this.currY = 0;
     this.nameLabel = new Label("Turtle :)");
-    this.positionLabel = new Label("30, 30");
+    this.positionLabel = new Label();
+    updateLocation();
     this.penDown = true;
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
@@ -172,10 +173,17 @@ public class TurtleView extends Group {
           if (animationQueue.size() > 0) {
             animationQueue.poll().play();
           }
+          updateLocation();
         });
     if (animationQueue.size() == 1) {
       an.play();
     }
+  }
+
+  public void updateLocation() {
+    int x = (int) getTranslateX();
+    int y = (int) getTranslateY();
+    positionLabel.setText(String.format("%d, %d", x, y));
   }
 
   private void setID() {

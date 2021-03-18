@@ -7,9 +7,7 @@ import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTMakeUserInstruction;
-import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTVariable;
 
 /**
  * Information that ASTNodes required in order to evaluate.
@@ -20,6 +18,12 @@ public interface InfoBundle {
    * @return The active turtles
    */
   List<Turtle> getActiveTurtles();
+
+  Turtle getMainTurtle();
+
+  void setCurrTurtle(List<Integer> currTurtles);
+
+  void setMainTurtle(int idx);
 
   /**
    * Notifies the listener of an update to the turtle.

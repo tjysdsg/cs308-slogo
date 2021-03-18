@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.exceptions.UnknownIdentifierException;
 
 public class ASTCommandFactoryTest {
   private static final String RESOURCES_PACKAGE = "resources.commands.";
@@ -21,9 +23,10 @@ public class ASTCommandFactoryTest {
 
   @Test
   void testCommands() {
+    ASTCommandFactory commandFactory = new ASTCommandFactory(new HashMap<>());
     ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES_PACKAGE + LANGUAGE);
     for (String command : bundle.keySet()) {
-      Class clazz = null;
+      Class clazz;
       try {
         clazz = Class.forName(packagePath + classPrefix + command);
       } catch (ClassNotFoundException e) {
@@ -32,9 +35,9 @@ public class ASTCommandFactoryTest {
       }
 
       if (!command.equals("MakeUserInstruction"))
-        assertEquals(clazz , ASTCommandFactory.getCommand(command).getClass());
+        assertEquals(clazz , commandFactory.getCommand(command).getClass());
     }
 
-    assertNull(ASTCommandFactory.getCommand(none));
+    assertThrows(UnknownIdentifierException.class, () -> commandFactory.getCommand(none));
   }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
+import slogo.model.InfoBundle;
 
 public class ProgramParser implements Parser {
 
@@ -16,9 +17,11 @@ public class ProgramParser implements Parser {
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
   private Map<String, ASTFunctionCall> lookUpTable;
 
-  public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
+  public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
-    lookUpTable = table;
+
+    functionTable = bundle.getCommandTable();
+    commandFactory = new ASTCommandFactory(functionTable);
   }
 
   public ASTNode parseCommand(String command)
@@ -30,12 +33,13 @@ public class ProgramParser implements Parser {
         UnmatchedSquareBracketException {
 
     // remove comments
-    command = command.replaceAll(COMMENT_MATCHER, "");
+    command = command.replaceAll(COMMENT_MATCHER, NOTHING);
 
     List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
     lines.removeIf(String::isBlank);
     Stack<Scope> scopeStack = new Stack<>();
     scopeStack.push(new Scope());
+
     boolean skipNext = false;
     int cursor  = -1;
     for (String token : lines) {
@@ -50,7 +54,7 @@ public class ProgramParser implements Parser {
 
       Scope currScope = scopeStack.peek();
 
-      token = token.replaceAll("\\s+", "");
+      token = token.replaceAll(WHITESPACE, NOTHING);
       if (token.length() > 0) {
         String type = tc.getSymbol(token);
 

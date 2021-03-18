@@ -29,13 +29,12 @@ public class CommandClassifierTest {
   @Test
   void testChangeLanguage() {
     for (String lang : languages) {
-      assertDoesNotThrow(() -> cc.changeLanguage(lang));
+      assertDoesNotThrow(() -> cc.changePatterns(LANGUAGES + lang));
       assertDoesNotThrow(() -> checkBundle(lang));
     }
   }
 
   void checkBundle(String language) {
-    String NOMATCH = "NO MATCH";
     String none = "meh";
 
     ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES_PACKAGE + LANGUAGES + language);

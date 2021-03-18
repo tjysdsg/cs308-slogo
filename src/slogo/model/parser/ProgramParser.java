@@ -19,6 +19,7 @@ public class ProgramParser implements Parser {
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
   private Map<String, ASTFunctionCall> functionTable;
   private ASTCommandFactory commandFactory;
+  private static final String LANGUAGES = "languages.";
 
   public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
@@ -140,6 +141,6 @@ public class ProgramParser implements Parser {
   }
 
   public void changeLanguage(String language) {
-    cc.changeLanguage(language);
+    cc.changePatterns(LANGUAGES + language);
   }
 }

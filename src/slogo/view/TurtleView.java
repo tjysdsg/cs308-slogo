@@ -1,8 +1,10 @@
 package slogo.view;
 
+import javafx.geometry.Pos;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
+import javafx.scene.layout.HBox;
 import java.util.Optional;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
@@ -29,7 +31,8 @@ public class TurtleView extends Group {
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
-  private Label name;
+  private Label nameLabel;
+  private Label positionLabel;
   private boolean penDown;
 
   protected TurtleView(Image image) {
@@ -37,11 +40,16 @@ public class TurtleView extends Group {
     getChildren().addAll(turtleImage);
     this.currX = 0;
     this.currY = 0;
-    this.name = new Label("Turtle :)");
+    this.nameLabel = new Label("Turtle :)");
+    this.positionLabel = new Label("30, 30");
     this.penDown = true;
-    getChildren().add(name);
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
+    HBox labelBox = new HBox();
+    labelBox.setAlignment(Pos.CENTER);
+    labelBox.setSpacing();
+    labelBox.getChildren().addAll(nameLabel, positionLabel);
+    getChildren().addAll(labelBox);
     setID();
     setupContextMenu();
   }
@@ -91,7 +99,7 @@ public class TurtleView extends Group {
       nameDialog.setHeaderText("Enter Turtle Name");
       Optional<String> res = nameDialog.showAndWait();
       if (res.isPresent()) {
-        name.setText(res.get());
+        nameLabel.setText(res.get());
       }
     });
   }

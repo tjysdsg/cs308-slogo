@@ -17,13 +17,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class HelpPane extends Pane {
-  public static final String RESOURCE_FOLDER = "resources/";
+
   private static final int SIZE = 200;
-  private static final String SEARCH_ICON = "images/searchicon.png";
-  private static final String CLEAR_ICON = "images/clearicon.png";
-  private static final String HELP_ICON = "images/helpicon.png";
   private VBox vbox;
-  private GridPane searchBar;
   private GridPane displayWindow;
   private Label helpLabel;
   private ListView<ChoiceBox<String>> list;
@@ -37,7 +33,7 @@ public class HelpPane extends Pane {
   private Label helpDescription = new Label();
   Button backButton;
   ImageView helpIcon;
-  private final String helpIconLocation = "src/slogo/view/resources/images/helpicon.png";
+  private final String helpIconLocation = "resources/images/helpicon.png";
 
   public HelpPane(ResourceBundle resource) {
     this.resources = resource;
@@ -47,7 +43,6 @@ public class HelpPane extends Pane {
 
   private void createHelpWindow() {
     createDisplayWindow();
-    createSearchBar();
     createList();
     createDisplayLanguages();
     createListAction();
@@ -140,7 +135,7 @@ public class HelpPane extends Pane {
   private void createDisplayWindow() {
     displayWindow = new GridPane();
     helpIcon =
-        new ImageView(new Image(new File(helpIconLocation).toURI().toString()));
+        new ImageView(new Image(getClass().getResourceAsStream(helpIconLocation)));
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();
@@ -149,22 +144,6 @@ public class HelpPane extends Pane {
     displayWindow.setHgap(10);
   }
 
-  private void createSearchBar() {
-    searchBar = new GridPane();
-    TextField search = new TextField();
-    search.setPrefWidth(.8 * SIZE);
-    ImageView searchIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + SEARCH_ICON).toExternalForm());
-    searchIcon.setFitWidth(.1 * SIZE);
-    searchIcon.setFitHeight(.1 * SIZE);
-    ImageView clearIcon =
-        new ImageView(getClass().getResource(RESOURCE_FOLDER + CLEAR_ICON).toExternalForm());
-    clearIcon.setFitWidth(.1 * SIZE);
-    clearIcon.setFitHeight(.1 * SIZE);
-    searchBar.add(searchIcon, 0, 0);
-    searchBar.add(search, 1, 0);
-    searchBar.add(clearIcon, 2, 0);
-  }
 
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
@@ -172,7 +151,7 @@ public class HelpPane extends Pane {
     createDisplayLanguages();
   }
 
-  private void setId(){
+  private void setId() {
     commandList.setId("commandList");
     helpLabel.setId("helpLabel");
     helpIcon.setId("helpIcon");

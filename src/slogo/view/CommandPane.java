@@ -93,7 +93,7 @@ public class CommandPane extends Pane {
         e -> {
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendCodeArea();
-          } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
+          } else if (e.getCode() == KeyCode.UP) {
            //fix this.
             vcon.fillCommandArea("");
           }

@@ -1,31 +1,32 @@
 package slogo.view;
 
-import javafx.geometry.Pos;
 import java.io.File;
 import java.util.LinkedList;
-import java.util.Queue;
-import javafx.scene.layout.HBox;
 import java.util.Optional;
+import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Group;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import slogo.events.TurtleRecord;
-import javafx.scene.control.TextInputDialog;
 
 public class TurtleView extends Group {
   private double currX;
-  public static double ANIMATION_SPEED = 10;
+  public static final double ANIMATION_SPEED = 10;
+  public static final double IMAGE_WIDTH = 200;
+  public static final double IMAGE_HEIGHT = 160;
   private double currY;
   private double rotation;
   private ImageView turtleImage;
@@ -47,7 +48,7 @@ public class TurtleView extends Group {
     this.penColor = "#009624";
     HBox labelBox = new HBox();
     labelBox.setAlignment(Pos.CENTER);
-    labelBox.setSpacing();
+    labelBox.setSpacing(IMAGE_WIDTH / 2);
     labelBox.getChildren().addAll(nameLabel, positionLabel);
     getChildren().addAll(labelBox);
     setID();
@@ -66,10 +67,11 @@ public class TurtleView extends Group {
     menu.getItems().addAll(setPen, setImage, setName);
     ColorPicker picker = new ColorPicker();
     FileChooser fileChooser = new FileChooser();
-    fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-        new ExtensionFilter("All Files", "*.*")
-        );
+    fileChooser
+        .getExtensionFilters()
+        .addAll(
+            new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+            new ExtensionFilter("All Files", "*.*"));
 
     picker.setVisible(false);
     getChildren().add(picker);
@@ -90,19 +92,22 @@ public class TurtleView extends Group {
         e -> {
           File file = fileChooser.showOpenDialog(getScene().getWindow());
           if (file != null) {
-            turtleImage.setImage(new Image(file.toURI().toString(), 200, 160, false, false));
+            turtleImage.setImage(
+                new Image(file.toURI().toString(), IMAGE_WIDTH, IMAGE_HEIGHT, false, false));
           }
         });
-    setName.setOnAction( e -> {
-      TextInputDialog nameDialog = new TextInputDialog();
-      nameDialog.setTitle("Turtle Name");
-      nameDialog.setHeaderText("Enter Turtle Name");
-      Optional<String> res = nameDialog.showAndWait();
-      if (res.isPresent()) {
-        nameLabel.setText(res.get());
-      }
-    });
+    setName.setOnAction(
+        e -> {
+          TextInputDialog nameDialog = new TextInputDialog();
+          nameDialog.setTitle("Turtle Name");
+          nameDialog.setHeaderText("Enter Turtle Name");
+          Optional<String> res = nameDialog.showAndWait();
+          if (res.isPresent()) {
+            nameLabel.setText(res.get());
+          }
+        });
   }
+
   public double getCurrX() {
     return this.currX;
   }
@@ -133,7 +138,7 @@ public class TurtleView extends Group {
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
-      //turtleImage.setRotate(info.rotation() - getCurrRot());
+      // turtleImage.setRotate(info.rotation() - getCurrRot());
       this.rotation = info.rotation();
       addAnimation(rt);
     }
@@ -144,11 +149,11 @@ public class TurtleView extends Group {
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
       if (tx != info.xCoord()) {
         moveTurtle.setToX(info.xCoord());
-        //turtleImage.setTranslateX(-info.xCoord());
+        // turtleImage.setTranslateX(-info.xCoord());
       }
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());
-        //turtleImage.setTranslateY(-info.yCoord());
+        // turtleImage.setTranslateY(-info.yCoord());
       }
       moveTurtle.setNode(this);
       addAnimation(moveTurtle);
@@ -173,7 +178,7 @@ public class TurtleView extends Group {
     }
   }
 
-  private void setID(){
+  private void setID() {
     turtleImage.setId("turtleImage");
   }
 }

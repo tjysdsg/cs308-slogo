@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.exceptions.UnknownIdentifierException;
 
 public class CommandClassifierTest {
   private static final String RESOURCES_PACKAGE = "resources.commands.";
@@ -44,6 +45,6 @@ public class CommandClassifierTest {
       assertEquals(command, cc.getSymbol(regex));
     }
 
-    assertEquals(NOMATCH, cc.getSymbol(none));
+    assertThrows(UnknownIdentifierException.class , () -> cc.getSymbol(none));
   }
 }

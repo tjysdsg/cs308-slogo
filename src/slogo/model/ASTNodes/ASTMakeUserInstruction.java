@@ -2,7 +2,6 @@ package slogo.model.ASTNodes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
@@ -15,10 +14,10 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   private static final int NUM_PARAMS = 2;
   private ASTNode vars; // contains a list of ASTVariable names
   private ASTNode commands;
-  private Map<String, ASTFunctionCall> functionTable;
-  private int result;
+  private InfoBundle functionTable;
+  private boolean addedCorrectly;
 
-  public ASTMakeUserInstruction(String identifier, Map<String, ASTFunctionCall> functionTable) {
+  public ASTMakeUserInstruction(String identifier, InfoBundle functionTable) {
     super(NAME, identifier, NUM_PARAMS);
     this.functionTable = functionTable;
   }
@@ -39,7 +38,7 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   protected double doEvaluate(InfoBundle info) {
     // add to runtime function table
     //info.getCommandTable().put(getIdentifier(), this);
-    return result;
+    return addedCorrectly ? 1 : 0;
   }
 
   @Override
@@ -47,19 +46,12 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     int numChildren = super.addChild(newChild);
     if (numChildren == 1) {
       vars = newChild;
-      ASTNode prev = functionTable.getOrDefault(getIdentifier(), null);
-      if (prev != null) {
-        result = 0;
-      } else {
-        result = 1;
-        functionTable.put(getIdentifier(),
-            new ASTFunctionCall(getIdentifier(),
-                getParameterNames()));
-      }
-
+      addedCorrectly = functionTable.setCommand(getIdentifier(),
+          new ASTFunctionCall(getIdentifier(),
+              getParameterNames()));
     } else {
-      if (result == 1) {
-        functionTable.get(getIdentifier()).setBody(newChild);
+      if (addedCorrectly) {
+        functionTable.getCommand(getIdentifier()).setBody(newChild);
       }
     }
     return numChildren;

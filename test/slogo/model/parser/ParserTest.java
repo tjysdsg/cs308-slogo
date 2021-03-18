@@ -212,7 +212,7 @@ public class ParserTest {
 
     parser.parseCommand(TEST_STRING);
 
-    ASTNode actual = infoBundle.getCommandTable().get("test");
+    ASTNode actual = infoBundle.getCommand("test");
     assertNodeStructure(expected, actual);
 
     TEST_STRING = "test 2 3";

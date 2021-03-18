@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.events.CommandsRecord;
+import slogo.events.DisplayCommand;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
@@ -19,6 +20,7 @@ public class TestBundle implements InfoBundle {
   private TurtleRecord info;
   private Turtle turtle;
   private boolean environmentCleared = false;
+  boolean isOuterScope = false;
 
   public TestBundle() {
     reset();
@@ -82,19 +84,33 @@ public class TestBundle implements InfoBundle {
     variableTable.put(name, value);
     return ret;
   }
+//
+//  public Map<String, ASTNumberLiteral> getVariableTable() {
+//    return variableTable;
+//  }
 
-  public Map<String, ASTNumberLiteral> getVariableTable() {
-    return variableTable;
+//  @Override
+//  public Map<String, ASTFunctionCall> getCommandTable() {
+//    return commandTable;
+//  }
+
+  @Override
+  public ASTFunctionCall getCommand(String name) {
+    return commandTable.get(name);
   }
 
   @Override
-  public Map<String, ASTFunctionCall> getCommandTable() {
-    return commandTable;
-  }
-
-  @Override
-  public ASTMakeUserInstruction getCommand(String name) {
-    return null;
+  public boolean setCommand(String name, ASTFunctionCall command) {
+    boolean ret = !commandTable.containsKey(name);
+    commandTable.put(name, command);
+    if (isOuterScope) {
+      ArrayList<DisplayCommand> commands = new ArrayList<>();
+      for (var entry : commandTable.entrySet()) {
+        commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
+      }
+      notifyCommandUpdate(new CommandsRecord(commands));
+    }
+    return ret;
   }
 
   @Override

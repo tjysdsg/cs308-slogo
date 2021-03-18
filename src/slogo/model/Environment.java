@@ -178,14 +178,14 @@ public class Environment implements TrackableEnvironment {
       return ret;
     }
 
-    @Override
-    public Map<String, ASTFunctionCall> getCommandTable() {
-      return commandTable;
-    }
+//    @Override
+//    public Map<String, ASTFunctionCall> getCommandTable() {
+//      return commandTable;
+//    }
 
     @Override
-    public ASTMakeUserInstruction getCommand(String name) {
-      return null;
+    public ASTFunctionCall getCommand(String name) {
+      return commandTable.get(name);
     }
 
     @Override

@@ -6,6 +6,7 @@ import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.InfoBundle;
 
 /**
  * The ASTCommand factory class is used to convert a string into an ASTNode using reflection.
@@ -24,10 +25,10 @@ public class ASTCommandFactory {
 
   public static final String packagePath = ASTCommand.class.getPackageName() + ".";
   public static final String classPrefix = "AST";
-  private Map<String, ASTFunctionCall> functionTable;
+  private InfoBundle functionTable;
 
-  public ASTCommandFactory(Map<String, ASTFunctionCall> functionTable) {
-    this.functionTable = functionTable;
+  public ASTCommandFactory(InfoBundle bundle) {
+    functionTable = bundle;
   }
 
 
@@ -43,7 +44,7 @@ public class ASTCommandFactory {
     } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
-      ASTFunctionCall foundFunc = functionTable.get(command);
+      ASTFunctionCall foundFunc = functionTable.getCommand(command);
       if (foundFunc == null) {
         throw new UnknownIdentifierException(command);
       }

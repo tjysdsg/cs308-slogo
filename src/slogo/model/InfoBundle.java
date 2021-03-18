@@ -58,9 +58,9 @@ public interface InfoBundle {
   /**
    * Returns the mapping of command names to command node.
    */
-  Map<String, ASTFunctionCall> getCommandTable();
+//  Map<String, ASTFunctionCall> getCommandTable();
 
-  ASTMakeUserInstruction getCommand(String name);
+  ASTFunctionCall getCommand(String name);
 
   boolean setCommand(String name, ASTFunctionCall command);
 

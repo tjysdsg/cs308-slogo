@@ -65,7 +65,7 @@ public class ASTNodeTest {
   }
 
   void assertVariableLookUp(String name, double val) {
-    ASTNumberLiteral literal = infoBundle.getVariableTable().get(name);
+    ASTNumberLiteral literal = infoBundle.getVariable(name);
     assertNotNull(literal);
     assertEquals(val, literal.getValue(), 1E-5);
   }
@@ -250,7 +250,7 @@ public class ASTNodeTest {
   @Test
   void testMakeVariable() {
     assertEquals(308.0, parseAndEvaluateCommands("MAKE :a", 308), 1E-5);
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":a");
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariable(":a");
     assertNotNull(literal);
     assertEquals(308, literal.getValue(), 1E-5);
     assertVariableLookUp(":a", 308);

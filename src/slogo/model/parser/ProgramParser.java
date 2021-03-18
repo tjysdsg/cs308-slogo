@@ -19,7 +19,7 @@ public class ProgramParser implements Parser {
   private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
-  private Map<String, ASTFunctionCall> functionTable;
+  private InfoBundle bundle;
   private ASTCommandFactory commandFactory;
   private static final String LANGUAGES = "languages.";
 
@@ -32,9 +32,8 @@ public class ProgramParser implements Parser {
 
   public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
-
-    functionTable = bundle.getCommandTable();
-    commandFactory = new ASTCommandFactory(functionTable);
+    this.bundle = bundle;
+    commandFactory = new ASTCommandFactory(bundle);
   }
 
   public ASTNode parseCommand(String command)
@@ -115,7 +114,7 @@ public class ProgramParser implements Parser {
     if(commandName.equals("MakeUserInstruction")) {
       String identifier = assertNextIsCommand(token);
 
-      newCommand = new ASTMakeUserInstruction(identifier, functionTable);
+      newCommand = new ASTMakeUserInstruction(identifier, bundle);
 
     } else {
       newCommand = commandFactory.getCommand(commandName);

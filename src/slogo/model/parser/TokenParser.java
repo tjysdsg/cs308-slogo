@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+import slogo.exceptions.UnknownIdentifierException;
 
 /**
 * Simple parser based on regular expressions that matches input strings to kinds of program elements.
@@ -54,15 +55,14 @@ public class TokenParser implements SyntaxClassifier, CommandClassifier {
   /**
    * Returns language's type associated with the given text if one exists
    */
-  public String getSymbol (String text) {
-      final String ERROR = "NO MATCH";
+  public String getSymbol (String text) throws UnknownIdentifierException {
       for (Entry<String, Pattern> e : mySymbols) {
           if (match(text, e.getValue())) {
               return e.getKey();
           }
       }
       // FIXME: perhaps throw an exception instead
-      return ERROR;
+      throw new UnknownIdentifierException(text);
   }
 
   // Returns true if the given text matches the given regular expression pattern

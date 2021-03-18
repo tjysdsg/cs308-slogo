@@ -13,9 +13,12 @@ public class ProgramParser implements Parser {
 
   private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
   private final CommandClassifier cc;
+  private static final String NOTHING = "";
+  private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
-  private Map<String, ASTFunctionCall> lookUpTable;
+  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
+  private Map<String, ASTFunctionCall> functionTable;
+  private ASTCommandFactory commandFactory;
 
   public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
@@ -66,29 +69,26 @@ public class ProgramParser implements Parser {
           }
 
           case "Command" -> {
-            String commandName = cc.getSymbol(token);
+            String commandName;
+
+            try {
+              commandName = cc.getSymbol(token);
+            } catch (UnknownIdentifierException e) {
+              commandName = token;
+            }
+
             ASTNode newCommand;
 
-            switch (commandName) {
-              case "MakeUserInstruction" -> {
-                String identifier = lines.get(cursor + 1);
-                if (!tc.getSymbol(identifier).equals("Command")) {
-                  throw new InvalidCommandIdentifierException(identifier);
-                }
-
-                newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
-                skipNext = true;
+            if(commandName.equals("MakeUserInstruction")) {
+              String identifier = lines.get(cursor + 1);
+              if (!tc.getSymbol(identifier).equals("Command")) {
+                throw new InvalidCommandIdentifierException(identifier);
               }
+              newCommand = new ASTMakeUserInstruction(identifier, functionTable);
+              skipNext = true;
 
-              case "NO MATCH" -> {
-                ASTFunctionCall foundFunc = lookUpTable.get(token);
-                if (foundFunc == null) {
-                  throw new UnknownIdentifierException(token);
-                }
-                newCommand = foundFunc.clone();
-              }
-
-              default -> newCommand = ASTCommandFactory.getCommand(commandName);
+            } else {
+              newCommand = commandFactory.getCommand(commandName);
             }
 
             currScope.push(newCommand);

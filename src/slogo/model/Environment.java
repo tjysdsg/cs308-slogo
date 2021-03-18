@@ -191,7 +191,9 @@ public class Environment implements TrackableEnvironment {
     @Override
     public boolean setCommand(String name, ASTFunctionCall command) {
       boolean ret = !commandTable.containsKey(name);
-      commandTable.put(name, command);
+      if (ret) {
+        commandTable.put(name, command);
+      }
       if (isOuterScope) {
         ArrayList<DisplayCommand> commands = new ArrayList<>();
         for (var entry : commandTable.entrySet()) {

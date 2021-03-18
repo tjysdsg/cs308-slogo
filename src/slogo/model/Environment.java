@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
+import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
@@ -185,6 +186,20 @@ public class Environment implements TrackableEnvironment {
     @Override
     public ASTMakeUserInstruction getCommand(String name) {
       return null;
+    }
+
+    @Override
+    public boolean setCommand(String name, ASTFunctionCall command) {
+      boolean ret = !commandTable.containsKey(name);
+      commandTable.put(name, command);
+      if (isOuterScope) {
+        ArrayList<DisplayCommand> commands = new ArrayList<>();
+        for (var entry : commandTable.entrySet()) {
+          commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
+        }
+        notifyCommandUpdate(new CommandsRecord(commands));
+      }
+      return ret;
     }
 
     @Override

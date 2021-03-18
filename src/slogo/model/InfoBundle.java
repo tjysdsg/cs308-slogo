@@ -62,5 +62,7 @@ public interface InfoBundle {
 
   ASTMakeUserInstruction getCommand(String name);
 
+  boolean setCommand(String name, ASTFunctionCall command);
+
   InfoBundle clone();
 }

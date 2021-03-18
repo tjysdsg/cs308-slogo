@@ -34,6 +34,7 @@ public class TurtleView extends Group {
   private String penColor;
   private Label nameLabel;
   private Label positionLabel;
+  private Label rotationLabel;
   private boolean penDown;
 
   protected TurtleView(Image image) {
@@ -43,14 +44,15 @@ public class TurtleView extends Group {
     this.currY = 0;
     this.nameLabel = new Label("Turtle :)");
     this.positionLabel = new Label();
+    this.rotationLabel = new Label();
     updateLocation();
     this.penDown = true;
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
     HBox labelBox = new HBox();
     labelBox.setAlignment(Pos.CENTER);
-    labelBox.setSpacing(IMAGE_WIDTH / 2);
-    labelBox.getChildren().addAll(nameLabel, positionLabel);
+    labelBox.setSpacing(IMAGE_WIDTH / 4);
+    labelBox.getChildren().addAll(nameLabel, rotationLabel, positionLabel);
     getChildren().addAll(labelBox);
     setID();
     setupContextMenu();
@@ -139,7 +141,6 @@ public class TurtleView extends Group {
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
-      // turtleImage.setRotate(info.rotation() - getCurrRot());
       this.rotation = info.rotation();
       addAnimation(rt);
     }
@@ -150,11 +151,9 @@ public class TurtleView extends Group {
       moveTurtle.setDuration(Duration.millis(ANIMATION_SPEED));
       if (tx != info.xCoord()) {
         moveTurtle.setToX(info.xCoord());
-        // turtleImage.setTranslateX(-info.xCoord());
       }
       if (ty != info.yCoord()) {
         moveTurtle.setToY(-info.yCoord());
-        // turtleImage.setTranslateY(-info.yCoord());
       }
       moveTurtle.setNode(this);
       addAnimation(moveTurtle);
@@ -183,7 +182,9 @@ public class TurtleView extends Group {
   public void updateLocation() {
     int x = (int) getTranslateX();
     int y = (int) getTranslateY();
+    int rotation = (int) turtleImage.getRotate();
     positionLabel.setText(String.format("%d, %d", x, y));
+    rotationLabel.setText(String.format("%d\u00B0", rotation));
   }
 
   private void setID() {

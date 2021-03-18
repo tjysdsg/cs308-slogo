@@ -56,22 +56,14 @@ public class ProgramParser implements Parser {
 
     skipNext = false;
     cursor  = -1;
-    for (String token : lines) {
-      cursor++;
+    String token;
 
-      // trim all whitespaces
-      // token.trim() doesn't work for symbols such as \t
-      // https://stackoverflow.com/a/15633284/7730917
-      if (skipNext) {
-        skipNext = false;
-        continue;
-      }
-
-      currScope = scopeStack.peek();
-
+    while (!lines.isEmpty()) {
+      token = lines.remove(0);
       token = token.replaceAll(WHITESPACE, NOTHING);
-      if (token.length() > 0) {
 
+      if (token.length() > 0) {
+        currScope = scopeStack.peek();
         String type;
 
         try {
@@ -105,7 +97,7 @@ public class ProgramParser implements Parser {
   }
 
   private void handleVariable(String token) {
-    assertNeedsChild(scopeStack.size(), currScope, currCommand, token);
+    assertNeedsChild(currScope, token);
     currScope.push(new ASTVariable(token));
   }
 
@@ -121,12 +113,9 @@ public class ProgramParser implements Parser {
     ASTNode newCommand;
 
     if(commandName.equals("MakeUserInstruction")) {
-      String identifier = lines.get(cursor + 1);
-      if (!tc.getSymbol(identifier).equals("Command")) {
-        throw new InvalidCommandIdentifierException(identifier);
-      }
+      String identifier = assertNextIsCommand(token);
+
       newCommand = new ASTMakeUserInstruction(identifier, functionTable);
-      skipNext = true;
 
     } else {
       newCommand = commandFactory.getCommand(commandName);
@@ -136,7 +125,7 @@ public class ProgramParser implements Parser {
   }
 
   private void handleConstant(String token) {
-    assertNeedsChild(scopeStack.size(), currScope, currCommand, token);
+    assertNeedsChild(currScope, token);
     currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
   }
 
@@ -149,9 +138,21 @@ public class ProgramParser implements Parser {
     currScope.push(prevScope.getCommands());
   }
 
-  private void assertNeedsChild(int scopeDepth, Scope currScope, String command, String token) {
-    if (scopeDepth == 1 && !currScope.addNextAsChild())
-      throw new InvalidSyntaxException(token, command);
+  private void assertNeedsChild(Scope currScope, String token) {
+    if (scopeStack.size() == 1 && !currScope.addNextAsChild())
+      throw new InvalidSyntaxException(token, currCommand);
+  }
+
+  private String assertNextIsCommand(String token) {
+    if (lines.isEmpty())
+      throw new InvalidSyntaxException(token, currCommand);
+
+    String identifier = lines.remove(0);
+    if (!tc.getSymbol(identifier).equals("Command")) {
+      throw new InvalidCommandIdentifierException(identifier);
+    }
+
+    return identifier;
   }
 
   public void changeLanguage(String language) {

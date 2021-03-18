@@ -332,6 +332,12 @@ public class ParserTest {
     assertNodeStructure(expected, parser.parseCommand(TEST_STRING));
   }
 
+  @Test
+  void testExitingScope() {
+    String TEST_STRING = "sum 50 50 50 )";
+    assertThrows(InvalidSyntaxException.class , () -> parser.parseCommand(TEST_STRING));
+  }
+
 
   public static void assertNodeStructure(ASTNode expected, ASTNode actual) {
     assertEquals(expected.getToken(), actual.getToken());

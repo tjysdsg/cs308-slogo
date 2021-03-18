@@ -33,6 +33,8 @@ public interface ViewController {
    */
   void setTurtleLogo(int turtleLogo);
 
+  void setTurtleLogo(String turtleLogo);
+
   void sendAlert(String title, String message);
 
   /** send user command to model to parse. */

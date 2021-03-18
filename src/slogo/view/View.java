@@ -214,6 +214,8 @@ public class View {
      */
     public void setTurtleLogo(int turtleLogo) {}
 
+    public void setTurtleLogo(String turtleLogo) {}
+
     public void sendAlert(String title, String message) {
       Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);
       a.showAndWait().ifPresent(System.out::println);

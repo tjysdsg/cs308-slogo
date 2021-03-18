@@ -227,6 +227,7 @@ public class TurtleSandbox extends GridPane {
     if (info.penDown() && (tx != info.xCoord() || ty != info.yCoord())) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
+      line.setStrokeWidth(turtle.getPenThickness());
       line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
@@ -239,7 +240,6 @@ public class TurtleSandbox extends GridPane {
       line.setStartY(ty);
       line.setEndX(-info.xCoord());
       line.setEndY(info.yCoord());
-      line.setStrokeWidth(2);
       lines.getChildren().addAll(line);
     }
   }

@@ -1,5 +1,7 @@
 package slogo.view;
 
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.Spinner;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -7,6 +9,7 @@ import java.util.Queue;
 import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.ColorPicker;
@@ -17,8 +20,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
@@ -32,6 +35,7 @@ public class TurtleView extends Group {
   public static final int PANE_HEIGHT = 200;
   private double currY;
   private double rotation;
+  private int penThickness;
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
@@ -55,9 +59,10 @@ public class TurtleView extends Group {
     this.penDown = true;
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
+    this.penThickness = 5;
     HBox labelBox = new HBox();
     createTrackerPane();
-    labelBox.setAlignment(Pos.CENTER);
+    labelBox.setAlignment(Pos.CENTER_RIGHT);
     labelBox.setSpacing(IMAGE_WIDTH / 7);
     labelBox.getChildren().addAll(nameLabel, rotationLabel, positionLabel);
     trackerPane.getStyleClass().add("turtle-tracker");
@@ -65,6 +70,7 @@ public class TurtleView extends Group {
     trackerPane.setMinHeight(IMAGE_HEIGHT);
 
     trackerPane.setStyle("-fx-background-color: white");
+    updateTracker();
     trackerPane.setOnMouseClicked(e -> trackerPane.setVisible(false));
     getChildren().addAll(labelBox, trackerPane);
     setID();
@@ -73,10 +79,24 @@ public class TurtleView extends Group {
 
   public void createTrackerPane() {
     trackerPane = new Pane();
+    trackerPane.setVisible(false);
     VBox items = new VBox();
     penOnLabel = new Label();
     penColorLabel = new Label();
+    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
+    Spinner<Integer> penThinknessSpinner = new Spinner<>(spinValFac);
+    penThinknessSpinner
+        .valueProperty()
+        .addListener(
+            (obs, old, newValue) -> {
+              setPenThinkcess(newValue);
+            });
+
     items.getChildren().addAll(penOnLabel, penColorLabel);
+
+    items.setSpacing(IMAGE_WIDTH / 10);
+    Insets insets = new Insets(10);
+    items.setPadding(insets);
     trackerPane.getChildren().addAll(items);
   }
 
@@ -84,12 +104,18 @@ public class TurtleView extends Group {
     this(new Image(new File("data/images/logo.png").toURI().toString()));
   }
 
+  public void setPenThinkcess(int thickness) {
+    this.penThickness = thickness;
+    updateTracker();
+  }
+
   public void setupContextMenu() {
     ContextMenu menu = new ContextMenu();
     MenuItem setPen = new MenuItem("Set Pen Color");
     MenuItem setImage = new MenuItem("Set Turtle Image");
     MenuItem setName = new MenuItem("Set Turtle Name");
-    menu.getItems().addAll(setPen, setImage, setName);
+    MenuItem openTracker = new MenuItem("Open Tracker");
+    menu.getItems().addAll(setPen, setImage, setName, openTracker);
     ColorPicker picker = new ColorPicker();
     FileChooser fileChooser = new FileChooser();
     fileChooser
@@ -131,6 +157,7 @@ public class TurtleView extends Group {
             nameLabel.setText(res.get());
           }
         });
+    openTracker.setOnAction(e -> trackerPane.setVisible(true));
   }
 
   public double getCurrX() {
@@ -153,8 +180,13 @@ public class TurtleView extends Group {
     return this.penDown;
   }
 
+  public int getPenThickness() {
+    return this.penThickness;
+  }
+
   public void setPenColor(String penColor) {
     this.penColor = penColor;
+    updateTracker();
   }
 
   public void update(TurtleRecord info) {
@@ -186,7 +218,7 @@ public class TurtleView extends Group {
   }
 
   public void updateTracker() {
-    penOnLabel.setText("Pen On: " + penDown);
+    penOnLabel.setText("Pen Down: " + penDown);
     penColorLabel.setText("Pen Color: " + penColor);
   }
 

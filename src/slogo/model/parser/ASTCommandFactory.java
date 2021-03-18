@@ -3,6 +3,7 @@ package slogo.model.parser;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import slogo.exceptions.UnknownIdentifierException;
+import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 
@@ -21,7 +22,7 @@ import slogo.model.ASTNodes.ASTNode;
  */
 public class ASTCommandFactory {
 
-  public static final String packagePath = "slogo.model.ASTNodes.";
+  public static final String packagePath = ASTCommand.class.getPackageName() + ".";
   public static final String classPrefix = "AST";
   private Map<String, ASTFunctionCall> functionTable;
 

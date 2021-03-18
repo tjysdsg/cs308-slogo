@@ -40,6 +40,7 @@ public class SettingsPane extends Pane {
   private File userFile;
   private Node node;
   private ViewController vcon;
+  private PopupSettings popupSettings;
 
   /**
    * This method intializes a viewController object which defines method for aspects of the GUI to
@@ -59,7 +60,8 @@ public class SettingsPane extends Pane {
     createPenAndBackground();
     createTurtleOptions();
     createTurtleUpload();
-    hbox = new HBox(title, languageList, penPane, backgroundPane);
+    popupSettings = new PopupSettings();
+    hbox = new HBox(title, languageList, penPane, backgroundPane, popupSettings);
     hbox.setAlignment(Pos.CENTER);
     hbox.setSpacing(20);
     hbox.setMinWidth(SIZE);
@@ -142,6 +144,7 @@ public class SettingsPane extends Pane {
 
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
+    popupSettings.setResources(resource);
     displayLabels();
   }
 

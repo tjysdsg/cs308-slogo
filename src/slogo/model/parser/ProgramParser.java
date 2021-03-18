@@ -1,5 +1,7 @@
 package slogo.model.parser;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +23,13 @@ public class ProgramParser implements Parser {
   private ASTCommandFactory commandFactory;
   private static final String LANGUAGES = "languages.";
 
+  private Stack<Scope> scopeStack;
+  private Scope currScope;
+  private String currCommand;
+  private List<String> lines;
+  private int cursor;
+  private boolean skipNext;
+
   public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
 
@@ -37,17 +46,19 @@ public class ProgramParser implements Parser {
         UnmatchedSquareBracketException {
 
     // remove comments
-    command = command.replaceAll(COMMENT_MATCHER, NOTHING);
+    currCommand = command.replaceAll(COMMENT_MATCHER, NOTHING);
 
-    List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
+    lines = new LinkedList<>(Arrays.asList(currCommand.split(SPLITTER)));
     lines.removeIf(String::isBlank);
-    Stack<Scope> scopeStack = new Stack<>();
+
+    scopeStack = new Stack<>();
     scopeStack.push(new Scope());
 
-    boolean skipNext = false;
-    int cursor  = -1;
+    skipNext = false;
+    cursor  = -1;
     for (String token : lines) {
       cursor++;
+
       // trim all whitespaces
       // token.trim() doesn't work for symbols such as \t
       // https://stackoverflow.com/a/15633284/7730917
@@ -56,71 +67,28 @@ public class ProgramParser implements Parser {
         continue;
       }
 
-      Scope currScope = scopeStack.peek();
+      currScope = scopeStack.peek();
 
       token = token.replaceAll(WHITESPACE, NOTHING);
       if (token.length() > 0) {
-        String type = tc.getSymbol(token);
 
-        //TODO: Try to avoid using a switch statement
-        switch (type) {
-          case "Constant" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
-          }
+        String type;
 
-          case "Command" -> {
-            String commandName;
+        try {
+          type = tc.getSymbol(token);
+        } catch (UnknownIdentifierException e) {
+          throw new InvalidSyntaxException(token, command);
+        }
 
-            try {
-              commandName = cc.getSymbol(token);
-            } catch (UnknownIdentifierException e) {
-              commandName = token;
-            }
+        try {
+          Method handler = this.getClass().getDeclaredMethod("handle" + type, String.class);
+          handler.setAccessible(true);
+          handler.invoke(this, token);
 
-            ASTNode newCommand;
-
-            if(commandName.equals("MakeUserInstruction")) {
-              String identifier = lines.get(cursor + 1);
-              if (!tc.getSymbol(identifier).equals("Command")) {
-                throw new InvalidCommandIdentifierException(identifier);
-              }
-              newCommand = new ASTMakeUserInstruction(identifier, functionTable);
-              skipNext = true;
-
-            } else {
-              newCommand = commandFactory.getCommand(commandName);
-            }
-
-            currScope.push(newCommand);
-          }
-
-          case "Variable" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTVariable(token));
-          }
-
-          case "ListStart" -> scopeStack.push(new Scope());
-
-          case "ListEnd" -> {
-//            if (currScope.isIncomplete()) {
-//              throw new IncorrectParameterCountException(currScope.peek());
-//            }
-
-            Scope prevScope = scopeStack.pop();
-            currScope = scopeStack.peek();
-            currScope.push(prevScope.getCommands());
-          }
-
-//          case "GroupStart" -> {
-//            beginGroup = true;
-//          }
-//
-//          case "GroupEnd" -> {
-//            beginGroup = false;
-//          }
-
-          default -> throw new InvalidSyntaxException(token, command);
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+          System.out.printf("DEBUG: Unimplemented Method Type: %s\n", type);
+        } catch (InvocationTargetException e) {
+          throw (ModelException) e.getTargetException();
         }
       }
     }
@@ -132,7 +100,53 @@ public class ProgramParser implements Parser {
     ASTNode out = scopeStack.pop().getCommands();
     if (out.getNumChildren() == 1)
       return out.getChildAt(0);
+
     return out;
+  }
+
+  private void handleVariable(String token) {
+    assertNeedsChild(scopeStack.size(), currScope, currCommand, token);
+    currScope.push(new ASTVariable(token));
+  }
+
+  private void handleCommand(String token) {
+    String commandName;
+
+    try {
+      commandName = cc.getSymbol(token);
+    } catch (UnknownIdentifierException e) {
+      commandName = token;
+    }
+
+    ASTNode newCommand;
+
+    if(commandName.equals("MakeUserInstruction")) {
+      String identifier = lines.get(cursor + 1);
+      if (!tc.getSymbol(identifier).equals("Command")) {
+        throw new InvalidCommandIdentifierException(identifier);
+      }
+      newCommand = new ASTMakeUserInstruction(identifier, functionTable);
+      skipNext = true;
+
+    } else {
+      newCommand = commandFactory.getCommand(commandName);
+    }
+
+    currScope.push(newCommand);
+  }
+
+  private void handleConstant(String token) {
+    assertNeedsChild(scopeStack.size(), currScope, currCommand, token);
+    currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
+  }
+
+  private void handleListStart(String token) {
+    scopeStack.push(new Scope());
+  }
+  private void handleListEnd(String token) {
+    Scope prevScope = scopeStack.pop();
+    currScope = scopeStack.peek();
+    currScope.push(prevScope.getCommands());
   }
 
   private void assertNeedsChild(int scopeDepth, Scope currScope, String command, String token) {
@@ -143,4 +157,6 @@ public class ProgramParser implements Parser {
   public void changeLanguage(String language) {
     cc.changePatterns(LANGUAGES + language);
   }
+
+
 }

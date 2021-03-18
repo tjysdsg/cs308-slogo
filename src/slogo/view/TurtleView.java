@@ -1,7 +1,5 @@
 package slogo.view;
 
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
-import javafx.scene.control.Spinner;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -16,6 +14,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -83,8 +83,14 @@ public class TurtleView extends Group {
     VBox items = new VBox();
     penOnLabel = new Label();
     penColorLabel = new Label();
+    // TODO: Move to sandbox to allow updating within model
+    Label penThicknessLabel = new Label("Pen Thickness");
+    HBox penThicknessSetting = new HBox();
+    penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
+    penThicknessSetting.setSpacing(10);
     IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
     Spinner<Integer> penThinknessSpinner = new Spinner<>(spinValFac);
+    penThinknessSpinner.setPrefWidth(60);
     penThinknessSpinner
         .valueProperty()
         .addListener(
@@ -92,7 +98,8 @@ public class TurtleView extends Group {
               setPenThinkcess(newValue);
             });
 
-    items.getChildren().addAll(penOnLabel, penColorLabel);
+    items.getChildren().addAll(penOnLabel, penColorLabel, penThicknessSetting);
+    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThinknessSpinner);
 
     items.setSpacing(IMAGE_WIDTH / 10);
     Insets insets = new Insets(10);
@@ -114,7 +121,7 @@ public class TurtleView extends Group {
     MenuItem setPen = new MenuItem("Set Pen Color");
     MenuItem setImage = new MenuItem("Set Turtle Image");
     MenuItem setName = new MenuItem("Set Turtle Name");
-    MenuItem openTracker = new MenuItem("Open Tracker");
+    MenuItem openTracker = new MenuItem("More...");
     menu.getItems().addAll(setPen, setImage, setName, openTracker);
     ColorPicker picker = new ColorPicker();
     FileChooser fileChooser = new FileChooser();

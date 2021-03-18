@@ -322,6 +322,16 @@ public class ParserTest {
     });
   }
 
+  @Test
+  void testGroupings() {
+    String TEST_STRING = "( sum 50 50 50 )";
+    ASTNode expected = new ASTForward();
+    for (int i = 0; i < 3; i++) {
+      expected.addChild(new ASTNumberLiteral(50));
+    }
+    assertNodeStructure(expected, parser.parseCommand(TEST_STRING));
+  }
+
 
   public static void assertNodeStructure(ASTNode expected, ASTNode actual) {
     assertEquals(expected.getToken(), actual.getToken());

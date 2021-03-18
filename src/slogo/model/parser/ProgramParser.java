@@ -97,7 +97,7 @@ public class ProgramParser implements Parser {
   }
 
   private void handleVariable(String token) {
-    assertNeedsChild(currScope, token);
+    assertCanTakeChild(token);
     currScope.push(new ASTVariable(token));
   }
 
@@ -125,20 +125,37 @@ public class ProgramParser implements Parser {
   }
 
   private void handleConstant(String token) {
-    assertNeedsChild(currScope, token);
+    assertCanTakeChild(token);
     currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
   }
 
   private void handleListStart(String token) {
     scopeStack.push(new Scope());
   }
+
   private void handleListEnd(String token) {
-    Scope prevScope = scopeStack.pop();
-    currScope = scopeStack.peek();
-    currScope.push(prevScope.getCommands());
+    ASTNode child = popCurrentScope();
+    currScope.push(child);
   }
 
-  private void assertNeedsChild(Scope currScope, String token) {
+  private void handleGroupStart(String token) {
+    String identifier = assertNextIsCommand(token);
+    handleCommand(identifier);
+    handleListStart(token);
+  }
+
+  private void handleGroupEnd(String token) {
+    ASTNode orphanage = popCurrentScope();
+    currScope.pushAll(orphanage.getChildren());
+  }
+
+  private ASTNode popCurrentScope() {
+    Scope prevScope = scopeStack.pop();
+    currScope = scopeStack.peek();
+    return prevScope.getCommands();
+  }
+
+  private void assertCanTakeChild(String token) {
     if (scopeStack.size() == 1 && !currScope.addNextAsChild())
       throw new InvalidSyntaxException(token, currCommand);
   }

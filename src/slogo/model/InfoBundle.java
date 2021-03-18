@@ -6,7 +6,8 @@ import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTNode;
+import slogo.model.ASTNodes.ASTMakeUserInstruction;
+import slogo.model.ASTNodes.ASTNumberLiteral;
 
 /**
  * Information that ASTNodes required in order to evaluate.
@@ -17,6 +18,12 @@ public interface InfoBundle {
    * @return The active turtles
    */
   List<Turtle> getActiveTurtles();
+
+  Turtle getMainTurtle();
+
+  void setCurrTurtle(List<Integer> currTurtles);
+
+  void setMainTurtle(int idx);
 
   /**
    * Notifies the listener of an update to the turtle.
@@ -41,22 +48,19 @@ public interface InfoBundle {
 
   void notifyEnvironmentClear();
 
-  /**
-   * Returns the mapping of names to AST trees.
-   *
-   * @return The table of command names to AST tree.
-   */
-  // Map<String, ASTNode> getLookupTable();
+  ASTNumberLiteral getVariable(String name);
 
   /**
-   * Returns the mapping of variable names to variable values.
+   * @return Returns true if a new entry is added to the variable table, otherwise false
    */
-  Map<String, ASTNode> getVariableTable();
+  boolean setVariable(String name, ASTNumberLiteral value);
 
   /**
    * Returns the mapping of command names to command node.
    */
   Map<String, ASTFunctionCall> getCommandTable();
+
+  ASTMakeUserInstruction getCommand(String name);
 
   InfoBundle clone();
 }

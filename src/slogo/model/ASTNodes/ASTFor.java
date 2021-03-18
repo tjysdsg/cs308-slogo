@@ -36,7 +36,7 @@ public class ASTFor extends ASTCommand {
     for (double i = start; i <= end; i += step) {
       // counter is set in the lookup table as a variable
       variable.setValue(i);
-      info.getVariableTable().put(counterName, variable);
+      info.setVariable(counterName, variable);
 
       ret = comp2.evaluate(info);
     }

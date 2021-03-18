@@ -65,7 +65,7 @@ public class ASTNodeTest {
   }
 
   void assertVariableLookUp(String name, double val) {
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(name);
+    ASTNumberLiteral literal = infoBundle.getVariableTable().get(name);
     assertNotNull(literal);
     assertEquals(val, literal.getValue(), 1E-5);
   }

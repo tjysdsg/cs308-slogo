@@ -183,7 +183,7 @@ public class TurtleView extends Group {
     int x = (int) getTranslateX();
     int y = (int) getTranslateY();
     int rotation = (int) turtleImage.getRotate();
-    positionLabel.setText(String.format("%d, %d", x, y));
+    positionLabel.setText(String.format("%d, %d", x, -y));
     rotationLabel.setText(String.format("%d\u00B0", rotation));
   }
 

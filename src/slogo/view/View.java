@@ -212,7 +212,7 @@ public class View {
      *
      * @param turtleLogo - the turtle logo the user picked.
      */
-    public void setTurtleLogo(String turtleLogo) {}
+    public void setTurtleLogo(int turtleLogo) {}
 
     public void sendAlert(String title, String message) {
       Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);

@@ -31,7 +31,7 @@ public interface ViewController {
    *
    * @param turtleLogo- The turtlelogo displayed in the view.
    */
-  void setTurtleLogo(String turtleLogo);
+  void setTurtleLogo(int turtleLogo);
 
   void sendAlert(String title, String message);
 

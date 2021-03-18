@@ -75,7 +75,7 @@ public class SettingsPane extends Pane {
           node = (Node) e.getSource();
           userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
           System.out.println(userFile.toString());
-          vcon.setTurtleLogo(userFile.toString());
+          //vcon.setTurtleLogo(userFile.toString());
           if (userFile == null) {
             System.out.println("empty file");
           }
@@ -116,7 +116,7 @@ public class SettingsPane extends Pane {
     turtleList.setValue("TurtleLogo");
     turtleList.setOnAction(
         (e -> {
-          vcon.setTurtleLogo(turtleList.getValue().toString());
+          //vcon.setTurtleLogo(turtleList.getValue().toString());
         }));
   }
 

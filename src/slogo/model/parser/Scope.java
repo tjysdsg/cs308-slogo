@@ -35,6 +35,13 @@ public class Scope {
     collapse();
   }
 
+  public void pushAll(List<ASTNode> orphanage) {
+    for (ASTNode child : orphanage) {
+      myStack.peek().addChild(child);
+    }
+    collapse();
+  }
+
   public ASTNode getCommands() {
     if (isIncomplete()) {
       throw new IncorrectParameterCountException(myStack.peek());

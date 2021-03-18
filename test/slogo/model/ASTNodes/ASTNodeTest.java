@@ -34,8 +34,8 @@ public class ASTNodeTest {
 
   @BeforeEach
   void setUp() {
-    parser = new ProgramParser("English", new HashMap<>());
     infoBundle = new TestBundle();
+    parser = new ProgramParser("English", infoBundle);
   }
 
   double parseAndEvaluateCommands(String cmd) {

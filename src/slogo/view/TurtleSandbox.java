@@ -37,8 +37,8 @@ import slogo.events.TurtleRecord;
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
 public class TurtleSandbox extends GridPane {
-  public static final double MAX_ZOOM = 5;
-  public static final double MIN_ZOOM = .2;
+  public static final double MAX_ZOOM = 3;
+  public static final double MIN_ZOOM = .1;
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
@@ -156,7 +156,7 @@ public class TurtleSandbox extends GridPane {
         (e) -> {
           center.play();
         });
-    Button saveImage = createControlButton("Save");
+    Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));

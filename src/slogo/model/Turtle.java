@@ -19,6 +19,10 @@ public class Turtle {
   private boolean penDown = true;
   private InfoBundle env;
 
+  public int getId() {
+    return id;
+  }
+
   public Turtle(int id, InfoBundle infoBundle) {
     env = infoBundle;
     this.id = id;

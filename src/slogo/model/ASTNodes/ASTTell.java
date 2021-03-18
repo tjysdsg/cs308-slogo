@@ -22,7 +22,7 @@ public class ASTTell extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     ASTCompoundStatement comp = (ASTCompoundStatement) getChildAt(0);
     int n = comp.getNumChildren();
-    double ret = 0;
+    double ret = info.getMainTurtle().getId();
     ArrayList<Integer> indices = new ArrayList<>();
     for (int i = 0; i < n; ++i) {
       int idx = (int) comp.getChildAt(i).evaluate(info);

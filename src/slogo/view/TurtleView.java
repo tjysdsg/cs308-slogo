@@ -17,6 +17,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
@@ -27,12 +29,16 @@ public class TurtleView extends Group {
   public static final double ANIMATION_SPEED = 10;
   public static final double IMAGE_WIDTH = 200;
   public static final double IMAGE_HEIGHT = 160;
+  public static final int PANE_HEIGHT = 200;
   private double currY;
   private double rotation;
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
+  private Pane trackerPane;
   private Label nameLabel;
+  private Label penOnLabel;
+  private Label penColorLabel;
   private Label positionLabel;
   private Label rotationLabel;
   private boolean penDown;
@@ -50,12 +56,28 @@ public class TurtleView extends Group {
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
     HBox labelBox = new HBox();
+    createTrackerPane();
     labelBox.setAlignment(Pos.CENTER);
-    labelBox.setSpacing(IMAGE_WIDTH / 4);
+    labelBox.setSpacing(IMAGE_WIDTH / 7);
     labelBox.getChildren().addAll(nameLabel, rotationLabel, positionLabel);
-    getChildren().addAll(labelBox);
+    trackerPane.getStyleClass().add("turtle-tracker");
+    trackerPane.setMinWidth(IMAGE_WIDTH);
+    trackerPane.setMinHeight(IMAGE_HEIGHT);
+
+    trackerPane.setStyle("-fx-background-color: white");
+    trackerPane.setOnMouseClicked(e -> trackerPane.setVisible(false));
+    getChildren().addAll(labelBox, trackerPane);
     setID();
     setupContextMenu();
+  }
+
+  public void createTrackerPane() {
+    trackerPane = new Pane();
+    VBox items = new VBox();
+    penOnLabel = new Label();
+    penColorLabel = new Label();
+    items.getChildren().addAll(penOnLabel, penColorLabel);
+    trackerPane.getChildren().addAll(items);
   }
 
   public TurtleView() {
@@ -138,6 +160,7 @@ public class TurtleView extends Group {
   public void update(TurtleRecord info) {
     penDown = info.penDown();
     turtleImage.setVisible(info.visible());
+    updateTracker();
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
@@ -160,6 +183,11 @@ public class TurtleView extends Group {
       this.currX = info.xCoord();
       this.currY = info.yCoord();
     }
+  }
+
+  public void updateTracker() {
+    penOnLabel.setText("Pen On: " + penDown);
+    penColorLabel.setText("Pen Color: " + penColor);
   }
 
   public void addAnimation(Animation an) {

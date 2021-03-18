@@ -49,7 +49,7 @@ public class ASTFunctionCall extends ASTCommand {
     }
 
     // TODO: Create Clone
-    return body.evaluate(info);
+    return body.evaluate(info.clone());
   }
 
   public ASTFunctionCall clone() {

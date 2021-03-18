@@ -19,11 +19,19 @@ public class TestBundle implements InfoBundle {
   private Map<String, ASTFunctionCall> commandTable;
   private TurtleRecord info;
   private Turtle turtle;
+  private List<Turtle> turtles;
+  private List<Integer> currTurtles;
+  private int mainTurtleIdx = 0;
   private boolean environmentCleared = false;
   boolean isOuterScope = false;
 
   public TestBundle() {
     reset();
+  }
+
+  public TestBundle(HashMap<String, ASTNumberLiteral> variableTable, HashMap<String, ASTFunctionCall> commandTable) {
+    this.variableTable = variableTable;
+    this.commandTable = commandTable;
   }
 
   public void reset() {
@@ -42,17 +50,31 @@ public class TestBundle implements InfoBundle {
 
   @Override
   public Turtle getMainTurtle() {
-    return null;
+    return turtles.get(mainTurtleIdx);
+  }
+
+  public void setCurrTurtle(int currTurtle) {
+    setMainTurtle(currTurtle);
   }
 
   @Override
-  public void setCurrTurtle(List<Integer> currTurtles) {
+  public void setCurrTurtle(List<Integer> newTurtles) {
+    for (int currTurtle : newTurtles) {
+      if (currTurtle >= turtles.size()) {
+        for (int i = turtles.size(); i <= currTurtle; ++i) {
+          Turtle turtle = new Turtle(i, this);
+          turtles.add(turtle);
+        }
+      }
+    }
 
+    currTurtles.clear();
+    currTurtles.addAll(newTurtles);
   }
 
   @Override
   public void setMainTurtle(int idx) {
-
+    mainTurtleIdx = idx;
   }
 
   @Override
@@ -115,7 +137,11 @@ public class TestBundle implements InfoBundle {
 
   @Override
   public InfoBundle clone() {
-    return null;
+    TestBundle instance = new TestBundle(
+        new HashMap<>(variableTable),
+        new HashMap<>(commandTable));
+    instance.isOuterScope = false;
+    return instance;
   }
 
   public TurtleRecord getInfo() {

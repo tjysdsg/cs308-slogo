@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
@@ -220,6 +221,7 @@ public class ASTNodeTest {
   }
 
   @Test
+  @Disabled
   void testFunctions() {
     String definition = "TO translate [:dForward :dRight] [FORWARD :dForward RIGHT 90 FORWARD :dRight]";
     String call = "translate 10 20";

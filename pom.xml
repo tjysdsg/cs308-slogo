@@ -1,12 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 <modelVersion>4.0.0</modelVersion>
 <groupId>CompSci308_2021Spring</groupId>
-<artifactId>slogo_team09</artifactId>
+<artifactId>slogo_team05</artifactId>
 <version>master-SNAPSHOT</version>
 <packaging>jar</packaging>
 
 <properties>
     <project.build.sourceEncoding>iso-8859-1</project.build.sourceEncoding>
+    <argLine></argLine>
 </properties>
 
 <dependencies>
@@ -24,26 +25,29 @@
         <version>4.0.16-alpha</version>
         <scope>test</scope>
     </dependency>
+    <!-- provides JavaFX frontend control -->
     <dependency>
-        <groupId>com.jfoenix</groupId>
-        <artifactId>jfoenix</artifactId>
-        <version>9.0.10</version>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>15</version>
     </dependency>
+    <!-- allows javafx testing without seeing tests run -->
     <dependency>
-        <groupId>org.fxmisc.richtext</groupId>
-        <artifactId>richtextfx</artifactId>
-        <version>0.10.5</version>
+        <groupId>org.testfx</groupId>
+        <artifactId>openjfx-monocle</artifactId>
+        <version>jdk-12.0.1+2</version>
+        <scope>test</scope>
     </dependency>
 </dependencies>
 
 <build>
-    <!-- use simple names for folders instead of maven's prerferred ones -->
+    <!-- use simple names for folders instead of maven's preferred ones -->
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
     <resources>
         <!-- external data files -->
         <resource>
-            <directory>data</directory>
+            <directory>src/resources</directory>
         </resource>
         <!-- internal resource files also need to be included, but not directly -->
         <resource>
@@ -58,21 +62,24 @@
             <version>3.8.0</version>
             <configuration>
                 <encoding>iso-8859-1</encoding>
-                <includes>
-                    <include>src/**/*.java</include>
-                </includes>
-                <source>15</source>
-                <target>15</target>
-                <compilerArgs>
-                    <arg>--enable-preview</arg>
-                </compilerArgs>
+                <compilerArgs/>
+                <source>14</source>
+                <target>14</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M3</version>
+            <configuration>
+                <argLine>@{argLine}</argLine>
             </configuration>
         </plugin>
         <!-- check for violations of code style -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.1.2</version>
+            <version>3.1.1</version>
             <dependencies>
                 <dependency>
                     <groupId>com.puppycrawl.tools</groupId>
@@ -96,6 +103,64 @@
                 </execution>
             </executions>
         </plugin>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.5</version>
+            <executions>
+                <execution>
+                    <id>default-prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.7.1</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>3.0.0</version>
+        </plugin>
     </plugins>
 </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

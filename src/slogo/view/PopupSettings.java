@@ -21,7 +21,7 @@ public class PopupSettings extends Pane {
   private Popup popup;
   private ImageView gearImage;
   private static final int SIZE = 50;
-  private final String gearIconLocation = "src/slogo/view/resources/images/gearicon.png";
+  private static final String GEAR_ICON = "resources/images/gearicon.png";
   private VBox settingsbox;
   private ChoiceBox<String> fontPicker;
   private ChoiceBox<String> themePicker;
@@ -39,7 +39,7 @@ public class PopupSettings extends Pane {
   }
 
   private void createImageIcon(){
-    gearImage =  new ImageView(new Image(new File(gearIconLocation).toURI().toString()));
+    gearImage =  new ImageView(new Image(getClass().getResourceAsStream(GEAR_ICON)));
     gearImage.setFitWidth(SIZE);
     gearImage.setFitHeight(SIZE);
     gearImage.setOnMouseClicked(e->{

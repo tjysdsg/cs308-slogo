@@ -14,6 +14,6 @@ public class ASTFunctionReference extends ASTCommand {
     for (ASTNode child : getChildren()) {
       body.addChild(child);
     }
-    return body.evaluate(info);
+    return body.evaluate(info.clone());
   }
 }

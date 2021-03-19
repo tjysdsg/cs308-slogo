@@ -111,7 +111,7 @@ public class TurtleView extends Group {
     this(new Image(new File("data/images/logo.png").toURI().toString()));
   }
 
-  public void setPenThinkcess(int thickness) {
+  public void setPenThinkcess(double thickness) {
     this.penThickness = thickness;
     updateTracker();
   }

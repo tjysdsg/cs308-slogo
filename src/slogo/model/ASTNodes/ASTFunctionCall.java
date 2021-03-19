@@ -44,7 +44,7 @@ public class ASTFunctionCall extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     // insert actual parameters into the lookup table
     for (int i = 0; i < getNumParams(); ++i) {
-      ASTNumberLiteral value = (ASTNumberLiteral) getChildAt(i);
+      ASTNumberLiteral value = new ASTNumberLiteral(getChildAt(i).evaluate(info));
       info.setVariable(parameterNames.get(i), value);
     }
 

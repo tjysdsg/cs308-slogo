@@ -5,6 +5,7 @@ import java.util.Map;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTFunctionReference;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.InfoBundle;
 
@@ -48,7 +49,7 @@ public class ASTCommandFactory {
       if (foundFunc == null) {
         throw new UnknownIdentifierException(command);
       }
-      return foundFunc.clone();
+      return foundFunc.createReference();
     }
 
     throw new UnknownIdentifierException(command);

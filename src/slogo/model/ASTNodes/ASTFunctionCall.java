@@ -16,7 +16,6 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTNode body;
-  private static final String NAME = "FunctionCall";
 
   /**
    * Constructor
@@ -72,5 +71,9 @@ public class ASTFunctionCall extends ASTCommand {
 
     ret.append("]");
     return ret.toString();
+  }
+
+  public ASTNode createReference() {
+    return new ASTFunctionReference(getName(), getNumParams());
   }
 }

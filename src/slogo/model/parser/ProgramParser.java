@@ -1,24 +1,37 @@
 package slogo.model.parser;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
+import slogo.model.InfoBundle;
 
 public class ProgramParser implements Parser {
 
   private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
   private final CommandClassifier cc;
+  private static final String handlerPrefix = "handle";
+  private static final String NOTHING = "";
+  private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
-  private Map<String, ASTFunctionCall> lookUpTable;
+  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
+  private final InfoBundle bundle;
+  private final ASTCommandFactory commandFactory;
+  private static final String LANGUAGES = "languages.";
 
-  public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
+  private Stack<Scope> scopeStack;
+  private Scope currScope;
+  private String currCommand;
+  private List<String> lines;
+
+  public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
-    lookUpTable = table;
+    this.bundle = bundle;
+    commandFactory = new ASTCommandFactory(bundle);
   }
 
   public ASTNode parseCommand(String command)
@@ -30,92 +43,39 @@ public class ProgramParser implements Parser {
         UnmatchedSquareBracketException {
 
     // remove comments
-    command = command.replaceAll(COMMENT_MATCHER, "");
+    currCommand = command.replaceAll(COMMENT_MATCHER, NOTHING);
 
-    List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
+    lines = new LinkedList<>(Arrays.asList(currCommand.split(SPLITTER)));
     lines.removeIf(String::isBlank);
-    Stack<Scope> scopeStack = new Stack<>();
+
+    scopeStack = new Stack<>();
     scopeStack.push(new Scope());
-    boolean skipNext = false;
-    int cursor  = -1;
-    for (String token : lines) {
-      cursor++;
-      // trim all whitespaces
-      // token.trim() doesn't work for symbols such as \t
-      // https://stackoverflow.com/a/15633284/7730917
-      if (skipNext) {
-        skipNext = false;
-        continue;
-      }
 
-      Scope currScope = scopeStack.peek();
+    String token;
 
-      token = token.replaceAll("\\s+", "");
+    while (!lines.isEmpty()) {
+      token = lines.remove(0);
+      token = token.replaceAll(WHITESPACE, NOTHING);
+
       if (token.length() > 0) {
-        String type = tc.getSymbol(token);
+        currScope = scopeStack.peek();
+        String type;
 
-        //TODO: Try to avoid using a switch statement
-        switch (type) {
-          case "Constant" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
-          }
+        try {
+          type = tc.getSymbol(token);
+        } catch (UnknownIdentifierException e) {
+          throw new InvalidSyntaxException(token, command);
+        }
 
-          case "Command" -> {
-            String commandName = cc.getSymbol(token);
-            ASTNode newCommand;
+        try {
+          Method handler = this.getClass().getDeclaredMethod(handlerPrefix + type, String.class);
+          handler.setAccessible(true);
+          handler.invoke(this, token);
 
-            switch (commandName) {
-              case "MakeUserInstruction" -> {
-                String identifier = lines.get(cursor + 1);
-                if (!tc.getSymbol(identifier).equals("Command")) {
-                  throw new InvalidCommandIdentifierException(identifier);
-                }
-
-                newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
-                skipNext = true;
-              }
-
-              case "NO MATCH" -> {
-                ASTFunctionCall foundFunc = lookUpTable.get(token);
-                if (foundFunc == null) {
-                  throw new UnknownIdentifierException(token);
-                }
-                newCommand = foundFunc.clone();
-              }
-
-              default -> newCommand = ASTCommandFactory.getCommand(commandName);
-            }
-
-            currScope.push(newCommand);
-          }
-
-          case "Variable" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTVariable(token));
-          }
-
-          case "ListStart" -> scopeStack.push(new Scope());
-
-          case "ListEnd" -> {
-//            if (currScope.isIncomplete()) {
-//              throw new IncorrectParameterCountException(currScope.peek());
-//            }
-
-            Scope prevScope = scopeStack.pop();
-            currScope = scopeStack.peek();
-            currScope.push(prevScope.getCommands());
-          }
-
-//          case "GroupStart" -> {
-//            beginGroup = true;
-//          }
-//
-//          case "GroupEnd" -> {
-//            beginGroup = false;
-//          }
-
-          default -> throw new InvalidSyntaxException(token, command);
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+          System.out.printf("DEBUG: Unimplemented Method Type: %s\n", type);
+        } catch (InvocationTargetException e) {
+          throw (ModelException) e.getTargetException();
         }
       }
     }
@@ -127,15 +87,88 @@ public class ProgramParser implements Parser {
     ASTNode out = scopeStack.pop().getCommands();
     if (out.getNumChildren() == 1)
       return out.getChildAt(0);
+
     return out;
   }
 
-  private void assertNeedsChild(int scopeDepth, Scope currScope, String command, String token) {
-    if (scopeDepth == 1 && !currScope.addNextAsChild())
-      throw new InvalidSyntaxException(token, command);
+  private void handleVariable(String token) {
+    assertCanTakeChild(token);
+    currScope.push(new ASTVariable(token));
+  }
+
+  private void handleCommand(String token) {
+    String commandName;
+
+    try {
+      commandName = cc.getSymbol(token);
+    } catch (UnknownIdentifierException e) {
+      commandName = token;
+    }
+
+    ASTNode newCommand;
+
+    if(commandName.equals("MakeUserInstruction")) {
+      String identifier = assertNextIsCommand(token);
+      newCommand = new ASTMakeUserInstruction(identifier, bundle);
+
+    } else {
+      newCommand = commandFactory.getCommand(commandName);
+    }
+
+    currScope.push(newCommand);
+  }
+
+  private void handleConstant(String token) {
+    assertCanTakeChild(token);
+    currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
+  }
+
+  private void handleListStart(String token) {
+    scopeStack.push(new Scope());
+  }
+
+  private void handleListEnd(String token) {
+    ASTNode child = popCurrentScope();
+    currScope.push(child);
+  }
+
+  private void handleGroupStart(String token) {
+    String identifier = assertNextIsCommand(token);
+    handleCommand(identifier);
+    handleListStart(token);
+  }
+
+  private void handleGroupEnd(String token) {
+    ASTNode orphanage = popCurrentScope();
+    currScope.pushAll(orphanage.getChildren());
+  }
+
+  private ASTNode popCurrentScope() {
+    Scope prevScope = scopeStack.pop();
+    currScope = scopeStack.peek();
+    return prevScope.getCommands();
+  }
+
+  private void assertCanTakeChild(String token) {
+    if (scopeStack.size() == 1 && !currScope.addNextAsChild())
+      throw new InvalidSyntaxException(token, currCommand);
+  }
+
+  private String assertNextIsCommand(String token) {
+    if (lines.isEmpty())
+      throw new InvalidSyntaxException(token, currCommand);
+
+    String identifier = lines.remove(0);
+    if (!tc.getSymbol(identifier).equals("Command")) {
+      throw new InvalidCommandIdentifierException(identifier);
+    }
+
+    return identifier;
   }
 
   public void changeLanguage(String language) {
-    cc.changeLanguage(language);
+    cc.changePatterns(LANGUAGES + language);
   }
+
+
 }

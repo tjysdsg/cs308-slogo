@@ -16,7 +16,6 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTNode body;
-  private static final String NAME = "FunctionCall";
 
   /**
    * Constructor
@@ -27,7 +26,6 @@ public class ASTFunctionCall extends ASTCommand {
   public ASTFunctionCall(String identifier, List<String> parameterNames) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
-    //this.body = body;
   }
 
   public ASTFunctionCall(String identifier, List<String> parameterNames, ASTNode body) {
@@ -44,11 +42,10 @@ public class ASTFunctionCall extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     // insert actual parameters into the lookup table
     for (int i = 0; i < getNumParams(); ++i) {
-      ASTNumberLiteral value = (ASTNumberLiteral) getChildAt(i);
+      ASTNumberLiteral value = new ASTNumberLiteral(getChildAt(i).evaluate(info));
       info.setVariable(parameterNames.get(i), value);
     }
 
-    // TODO: Create Clone
     return body.evaluate(info);
   }
 
@@ -56,7 +53,6 @@ public class ASTFunctionCall extends ASTCommand {
     return new ASTFunctionCall(getName(), parameterNames, body);
   }
 
-  // TODO: func.toString() doesn't return signature
   @Override
   public String toString() {
     StringBuilder ret = new StringBuilder();
@@ -73,5 +69,9 @@ public class ASTFunctionCall extends ASTCommand {
 
     ret.append("]");
     return ret.toString();
+  }
+
+  public ASTNode createReference() {
+    return new ASTFunctionReference(getName(), getNumParams());
   }
 }

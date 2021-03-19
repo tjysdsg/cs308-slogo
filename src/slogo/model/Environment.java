@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import slogo.events.ClearEnvironment;
 import slogo.events.CommandsRecord;
+import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
 import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
@@ -13,16 +14,15 @@ import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
 public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles;
+  private int mainTurtleIdx = 0;
   private List<Integer> currTurtles;
   private ExecutionEnvironment executionEnvironment;
   private UpdateTurtle updateTurtleCallback;
@@ -36,7 +36,7 @@ public class Environment implements TrackableEnvironment {
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
 
-    myParser = new ProgramParser(DEFAULT_LANG, new CommandTable(executionEnvironment));
+    myParser = new ProgramParser(DEFAULT_LANG, executionEnvironment);
     turtles = new ArrayList<>();
     turtles.add(new Turtle(0, executionEnvironment));
     currTurtles = new ArrayList<>();
@@ -75,29 +75,11 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void setCurrTurtle(int currTurtle) {
-    if (currTurtle >= turtles.size()) {
-      for (int i = turtles.size(); i <= currTurtle; ++i) {
-        Turtle turtle = new Turtle(i, executionEnvironment);
-        this.turtles.add(turtle);
-      }
-    }
-
-    this.currTurtles.clear();
-    this.currTurtles.add(currTurtle);
+    executionEnvironment.setMainTurtle(currTurtle);
   }
 
   public void setCurrTurtle(List<Integer> currTurtles) {
-    for (int currTurtle : currTurtles) {
-      if (currTurtle >= turtles.size()) {
-        for (int i = turtles.size(); i <= currTurtle; ++i) {
-          Turtle turtle = new Turtle(i, executionEnvironment);
-          this.turtles.add(turtle);
-        }
-      }
-    }
-
-    this.currTurtles.clear();
-    this.currTurtles.addAll(currTurtles);
+    executionEnvironment.setCurrTurtle(currTurtles);
   }
 
   private class ExecutionEnvironment implements InfoBundle {
@@ -118,12 +100,40 @@ public class Environment implements TrackableEnvironment {
       this.commandTable = commandTable;
     }
 
+    @Override
     public ExecutionEnvironment clone() {
+      HashMap<String, ASTNumberLiteral> varCopy = new HashMap<>();
+      for (var entry : variableTable.entrySet()) {
+        varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
+      }
+
       ExecutionEnvironment instance = new ExecutionEnvironment(
-          new HashMap<>(variableTable),
+          varCopy,
           new HashMap<>(commandTable));
       instance.isOuterScope = false;
       return instance;
+    }
+
+    @Override
+    public void setCurrTurtle(List<Integer> newTurtles) {
+      for (int currTurtle : newTurtles) {
+        if (currTurtle >= turtles.size()) {
+          for (int i = turtles.size(); i <= currTurtle; ++i) {
+            Turtle turtle = new Turtle(i, executionEnvironment);
+            turtles.add(turtle);
+          }
+        }
+      }
+
+      currTurtles.clear();
+      currTurtles.addAll(newTurtles);
+
+      notifyAllTurtleUpdates();
+    }
+
+    @Override
+    public void setMainTurtle(int idx) {
+      mainTurtleIdx = idx;
     }
 
     @Override
@@ -135,16 +145,32 @@ public class Environment implements TrackableEnvironment {
       return ret;
     }
 
+    @Override
+    public Turtle getMainTurtle() {
+      return turtles.get(mainTurtleIdx);
+    }
+
+    /**
+     * Notify all turtle information
+     */
+    private void notifyAllTurtleUpdates() {
+      for (Turtle t : turtles) {
+        notifyTurtleUpdate(
+            new TurtleRecord(
+                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown()
+            )
+        );
+      }
+    }
+
+    @Override
     public void notifyTurtleUpdate(TurtleRecord info) {
       if (updateTurtleCallback != null) {
         updateTurtleCallback.execute(info);
       }
     }
 
-    public void setCurrTurtle() {
-      // TODO: implement this
-    }
-
+    @Override
     public void notifyEnvironmentClear() {
       if (clearEnvironmentCallback != null) {
         clearEnvironmentCallback.execute();
@@ -171,22 +197,40 @@ public class Environment implements TrackableEnvironment {
       return ret;
     }
 
+//    @Override
+//    public Map<String, ASTFunctionCall> getCommandTable() {
+//      return commandTable;
+//    }
+
     @Override
-    public Map<String, ASTFunctionCall> getCommandTable() {
-      return commandTable;
+    public ASTFunctionCall getCommand(String name) {
+      return commandTable.get(name);
     }
 
     @Override
-    public ASTMakeUserInstruction getCommand(String name) {
-      return null;
+    public boolean setCommand(String name, ASTFunctionCall command) {
+      boolean ret = !commandTable.containsKey(name);
+      if (ret) {
+        commandTable.put(name, command);
+      }
+      if (isOuterScope) {
+        ArrayList<DisplayCommand> commands = new ArrayList<>();
+        for (var entry : commandTable.entrySet()) {
+          commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
+        }
+        notifyCommandUpdate(new CommandsRecord(commands));
+      }
+      return ret;
     }
 
+    @Override
     public void notifyCommandUpdate(CommandsRecord info) {
       if (updateCommandsCallback != null) {
         updateCommandsCallback.execute(info);
       }
     }
 
+    @Override
     public void notifyVariableUpdate(VariablesRecord info) {
       if (isOuterScope && updateVariablesCallback != null) {
         updateVariablesCallback.execute(info);

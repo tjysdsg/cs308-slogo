@@ -23,9 +23,9 @@ public abstract class ASTCommand extends ASTNamed {
   @Override
   protected void preEvaluate(InfoBundle info) {
     int size = getNumChildren();
-    if (size > numParams) {
-      throw new IncorrectParameterCountException(this);
-    }
+//    if (size > numParams) {
+//      throw new IncorrectParameterCountException(this);
+//    }
   }
 
   @Override
@@ -33,14 +33,14 @@ public abstract class ASTCommand extends ASTNamed {
     super.addChild(newChild);
     int size = getNumChildren();
 
-    if (size > numParams) {
-      throw new IncorrectParameterCountException(this);
-    }
+//    if (size > numParams) {
+//      throw new IncorrectParameterCountException(this);
+//    }
     return size;
   }
 
   @Override
   public boolean isDone() {
-    return numParams == getNumChildren();
+    return numParams <= getNumChildren();
   }
 }

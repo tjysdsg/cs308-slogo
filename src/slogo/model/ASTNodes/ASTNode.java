@@ -1,6 +1,7 @@
 package slogo.model.ASTNodes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import slogo.model.InfoBundle;
 
@@ -92,4 +93,8 @@ public abstract class ASTNode {
   protected abstract double doEvaluate(InfoBundle info);
 
   public abstract boolean isDone();
+
+  public List<ASTNode> getChildren() {
+    return Collections.unmodifiableList(children);
+  }
 }

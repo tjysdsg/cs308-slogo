@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
@@ -34,8 +35,8 @@ public class ASTNodeTest {
 
   @BeforeEach
   void setUp() {
-    parser = new ProgramParser("English", new HashMap<>());
     infoBundle = new TestBundle();
+    parser = new ProgramParser("English", infoBundle);
   }
 
   double parseAndEvaluateCommands(String cmd) {
@@ -65,7 +66,7 @@ public class ASTNodeTest {
   }
 
   void assertVariableLookUp(String name, double val) {
-    ASTNumberLiteral literal = infoBundle.getVariableTable().get(name);
+    ASTNumberLiteral literal = infoBundle.getVariable(name);
     assertNotNull(literal);
     assertEquals(val, literal.getValue(), 1E-5);
   }
@@ -250,7 +251,7 @@ public class ASTNodeTest {
   @Test
   void testMakeVariable() {
     assertEquals(308.0, parseAndEvaluateCommands("MAKE :a", 308), 1E-5);
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":a");
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariable(":a");
     assertNotNull(literal);
     assertEquals(308, literal.getValue(), 1E-5);
     assertVariableLookUp(":a", 308);

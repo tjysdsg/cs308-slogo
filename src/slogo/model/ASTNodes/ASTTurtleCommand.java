@@ -21,6 +21,7 @@ public abstract class ASTTurtleCommand extends ASTCommand {
     double ret = 0;
     List<Turtle> turtles = info.getActiveTurtles();
     for (Turtle t : turtles) {
+      info.setMainTurtle(t.getId());
       ret = evaluateForTurtle(t, params, info);
     }
     return ret;

@@ -128,6 +128,7 @@ public class TurtleSandbox extends GridPane {
     addTurtle.setOnAction(
         e -> {
           addTurtle();
+          viewController.addTurtle();
         });
     Tooltip addTip = new Tooltip("Select turtle with Shift+Click");
     addTip.setShowDelay(Duration.millis(200));
@@ -182,7 +183,6 @@ public class TurtleSandbox extends GridPane {
   private void addTurtle() {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
-    if (turtles.size() > 1) viewController.addTurtle();
     turtle.setOnMouseClicked(
         e -> {
           if (e.isShiftDown()) {
@@ -220,6 +220,10 @@ public class TurtleSandbox extends GridPane {
    * @param info
    */
   public void updateTurtle(TurtleRecord info) {
+    int turtleID = info.id();
+    if (turtleID >= turtles.size()) {
+      addTurtle();
+    }
     TurtleView turtle = turtles.get(info.id());
     double tx = turtle.getCurrX();
     double ty = turtle.getCurrY();

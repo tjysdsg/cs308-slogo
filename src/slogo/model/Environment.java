@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import slogo.events.ClearEnvironment;
+import java.util.function.Consumer;
 import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
 import slogo.events.TurtleRecord;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
@@ -25,10 +22,10 @@ public class Environment implements TrackableEnvironment {
   private int mainTurtleIdx = 0;
   private List<Integer> currTurtles;
   private ExecutionEnvironment executionEnvironment;
-  private UpdateTurtle updateTurtleCallback;
-  private UpdateVariables updateVariablesCallback;
-  private UpdateCommands updateCommandsCallback;
-  private ClearEnvironment clearEnvironmentCallback;
+  private Consumer<TurtleRecord> updateTurtleCallback;
+  private Consumer<VariablesRecord> updateVariablesCallback;
+  private Consumer<CommandsRecord> updateCommandsCallback;
+  private Runnable clearEnvironmentCallback;
   private Parser myParser;
 
   private static final String DEFAULT_LANG = "English";
@@ -43,15 +40,15 @@ public class Environment implements TrackableEnvironment {
     currTurtles.add(0);
   }
 
-  public void setOnTurtleUpdate(UpdateTurtle callback) {
+  public void setOnTurtleUpdate(Consumer<TurtleRecord> callback) {
     updateTurtleCallback = callback;
   }
 
-  public void setOnVariableUpdate(UpdateVariables callback) {
+  public void setOnVariableUpdate(Consumer<VariablesRecord> callback) {
     updateVariablesCallback = callback;
   }
 
-  public void setOnCommandUpdate(UpdateCommands callback) {
+  public void setOnCommandUpdate(Consumer<CommandsRecord> callback) {
     updateCommandsCallback = callback;
   }
 
@@ -60,7 +57,7 @@ public class Environment implements TrackableEnvironment {
     commandTree.evaluate(executionEnvironment);
   }
 
-  public void setOnClear(ClearEnvironment callback) {
+  public void setOnClear(Runnable callback) {
     this.clearEnvironmentCallback = callback;
   }
 
@@ -166,14 +163,14 @@ public class Environment implements TrackableEnvironment {
     @Override
     public void notifyTurtleUpdate(TurtleRecord info) {
       if (updateTurtleCallback != null) {
-        updateTurtleCallback.execute(info);
+        updateTurtleCallback.accept(info);
       }
     }
 
     @Override
     public void notifyEnvironmentClear() {
       if (clearEnvironmentCallback != null) {
-        clearEnvironmentCallback.execute();
+        clearEnvironmentCallback.run();
       }
     }
 
@@ -226,14 +223,14 @@ public class Environment implements TrackableEnvironment {
     @Override
     public void notifyCommandUpdate(CommandsRecord info) {
       if (updateCommandsCallback != null) {
-        updateCommandsCallback.execute(info);
+        updateCommandsCallback.accept(info);
       }
     }
 
     @Override
     public void notifyVariableUpdate(VariablesRecord info) {
       if (isOuterScope && updateVariablesCallback != null) {
-        updateVariablesCallback.execute(info);
+        updateVariablesCallback.accept(info);
       }
     }
   }

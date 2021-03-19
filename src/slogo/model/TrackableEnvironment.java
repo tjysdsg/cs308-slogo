@@ -1,11 +1,10 @@
 package slogo.model;
 
 import java.util.List;
-import java.util.ResourceBundle;
-import slogo.events.ClearEnvironment;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
+import java.util.function.Consumer;
+import slogo.events.CommandsRecord;
+import slogo.events.TurtleRecord;
+import slogo.events.VariablesRecord;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.
@@ -20,7 +19,7 @@ public interface TrackableEnvironment {
    *
    * @param callback - The callback that is called.
    */
-  void setOnTurtleUpdate(UpdateTurtle callback);
+  void setOnTurtleUpdate(Consumer<TurtleRecord> callback);
 
   /**
    * Sets the callback is called whenever there is an update to the variables within the
@@ -28,14 +27,14 @@ public interface TrackableEnvironment {
    *
    * @param callback - The callback that is called.
    */
-  void setOnVariableUpdate(UpdateVariables callback);
+  void setOnVariableUpdate(Consumer<VariablesRecord> callback);
 
   /**
    * Sets the callback is called whenever there is an update to the userdefined commands.
    *
    * @param callback - The callback that is called.
    */
-  void setOnCommandUpdate(UpdateCommands callback);
+  void setOnCommandUpdate(Consumer<CommandsRecord> callback);
 
   /**
    * Parses and executes a passed in command.
@@ -57,5 +56,5 @@ public interface TrackableEnvironment {
 
   void setCurrTurtle(List<Integer> turtle);
 
-  void setOnClear(ClearEnvironment callback);
+  void setOnClear(Runnable callback);
 }

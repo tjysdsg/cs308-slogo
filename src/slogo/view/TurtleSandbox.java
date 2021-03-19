@@ -13,6 +13,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.ColumnConstraints;
@@ -41,6 +44,7 @@ public class TurtleSandbox extends GridPane {
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
+  private int mainTurtle = 0;
   private StackPane lines;
   private StackPane sandbox;
   private HBox controls;
@@ -121,7 +125,7 @@ public class TurtleSandbox extends GridPane {
 
   private HBox createControls() {
     HBox controls = new HBox();
-    controls.setSpacing(5);
+    controls.setSpacing(10);
     controls.setStyle("-fx-background-color: rgba(95, 84, 87, 0.74)");
 
     Button addTurtle = createControlButton("Add Turtle");
@@ -148,6 +152,22 @@ public class TurtleSandbox extends GridPane {
     scaleCenter.setDuration(Duration.seconds(1));
     ParallelTransition center = new ParallelTransition(centerSandbox, scaleCenter);
 
+    Label penThicknessLabel = new Label("Pen Thickness");
+    HBox penThicknessSetting = new HBox();
+    penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
+    penThicknessSetting.setSpacing(10);
+    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
+    Spinner<Integer> penThinknessSpinner = new Spinner<>(spinValFac);
+    penThinknessSpinner.setPrefWidth(60);
+    penThinknessSpinner
+        .valueProperty()
+        .addListener(
+            (obs, old, newValue) -> {
+              turtles.get(mainTurtle).setPenThinkcess(newValue);
+            });
+
+    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThinknessSpinner);
+
     centerButton.setOnAction(
         (e) -> {
           center.play();
@@ -168,7 +188,7 @@ public class TurtleSandbox extends GridPane {
             uhoh.printStackTrace();
           }
         });
-    controls.getChildren().addAll(addTurtle, centerButton, saveImage);
+    controls.getChildren().addAll(addTurtle, centerButton, saveImage, penThicknessSetting);
     return controls;
   }
 
@@ -196,6 +216,7 @@ public class TurtleSandbox extends GridPane {
 
   public void setTurtle(int index) {
     if (turtles.size() > 1) viewController.setCurrTurtle(index);
+    mainTurtle = index;
     for (TurtleView turtle : turtles) {
       turtle.setStyle("-fx-opacity: .5");
     }

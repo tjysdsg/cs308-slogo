@@ -45,6 +45,7 @@ public class TurtleView extends Group {
   private Label penColorLabel;
   private Label positionLabel;
   private Label rotationLabel;
+  private Label penThicknessLabel;
   private boolean penDown;
 
   protected TurtleView(Image image) {
@@ -83,28 +84,13 @@ public class TurtleView extends Group {
     VBox items = new VBox();
     penOnLabel = new Label();
     penColorLabel = new Label();
-    // TODO: Move to sandbox to allow updating within model
-    Label penThicknessLabel = new Label("Pen Thickness");
-    HBox penThicknessSetting = new HBox();
-    penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
-    penThicknessSetting.setSpacing(10);
-    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
-    Spinner<Integer> penThinknessSpinner = new Spinner<>(spinValFac);
-    penThinknessSpinner.setPrefWidth(60);
-    penThinknessSpinner
-        .valueProperty()
-        .addListener(
-            (obs, old, newValue) -> {
-              setPenThinkcess(newValue);
-            });
-
-    items.getChildren().addAll(penOnLabel, penColorLabel, penThicknessSetting);
-    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThinknessSpinner);
+    penThicknessLabel = new Label();
 
     items.setSpacing(IMAGE_WIDTH / 10);
+    items.getChildren().addAll(penOnLabel, penColorLabel, penThicknessLabel);
+    trackerPane.getChildren().add(items);
     Insets insets = new Insets(10);
     items.setPadding(insets);
-    trackerPane.getChildren().addAll(items);
   }
 
   public TurtleView() {
@@ -199,8 +185,8 @@ public class TurtleView extends Group {
   public void update(TurtleRecord info) {
     penDown = info.penDown();
     turtleImage.setVisible(info.visible());
-    updateTracker();
     penThickness = info.penThickness();
+    updateTracker();
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());
@@ -228,6 +214,7 @@ public class TurtleView extends Group {
   public void updateTracker() {
     penOnLabel.setText("Pen Down: " + penDown);
     penColorLabel.setText("Pen Color: " + penColor);
+    penThicknessLabel.setText("Pen Thickness: " + penThickness);
   }
 
   public void addAnimation(Animation an) {

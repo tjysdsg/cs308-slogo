@@ -14,7 +14,6 @@ import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.parser.Parser;
@@ -103,8 +102,13 @@ public class Environment implements TrackableEnvironment {
 
     @Override
     public ExecutionEnvironment clone() {
+      HashMap<String, ASTNumberLiteral>  varCopy = new HashMap<>();
+      for (var entry : variableTable.entrySet()) {
+        varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
+      }
+
       ExecutionEnvironment instance = new ExecutionEnvironment(
-          new HashMap<>(variableTable),
+          varCopy,
           new HashMap<>(commandTable));
       instance.isOuterScope = false;
       return instance;

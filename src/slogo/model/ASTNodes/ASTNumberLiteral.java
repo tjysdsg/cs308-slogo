@@ -11,6 +11,7 @@ public class ASTNumberLiteral extends ASTNode {
    */
   public ASTNumberLiteral(double value) {
     super();
+    setToken(String.valueOf(value));
     this.value = value;
   }
 

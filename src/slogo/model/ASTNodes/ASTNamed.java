@@ -7,6 +7,7 @@ public abstract class ASTNamed extends ASTNode {
 
   ASTNamed(String name) {
     super();
+    setToken(name);
     this.name = name;
   }
 

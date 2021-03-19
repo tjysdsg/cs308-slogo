@@ -50,6 +50,7 @@ public class TurtleSandbox extends GridPane {
   private HBox controls;
   private double dragX;
   private double dragY;
+  private FileChooser fileChooser;
   private ViewController viewController;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
@@ -59,6 +60,8 @@ public class TurtleSandbox extends GridPane {
     this.sandbox = new StackPane();
     this.viewController = viewController;
     this.controls = createControls();
+    this.fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
     getChildren().addAll(sandbox, controls);
@@ -126,7 +129,7 @@ public class TurtleSandbox extends GridPane {
   private HBox createControls() {
     HBox controls = new HBox();
     controls.setSpacing(10);
-    controls.setStyle("-fx-background-color: rgba(95, 84, 87, 0.74)");
+    controls.getStyleClass().add("sandbox-controls");
 
     Button addTurtle = createControlButton("Add Turtle");
     addTurtle.setOnAction(
@@ -158,8 +161,6 @@ public class TurtleSandbox extends GridPane {
         });
     Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     saveImage.setOnAction((e) -> saveImage());
     controls.getChildren().addAll(addTurtle, centerButton, saveImage, penThicknessSetting);
     return controls;

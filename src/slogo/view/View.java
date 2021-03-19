@@ -72,7 +72,7 @@ public class View {
     stage.setMinWidth(WIDTH);
 
     topPane.getChildren().addAll(settingsPane);
-    topPane.setStyle("-fx-background-color: white");
+    topPane.getStyleClass().add("component-pane");
     topPane.setAlignment(Pos.CENTER_LEFT);
     createWorkspaceSelector(topPane);
     borderPane.setTop(topPane);
@@ -118,11 +118,10 @@ public class View {
     Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);
 
     // Doesn't work within css for some reason :/
-    environmentPane.setStyle("-fx-background-color: white");
-    commandPane.setStyle("-fx-background-color: white");
-    settingsPane.setStyle("-fx-background-color: white");
-    helpPane.setStyle("-fx-background-color: white");
-    borderPane.setStyle("-fx-background-color: white");
+    commandPane.getStyleClass().add("component-pane");
+    environmentPane.getStyleClass().add("component-pane");
+    settingsPane.getStyleClass().add("component-pane");
+    helpPane.getStyleClass().add("component-pane");
 
     environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
     environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));

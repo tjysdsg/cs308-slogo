@@ -9,10 +9,18 @@
   -fx-background-color: rgba(95, 84, 87, 0.74);
 }
 
+.sandbox-controls Spinner {
+
+
+}
 .turtle-tracker {
   -fx-effect: dropshadow( three-pass-box , rgba(200,255,255,0.5) , 2,2,2,0 );
-  -fx-background-color: transparent;
+  -fx-background-color: white;
   -fx-opacity: 0.7;
+}
+
+.turtle-tracker Label {
+ -fx-font-size: 10pt;
 }
 
 .color-picker{
@@ -49,4 +57,8 @@
 .turtle {
   -fx-opacity: .5;
   -fx-effect: dropshadow( gaussian , rgba(200,255,255,0.5) , 5,5,5,0 )
+}
+
+.component-pane {
+  -fx-background-color: #ffffff;
 }

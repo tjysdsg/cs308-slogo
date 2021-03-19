@@ -70,7 +70,6 @@ public class TurtleView extends Group {
     trackerPane.setMinWidth(IMAGE_WIDTH);
     trackerPane.setMinHeight(IMAGE_HEIGHT);
 
-    trackerPane.setStyle("-fx-background-color: white");
     updateTracker();
     trackerPane.setOnMouseClicked(e -> trackerPane.setVisible(false));
     getChildren().addAll(labelBox, trackerPane);

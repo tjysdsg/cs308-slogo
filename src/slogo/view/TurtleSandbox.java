@@ -172,16 +172,16 @@ public class TurtleSandbox extends GridPane {
     penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
     penThicknessSetting.setSpacing(10);
     IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
-    Spinner<Integer> penThinknessSpinner = new Spinner<>(spinValFac);
-    penThinknessSpinner.setPrefWidth(60);
-    penThinknessSpinner
+    Spinner<Integer> penThicknessSpinner = new Spinner<>(spinValFac);
+    penThicknessSpinner.setPrefWidth(60);
+    penThicknessSpinner
         .valueProperty()
         .addListener(
             (obs, old, newValue) -> {
               turtles.get(mainTurtle).setPenThinkcess(newValue);
             });
 
-    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThinknessSpinner);
+    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThicknessSpinner);
     return penThicknessSetting;
   }
 

@@ -27,8 +27,8 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
    */
   public List<String> getParameterNames() {
     ArrayList<String> ret = new ArrayList<>();
-    for (int i = 0; i < vars.getNumChildren(); ++i) {
-      String name = ((ASTNamed) vars.getChildAt(i)).getName();
+    for (ASTNode child : vars.getChildren()) {
+      String name = ((ASTNamed) child).getName();
       ret.add(name);
     }
     return ret;
@@ -63,13 +63,14 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     ret.append(getIdentifier()).append(" [");
 
     // parameters
-    int nParams = vars.getNumChildren();
-    for (int i = 0; i < nParams; ++i) {
-      ASTVariable variable = (ASTVariable) vars.getChildAt(i);
+    int idx = 0;
+    for (ASTNode param : vars.getChildren()) {
+      ASTVariable variable = (ASTVariable) param;
       ret.append(variable.getName());
-      if (i < vars.getNumChildren() - 1) {
+      if (idx < vars.getNumChildren() - 1) {
         ret.append(", ");
       }
+      ++idx;
     }
 
     ret.append("]");

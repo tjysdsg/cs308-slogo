@@ -21,11 +21,10 @@ public class ASTTell extends ASTCommand {
   @Override
   protected double doEvaluate(InfoBundle info) {
     ASTCompoundStatement comp = (ASTCompoundStatement) getChildAt(0);
-    int n = comp.getNumChildren();
     double ret = info.getMainTurtle().getId();
     ArrayList<Integer> indices = new ArrayList<>();
-    for (int i = 0; i < n; ++i) {
-      int idx = (int) comp.getChildAt(i).evaluate(info);
+    for (ASTNode node : comp.getChildren()) {
+      int idx = (int) node.evaluate(info);
       ret = idx;
       indices.add(idx);
     }

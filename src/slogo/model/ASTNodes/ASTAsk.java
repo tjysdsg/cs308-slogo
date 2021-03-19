@@ -36,11 +36,10 @@ public class ASTAsk extends ASTCommand {
 
     ASTCompoundStatement comp = (ASTCompoundStatement) getChildAt(0);
     ASTCompoundStatement commands = (ASTCompoundStatement) getChildAt(1);
-    int n = comp.getNumChildren();
 
     // run all commands for each turtle index
-    for (int i = 0; i < n; ++i) {
-      int idx = (int) comp.getChildAt(i).evaluate(info);
+    for (ASTNode child : comp.getChildren()) {
+      int idx = (int) child.evaluate(info);
 
       // only contains 1 index, so that ASTTurtleCommand works as intended
       ArrayList<Integer> indices = new ArrayList<>();

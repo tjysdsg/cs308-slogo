@@ -15,16 +15,18 @@ public class ASTCompoundStatement extends ASTNode {
   @Override
   protected double doEvaluate(InfoBundle info) {
     double ret = 0;
-    for (int i = 0; i < getNumChildren(); ++i) {
-      ret = getChildAt(i).evaluate(info);
+    for (ASTNode node : getChildren()) {
+      ret = node.evaluate(info);
     }
     return ret;
   }
 
   @Override
   public boolean isDone() {
-    for (int i = 0; i < getNumChildren(); ++i) {
-      if (!getChildAt(i).isDone()) return false;
+    for (ASTNode node : getChildren()) {
+      if (!node.isDone()) {
+        return false;
+      }
     }
     return true;
   }

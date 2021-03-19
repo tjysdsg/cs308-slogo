@@ -1,12 +1,10 @@
 package slogo.model;
 
 import java.util.List;
-import java.util.Map;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
 /**
@@ -57,6 +55,7 @@ public interface InfoBundle {
 
   /**
    * Returns the mapping of command names to command node.
+   * @return
    */
 //  Map<String, ASTFunctionCall> getCommandTable();
 

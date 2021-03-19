@@ -27,7 +27,6 @@ public class ASTFunctionCall extends ASTCommand {
   public ASTFunctionCall(String identifier, List<String> parameterNames) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
-    //this.body = body;
   }
 
   public ASTFunctionCall(String identifier, List<String> parameterNames, ASTNode body) {

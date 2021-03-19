@@ -109,7 +109,6 @@ public class ProgramParser implements Parser {
 
     if(commandName.equals("MakeUserInstruction")) {
       String identifier = assertNextIsCommand(token);
-
       newCommand = new ASTMakeUserInstruction(identifier, bundle);
 
     } else {

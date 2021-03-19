@@ -221,7 +221,6 @@ public class ASTNodeTest {
   }
 
   @Test
-  @Disabled
   void testFunctions() {
     String definition = "TO translate [:dForward :dRight] [FORWARD :dForward RIGHT 90 FORWARD :dRight]";
     String call = "translate 10 20";

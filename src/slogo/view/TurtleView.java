@@ -35,7 +35,7 @@ public class TurtleView extends Group {
   public static final int PANE_HEIGHT = 200;
   private double currY;
   private double rotation;
-  private int penThickness;
+  private double penThickness;
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
@@ -187,7 +187,7 @@ public class TurtleView extends Group {
     return this.penDown;
   }
 
-  public int getPenThickness() {
+  public double getPenThickness() {
     return this.penThickness;
   }
 
@@ -200,6 +200,7 @@ public class TurtleView extends Group {
     penDown = info.penDown();
     turtleImage.setVisible(info.visible());
     updateTracker();
+    penThickness = info.penThickness();
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());

@@ -157,7 +157,7 @@ public class Environment implements TrackableEnvironment {
       for (Turtle t : turtles) {
         notifyTurtleUpdate(
             new TurtleRecord(
-                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown()
+                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown(), t.getPenThickness()
             )
         );
       }

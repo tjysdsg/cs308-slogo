@@ -5,6 +5,6 @@ package slogo.events;
  */
 public record TurtleRecord(
     int id, double xCoord, double yCoord, double rotation, boolean visible,
-    boolean penDown) {
+    boolean penDown, double penThickness) {
 
 }

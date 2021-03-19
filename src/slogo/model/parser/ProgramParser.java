@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
@@ -15,20 +14,19 @@ public class ProgramParser implements Parser {
 
   private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
   private final CommandClassifier cc;
+  private static final String handlerPrefix = "handle";
   private static final String NOTHING = "";
   private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
-  private InfoBundle bundle;
-  private ASTCommandFactory commandFactory;
+  private final InfoBundle bundle;
+  private final ASTCommandFactory commandFactory;
   private static final String LANGUAGES = "languages.";
 
   private Stack<Scope> scopeStack;
   private Scope currScope;
   private String currCommand;
   private List<String> lines;
-  private int cursor;
-  private boolean skipNext;
 
   public ProgramParser(String language, InfoBundle bundle) {
     cc = ClassifierFactory.buildCommandClassifier(language);
@@ -53,8 +51,6 @@ public class ProgramParser implements Parser {
     scopeStack = new Stack<>();
     scopeStack.push(new Scope());
 
-    skipNext = false;
-    cursor  = -1;
     String token;
 
     while (!lines.isEmpty()) {
@@ -72,7 +68,7 @@ public class ProgramParser implements Parser {
         }
 
         try {
-          Method handler = this.getClass().getDeclaredMethod("handle" + type, String.class);
+          Method handler = this.getClass().getDeclaredMethod(handlerPrefix + type, String.class);
           handler.setAccessible(true);
           handler.invoke(this, token);
 

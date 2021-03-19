@@ -30,6 +30,8 @@ import slogo.model.ASTNodes.ASTRepeat;
 import slogo.model.ASTNodes.ASTSum;
 import slogo.model.ASTNodes.ASTUnaryOperator;
 import slogo.model.ASTNodes.ASTVariable;
+import slogo.model.InfoBundle;
+import slogo.model.TestBundle;
 
 
 /**
@@ -40,12 +42,12 @@ public class ParserTest {
   private Parser parser;
   private static final double FLOATING_POINT_EPSILON = 1E-5;
   private CommandClassifier commandClassifier;
-  private Map<String, ASTFunctionCall> functionTable;
+  private InfoBundle infoBundle;
 
   @BeforeEach
   void setUp() {
-    functionTable = new HashMap<>();
-    parser = new ProgramParser("English", functionTable);
+    infoBundle = new TestBundle();
+    parser = new ProgramParser("English", infoBundle);
     commandClassifier = ClassifierFactory.buildCommandClassifier("English");
   }
 
@@ -210,7 +212,7 @@ public class ParserTest {
 
     parser.parseCommand(TEST_STRING);
 
-    ASTNode actual = functionTable.get("test");
+    ASTNode actual = infoBundle.getCommand("test");
     assertNodeStructure(expected, actual);
 
     TEST_STRING = "test 2 3";
@@ -318,6 +320,22 @@ public class ParserTest {
     assertThrows(InvalidSyntaxException.class, () -> {
       parser.parseCommand(TEST_STRING);
     });
+  }
+
+  @Test
+  void testGroupings() {
+    String TEST_STRING = "( sum 50 50 50 )";
+    ASTNode expected = new ASTForward();
+    for (int i = 0; i < 3; i++) {
+      expected.addChild(new ASTNumberLiteral(50));
+    }
+    assertNodeStructure(expected, parser.parseCommand(TEST_STRING));
+  }
+
+  @Test
+  void testExitingScope() {
+    String TEST_STRING = "sum 50 50 50 )";
+    assertThrows(InvalidSyntaxException.class , () -> parser.parseCommand(TEST_STRING));
   }
 
 

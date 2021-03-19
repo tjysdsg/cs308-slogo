@@ -23,7 +23,8 @@ public class ASTIfElse extends ASTCommand {
   protected double doEvaluate(InfoBundle info) {
     if (getChildAt(0).evaluate(info) != 0) {
       return getChildAt(1).evaluate(info);
+    } else {
+      return getChildAt(2).evaluate(info);
     }
-    return getChildAt(2).evaluate(info);
   }
 }

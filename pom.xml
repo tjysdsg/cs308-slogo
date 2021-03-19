@@ -18,6 +18,11 @@
         <version>5.7.1</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>com.jfoenix</groupId>
+        <artifactId>jfoenix</artifactId>
+        <version>9.0.10</version>
+    </dependency>
     <!-- provides testing for JavaFX by simulating user interactions and checking using JUnit assertions -->
     <dependency>
         <groupId>org.testfx</groupId>

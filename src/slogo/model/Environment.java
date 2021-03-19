@@ -102,8 +102,13 @@ public class Environment implements TrackableEnvironment {
 
     @Override
     public ExecutionEnvironment clone() {
+      HashMap<String, ASTNumberLiteral>  varCopy = new HashMap<>();
+      for (var entry : variableTable.entrySet()) {
+        varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
+      }
+
       ExecutionEnvironment instance = new ExecutionEnvironment(
-          new HashMap<>(variableTable),
+          varCopy,
           new HashMap<>(commandTable));
       instance.isOuterScope = false;
       return instance;

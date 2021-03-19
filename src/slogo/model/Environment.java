@@ -102,7 +102,7 @@ public class Environment implements TrackableEnvironment {
 
     @Override
     public ExecutionEnvironment clone() {
-      HashMap<String, ASTNumberLiteral>  varCopy = new HashMap<>();
+      HashMap<String, ASTNumberLiteral> varCopy = new HashMap<>();
       for (var entry : variableTable.entrySet()) {
         varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
       }
@@ -127,6 +127,8 @@ public class Environment implements TrackableEnvironment {
 
       currTurtles.clear();
       currTurtles.addAll(newTurtles);
+
+      notifyAllTurtleUpdates();
     }
 
     @Override
@@ -146,6 +148,19 @@ public class Environment implements TrackableEnvironment {
     @Override
     public Turtle getMainTurtle() {
       return turtles.get(mainTurtleIdx);
+    }
+
+    /**
+     * Notify all turtle information
+     */
+    private void notifyAllTurtleUpdates() {
+      for (Turtle t : turtles) {
+        notifyTurtleUpdate(
+            new TurtleRecord(
+                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown()
+            )
+        );
+      }
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTCompoundStatement extends ASTNode {
-  // TODO: numParams()?
 
   public ASTCompoundStatement(List<ASTNode> children) {
     for (ASTNode child : children) {

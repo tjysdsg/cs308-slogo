@@ -46,7 +46,6 @@ public class ASTFunctionCall extends ASTCommand {
       info.setVariable(parameterNames.get(i), value);
     }
 
-    // TODO: Create Clone
     return body.evaluate(info);
   }
 
@@ -54,7 +53,6 @@ public class ASTFunctionCall extends ASTCommand {
     return new ASTFunctionCall(getName(), parameterNames, body);
   }
 
-  // TODO: func.toString() doesn't return signature
   @Override
   public String toString() {
     StringBuilder ret = new StringBuilder();

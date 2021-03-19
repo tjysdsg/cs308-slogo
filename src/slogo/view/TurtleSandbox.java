@@ -151,7 +151,21 @@ public class TurtleSandbox extends GridPane {
     scaleCenter.setNode(sandbox);
     scaleCenter.setDuration(Duration.seconds(1));
     ParallelTransition center = new ParallelTransition(centerSandbox, scaleCenter);
+    HBox penThicknessSetting = createPenSettings();
+    centerButton.setOnAction(
+        (e) -> {
+          center.play();
+        });
+    Button saveImage = createControlButton("Save Image");
+    saveImage.getStyleClass().add("control-button");
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
+    saveImage.setOnAction((e) -> saveImage());
+    controls.getChildren().addAll(addTurtle, centerButton, saveImage, penThicknessSetting);
+    return controls;
+  }
 
+  private HBox createPenSettings() {
     Label penThicknessLabel = new Label("Pen Thickness");
     HBox penThicknessSetting = new HBox();
     penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
@@ -167,29 +181,19 @@ public class TurtleSandbox extends GridPane {
             });
 
     penThicknessSetting.getChildren().addAll(penThicknessLabel, penThinknessSpinner);
+    return penThicknessSetting;
+  }
 
-    centerButton.setOnAction(
-        (e) -> {
-          center.play();
-        });
-    Button saveImage = createControlButton("Save Image");
-    saveImage.getStyleClass().add("control-button");
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
-    saveImage.setOnAction(
-        (e) -> {
-          WritableImage wi = new WritableImage((int) sandbox.getWidth(), (int) sandbox.getHeight());
-          snapshot(null, wi);
-          File file = fileChooser.showSaveDialog(getScene().getWindow());
-          if (file == null) return;
-          try {
-            ImageIO.write(SwingFXUtils.fromFXImage(wi, null), "png", file);
-          } catch (IOException uhoh) {
-            uhoh.printStackTrace();
-          }
-        });
-    controls.getChildren().addAll(addTurtle, centerButton, saveImage, penThicknessSetting);
-    return controls;
+  private void saveImage() {
+    WritableImage wi = new WritableImage((int) sandbox.getWidth(), (int) sandbox.getHeight());
+    snapshot(null, wi);
+    File file = fileChooser.showSaveDialog(getScene().getWindow());
+    if (file == null) return;
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(wi, null), "png", file);
+    } catch (IOException uhoh) {
+      uhoh.printStackTrace();
+    }
   }
 
   private Button createControlButton(String name) {

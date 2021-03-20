@@ -148,6 +148,11 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
+    public List<Turtle> getAllTurtles() {
+      return turtles;
+    }
+
+    @Override
     public Turtle getMainTurtle() {
       return turtles.get(mainTurtleIdx);
     }

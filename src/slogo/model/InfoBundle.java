@@ -17,6 +17,8 @@ public interface InfoBundle {
    */
   List<Turtle> getActiveTurtles();
 
+  List<Turtle> getAllTurtles();
+
   Turtle getMainTurtle();
 
   void setCurrTurtle(List<Integer> currTurtles);

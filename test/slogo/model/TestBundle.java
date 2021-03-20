@@ -46,6 +46,13 @@ public class TestBundle implements InfoBundle {
   }
 
   @Override
+  public List<Turtle> getAllTurtles() {
+    ArrayList<Turtle> ret = new ArrayList<>();
+    ret.add(turtle);
+    return ret;
+  }
+
+  @Override
   public Turtle getMainTurtle() {
     return turtle;
   }

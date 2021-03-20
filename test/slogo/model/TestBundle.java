@@ -34,7 +34,7 @@ public class TestBundle implements InfoBundle {
   public void reset() {
     variableTable = new HashMap<>();
     commandTable = new HashMap<>();
-    turtleRecord = new TurtleRecord(0, 0, 0, 0, true, true);
+    turtleRecord = new TurtleRecord(0, 0, 0, 0, true, true, 5);
     turtle = new Turtle(0, this);
   }
 

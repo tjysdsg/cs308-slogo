@@ -134,6 +134,11 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
+    public int getTotalNumTurtles() {
+      return turtles.size();
+    }
+
+    @Override
     public List<Turtle> getActiveTurtles() {
       ArrayList<Turtle> ret = new ArrayList<>();
       for (int idx : currTurtles) {

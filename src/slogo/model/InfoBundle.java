@@ -23,6 +23,8 @@ public interface InfoBundle {
 
   void setMainTurtle(int idx);
 
+  int getTotalNumTurtles();
+
   /**
    * Notifies the listener of an update to the turtle.
    *
@@ -55,6 +57,7 @@ public interface InfoBundle {
 
   /**
    * Returns the mapping of command names to command node.
+   *
    * @return
    */
 //  Map<String, ASTFunctionCall> getCommandTable();

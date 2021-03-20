@@ -65,6 +65,11 @@ public class TestBundle implements InfoBundle {
   }
 
   @Override
+  public int getTotalNumTurtles() {
+    return 1;
+  }
+
+  @Override
   public void notifyTurtleUpdate(TurtleRecord info) {
     this.turtleRecord = info;
   }

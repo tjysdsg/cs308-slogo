@@ -69,4 +69,16 @@ public interface InfoBundle {
   boolean setCommand(String name, ASTFunctionCall command);
 
   InfoBundle clone();
+
+  int getPenColorIdx();
+
+  void setPenColorIdx(int penColorIdx);
+
+  int getBackgroundColorIdx();
+
+  void setBackgroundColorIdx(int backgroundColorIdx);
+
+  int getShapeIdx();
+
+  void setShapeIdx(int shapeIdx);
 }

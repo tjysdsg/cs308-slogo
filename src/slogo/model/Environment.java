@@ -27,6 +27,9 @@ public class Environment implements TrackableEnvironment {
   private Consumer<CommandsRecord> updateCommandsCallback;
   private Runnable clearEnvironmentCallback;
   private Parser myParser;
+  private int penColorIdx = 0;
+  private int backgroundColorIdx = 0;
+  private int shapeIdx = 0;
 
   private static final String DEFAULT_LANG = "English";
 
@@ -242,6 +245,33 @@ public class Environment implements TrackableEnvironment {
       if (isOuterScope && updateVariablesCallback != null) {
         updateVariablesCallback.accept(info);
       }
+    }
+
+    public int getPenColorIdx() {
+      return penColorIdx;
+    }
+
+    public void setPenColorIdx(int _penColorIdx) {
+      penColorIdx = _penColorIdx;
+      // TODO: notify view about changes
+    }
+
+    public int getBackgroundColorIdx() {
+      return backgroundColorIdx;
+    }
+
+    public void setBackgroundColorIdx(int _backgroundColorIdx) {
+      backgroundColorIdx = _backgroundColorIdx;
+      // TODO: notify view about changes
+    }
+
+    public int getShapeIdx() {
+      return shapeIdx;
+    }
+
+    public void setShapeIdx(int _shapeIdx) {
+      shapeIdx = _shapeIdx;
+      // TODO: notify view about changes
     }
   }
 }

@@ -152,12 +152,13 @@ public class EnvironmentPane extends GridPane {
 
   public String getPreviousCommand() {
     keycodeUpCount++;
-    while (keycodeUpCount <=previousCommands.getItems().size()) {
+    while (keycodeUpCount <= previousCommands.getItems().size()) {
       int index = previousCommands.getItems().size() - keycodeUpCount;
       return lastRanCommand != null ? previousCommands.getItems().get(index).getText() : "";
-    };
-    keycodeUpCount =0;
-    return previousCommands.getItems().get(0).getText();
+    }
+    ;
+    keycodeUpCount = 0;
+    return "";
 
   }
 

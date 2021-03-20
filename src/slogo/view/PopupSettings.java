@@ -35,8 +35,8 @@ public class PopupSettings extends Pane {
   private static final String FONT_SIZE_ICON = "resources/images/fontsizeicon.png";
   private static final String TURTLE_ICON = "resources/images/logo.png";
   private static final String THEME_ICON = "resources/images/themeicon.png";
-  private static final String PREFERENCES_ICON= "resources/images/preficon.png";
-  private static final String BACK_ICON= "resources/images/backicon.png";
+  private static final String PREFERENCES_ICON = "resources/images/preficon.png";
+  private static final String BACK_ICON = "resources/images/backicon.png";
   private VBox vboxContainer;
   private HBox titlePane;
   private HBox settingsBox;
@@ -53,7 +53,6 @@ public class PopupSettings extends Pane {
   private Label turtleLabel = new Label();
 
 
-
   public PopupSettings() {
     createPopup();
     getChildren().add(gearImage);
@@ -62,11 +61,17 @@ public class PopupSettings extends Pane {
   //TODO: I THINK THIS IS WHERE JOSH PLACES THE
   //GLOBAL PREFERENCES THING
   private void createPreferencesAction() {
-    fontPicker.setOnAction(e->{;});
-    turtlePicker.setOnAction(e->{;});
-    themePicker.setOnAction(e->{;});
-    fontSizePicker.setOnKeyPressed(e->{
-      if (e.getCode() == KeyCode.ENTER){
+    fontPicker.setOnAction(e -> {
+      ;
+    });
+    turtlePicker.setOnAction(e -> {
+      ;
+    });
+    themePicker.setOnAction(e -> {
+      ;
+    });
+    fontSizePicker.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
         fontSizePicker.getText();
       }
     });
@@ -76,13 +81,13 @@ public class PopupSettings extends Pane {
   private void setIconSize() {
     gearImage.setFitWidth(ICON_SIZE);
     gearImage.setFitHeight(ICON_SIZE);
-   fontImage.setFitWidth(2*ICON_SIZE);
+    fontImage.setFitWidth(2 * ICON_SIZE);
     fontImage.setFitHeight(ICON_SIZE);
-    fontSizeImage.setFitWidth(2*ICON_SIZE);
+    fontSizeImage.setFitWidth(2 * ICON_SIZE);
     fontSizeImage.setFitHeight(ICON_SIZE);
-    turtleImage.setFitWidth(2*ICON_SIZE);
+    turtleImage.setFitWidth(2 * ICON_SIZE);
     turtleImage.setFitHeight(ICON_SIZE);
-    themeImage.setFitWidth(2*ICON_SIZE);
+    themeImage.setFitWidth(2 * ICON_SIZE);
     themeImage.setFitHeight(ICON_SIZE);
     prefImage.setFitHeight(ICON_SIZE);
     prefImage.setFitWidth(ICON_SIZE);
@@ -102,6 +107,7 @@ public class PopupSettings extends Pane {
         }
     );
   }
+
   private void createPopup() {
     createDisplayIcons();
     createSettingsBox();
@@ -125,14 +131,14 @@ public class PopupSettings extends Pane {
   }
 
   private void createVboxContainer() {
-    vboxContainer = new VBox(titlePane,settingsBox);
+    vboxContainer = new VBox(titlePane, settingsBox);
     vboxContainer.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
   }
 
   private void createDisplayIcons() {
     fontImage = new ImageView(new Image(getClass().getResourceAsStream(FONT_ICON)));
-    fontSizeImage= new ImageView(new Image(getClass().getResourceAsStream(FONT_SIZE_ICON)));
-    turtleImage=new ImageView(new Image(getClass().getResourceAsStream(TURTLE_ICON)));
+    fontSizeImage = new ImageView(new Image(getClass().getResourceAsStream(FONT_SIZE_ICON)));
+    turtleImage = new ImageView(new Image(getClass().getResourceAsStream(TURTLE_ICON)));
     themeImage = new ImageView(new Image(getClass().getResourceAsStream(THEME_ICON)));
     settingsBox = new HBox(fontImage, fontSizeImage, turtleImage, themeImage);
     settingsBox.setMinWidth(WINDOW_SIZE);
@@ -145,7 +151,7 @@ public class PopupSettings extends Pane {
     prefImage = new ImageView(new Image(getClass().getResourceAsStream(PREFERENCES_ICON)));
     backButton = new ImageView(new Image(getClass().getResourceAsStream(BACK_ICON)));
     backButton.setDisable(true);
-    titlePane= new HBox(prefImage, title, backButton);
+    titlePane = new HBox(prefImage, title, backButton);
   }
 
   private void createIconAction() {
@@ -153,14 +159,14 @@ public class PopupSettings extends Pane {
     setAction(fontSizeImage, fontSizePicker);
     setAction(turtleImage, turtlePicker);
     setAction(themeImage, themePicker);
-    backButton.setOnMouseClicked(e->{
+    backButton.setOnMouseClicked(e -> {
       settingsBox.getChildren().clear();
-      settingsBox.getChildren().addAll(fontImage,fontSizeImage, turtleImage, themeImage);
+      settingsBox.getChildren().addAll(fontImage, fontSizeImage, turtleImage, themeImage);
     });
   }
 
   private void setAction(ImageView fontImage, Node fontPicker) {
-    fontImage.setOnMouseClicked(e->{
+    fontImage.setOnMouseClicked(e -> {
       settingsBox.getChildren().clear();
       settingsBox.getChildren().add(fontPicker);
       backButton.setDisable(false);
@@ -171,7 +177,7 @@ public class PopupSettings extends Pane {
     fontPicker = new ChoiceBox<>();
     fontSizePicker = new TextField();
     themePicker = new ChoiceBox<>();
-    turtlePicker= new ChoiceBox<>();
+    turtlePicker = new ChoiceBox<>();
   }
 
 

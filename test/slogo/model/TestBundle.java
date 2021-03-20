@@ -152,4 +152,38 @@ public class TestBundle implements InfoBundle {
   public boolean getEnvironmentCleared() {
     return environmentCleared;
   }
+
+
+  @Override
+  public int getPenColorIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setPenColorIdx(int penColorIdx) {
+    // TODO: implement this
+  }
+
+  @Override
+  public int getBackgroundColorIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setBackgroundColorIdx(int backgroundColorIdx) {
+    // TODO: implement this
+  }
+
+  @Override
+  public int getShapeIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setShapeIdx(int shapeIdx) {
+    // TODO: implement this
+  }
 }

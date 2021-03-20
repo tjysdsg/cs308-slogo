@@ -1,17 +1,14 @@
 package slogo.view;
 
-import java.awt.Rectangle;
 import java.util.ResourceBundle;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -31,8 +28,7 @@ public class PopupSettings extends Pane {
   private ImageView turtleImage;
   private ImageView themeImage;
   private static final int ICON_SIZE = 50;
-  private static final int WINDOW_SIZE_WIDTH = 500;
-  private static final int WINDOW_SIZE_HEIGHT = 600;
+  private static final int WINDOW_SIZE = 500;
 
   private static final String GEAR_ICON = "resources/images/gearicon.png";
   private static final String FONT_ICON = "resources/images/fonticon.png";
@@ -41,8 +37,7 @@ public class PopupSettings extends Pane {
   private static final String THEME_ICON = "resources/images/themeicon.png";
   private static final String PREFERENCES_ICON= "resources/images/preficon.png";
   private static final String BACK_ICON= "resources/images/backicon.png";
-  private static final String BAKCGROUND_COLOR = "#4C5151";
-  private VBox container;
+  private VBox vboxContainer;
   private HBox titlePane;
   private HBox settingsBox;
   private ChoiceBox<String> fontPicker;
@@ -51,6 +46,12 @@ public class PopupSettings extends Pane {
   private TextField fontSizePicker;
   private ResourceBundle resources;
   private ImageView backButton;
+  private ImageView prefImage;
+  private Label fontLabel = new Label();
+  private Label fontSizeLabel = new Label();
+  private Label themeLabel = new Label();
+  private Label turtleLabel = new Label();
+
 
 
   public PopupSettings() {
@@ -58,10 +59,24 @@ public class PopupSettings extends Pane {
     getChildren().add(gearImage);
   }
 
+  //TODO: I THINK THIS IS WHERE JOSH PLACES THE
+  //GLOBAL PREFERENCES THING
+  private void createPreferencesAction() {
+    fontPicker.setOnAction(e->{;});
+    turtlePicker.setOnAction(e->{;});
+    themePicker.setOnAction(e->{;});
+    fontSizePicker.setOnKeyPressed(e->{
+      if (e.getCode() == KeyCode.ENTER){
+        fontSizePicker.getText();
+      }
+    });
+
+  }
+
   private void setIconSize() {
     gearImage.setFitWidth(ICON_SIZE);
     gearImage.setFitHeight(ICON_SIZE);
-    fontImage.setFitWidth(2*ICON_SIZE);
+   fontImage.setFitWidth(2*ICON_SIZE);
     fontImage.setFitHeight(ICON_SIZE);
     fontSizeImage.setFitWidth(2*ICON_SIZE);
     fontSizeImage.setFitHeight(ICON_SIZE);
@@ -69,20 +84,20 @@ public class PopupSettings extends Pane {
     turtleImage.setFitHeight(ICON_SIZE);
     themeImage.setFitWidth(2*ICON_SIZE);
     themeImage.setFitHeight(ICON_SIZE);
-
+    prefImage.setFitHeight(ICON_SIZE);
+    prefImage.setFitWidth(ICON_SIZE);
+    backButton.setFitHeight(50);
+    backButton.setFitWidth(ICON_SIZE);
   }
 
   private void createImageIcon() {
     gearImage = new ImageView(new Image(getClass().getResourceAsStream(GEAR_ICON)));
-    gearImage.setFitWidth(ICON_SIZE);
-    gearImage.setFitHeight(ICON_SIZE);
     gearImage.setOnMouseClicked(e -> {
           if (!popup.isShowing()) {
             Node source = (Node) e.getSource();
             final Stage stage = (Stage) source.getScene().getWindow();
             popup.show(stage);
             popup.centerOnScreen();
-
           }
         }
     );
@@ -91,16 +106,27 @@ public class PopupSettings extends Pane {
     createDisplayIcons();
     createSettingsBox();
     createImageIcon();
-    setIconSize();
     createTitlePane();
     createIconAction();
-    container= new VBox(titlePane,settingsBox);
-    container.setMinSize(WINDOW_SIZE_WIDTH, WINDOW_SIZE_WIDTH);
-    container.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+    createVboxContainer();
+    createPreferencesAction();
+    setIconSize();
+    setChildrenIds();
     popup = new Popup();
-    popup.getContent().addAll(container);
+    popup.getContent().addAll(vboxContainer);
     popup.setAutoHide(true);
+  }
 
+  private void setChildrenIds() {
+    vboxContainer.setId("verticalContainer");
+    titlePane.setId("titlePane");
+    setId("popupSettings");
+    backButton.setId("backButton");
+  }
+
+  private void createVboxContainer() {
+    vboxContainer = new VBox(titlePane,settingsBox);
+    vboxContainer.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
   }
 
   private void createDisplayIcons() {
@@ -109,70 +135,49 @@ public class PopupSettings extends Pane {
     turtleImage=new ImageView(new Image(getClass().getResourceAsStream(TURTLE_ICON)));
     themeImage = new ImageView(new Image(getClass().getResourceAsStream(THEME_ICON)));
     settingsBox = new HBox(fontImage, fontSizeImage, turtleImage, themeImage);
-    settingsBox.setMinWidth(WINDOW_SIZE_WIDTH);
-    settingsBox.setSpacing(50);
+    settingsBox.setMinWidth(WINDOW_SIZE);
+    settingsBox.setSpacing(ICON_SIZE);
   }
 
   private void createTitlePane() {
     Label title = new Label("System Preferences");
     title.setId("settingsTitle");
-    ImageView prefImage = new ImageView(new Image(getClass().getResourceAsStream(PREFERENCES_ICON)));
+    prefImage = new ImageView(new Image(getClass().getResourceAsStream(PREFERENCES_ICON)));
     backButton = new ImageView(new Image(getClass().getResourceAsStream(BACK_ICON)));
-    prefImage.setFitHeight(50);
-    prefImage.setFitWidth(50);
-    backButton.setFitHeight(50);
-    backButton.setFitWidth(50);
     backButton.setDisable(true);
     titlePane= new HBox(prefImage, title, backButton);
-    titlePane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-
   }
 
   private void createIconAction() {
-    setaction(fontImage, fontPicker);
-    setaction(fontSizeImage, fontSizePicker);
-    setaction(turtleImage, turtlePicker);
-    setaction(themeImage, themePicker);
-
+    setAction(fontImage, fontPicker);
+    setAction(fontSizeImage, fontSizePicker);
+    setAction(turtleImage, turtlePicker);
+    setAction(themeImage, themePicker);
     backButton.setOnMouseClicked(e->{
       settingsBox.getChildren().clear();
       settingsBox.getChildren().addAll(fontImage,fontSizeImage, turtleImage, themeImage);
-
     });
-
   }
 
-  private void setaction(ImageView fontImage, Node fontPicker) {
+  private void setAction(ImageView fontImage, Node fontPicker) {
     fontImage.setOnMouseClicked(e->{
       settingsBox.getChildren().clear();
       settingsBox.getChildren().add(fontPicker);
       backButton.setDisable(false);
-
     });
-
-
   }
-
 
   private void createSettingsBox() {
     fontPicker = new ChoiceBox<>();
-    fontPicker.setPrefSize(2 * ICON_SIZE, 2*ICON_SIZE);
     fontSizePicker = new TextField();
-    fontSizePicker.setPrefSize(2 * ICON_SIZE, 2*ICON_SIZE);
     themePicker = new ChoiceBox<>();
-    themePicker.setPrefSize(2 * ICON_SIZE, 2*ICON_SIZE);
     turtlePicker= new ChoiceBox<>();
-    turtlePicker.setPrefSize(2 * ICON_SIZE, 2*ICON_SIZE);
-
-
-
   }
 
 
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     createDisplayText();
-
   }
 
   private void createDisplayText() {
@@ -184,9 +189,9 @@ public class PopupSettings extends Pane {
     themePicker.getItems().clear();
     themePicker.getItems().addAll(resources.getString("themeOptions").split(","));
     turtlePicker.getItems().clear();
+    turtlePicker.setValue(resources.getString("turtleText"));
     turtlePicker.getItems().addAll(resources.getString("turtleList").split(","));
 
   }
-
 
 }

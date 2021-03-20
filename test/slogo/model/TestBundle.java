@@ -46,6 +46,13 @@ public class TestBundle implements InfoBundle {
   }
 
   @Override
+  public List<Turtle> getAllTurtles() {
+    ArrayList<Turtle> ret = new ArrayList<>();
+    ret.add(turtle);
+    return ret;
+  }
+
+  @Override
   public Turtle getMainTurtle() {
     return turtle;
   }
@@ -62,6 +69,11 @@ public class TestBundle implements InfoBundle {
   @Override
   public void setMainTurtle(int idx) {
     // TODO: implement this when testing TELL and ASK
+  }
+
+  @Override
+  public int getTotalNumTurtles() {
+    return 1;
   }
 
   @Override
@@ -139,5 +151,39 @@ public class TestBundle implements InfoBundle {
 
   public boolean getEnvironmentCleared() {
     return environmentCleared;
+  }
+
+
+  @Override
+  public int getPenColorIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setPenColorIdx(int penColorIdx) {
+    // TODO: implement this
+  }
+
+  @Override
+  public int getBackgroundColorIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setBackgroundColorIdx(int backgroundColorIdx) {
+    // TODO: implement this
+  }
+
+  @Override
+  public int getShapeIdx() {
+    // TODO: implement this
+    return 0;
+  }
+
+  @Override
+  public void setShapeIdx(int shapeIdx) {
+    // TODO: implement this
   }
 }

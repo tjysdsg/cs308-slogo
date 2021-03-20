@@ -17,11 +17,15 @@ public interface InfoBundle {
    */
   List<Turtle> getActiveTurtles();
 
+  List<Turtle> getAllTurtles();
+
   Turtle getMainTurtle();
 
   void setCurrTurtle(List<Integer> currTurtles);
 
   void setMainTurtle(int idx);
+
+  int getTotalNumTurtles();
 
   /**
    * Notifies the listener of an update to the turtle.
@@ -55,6 +59,7 @@ public interface InfoBundle {
 
   /**
    * Returns the mapping of command names to command node.
+   *
    * @return
    */
 //  Map<String, ASTFunctionCall> getCommandTable();
@@ -64,4 +69,16 @@ public interface InfoBundle {
   boolean setCommand(String name, ASTFunctionCall command);
 
   InfoBundle clone();
+
+  int getPenColorIdx();
+
+  void setPenColorIdx(int penColorIdx);
+
+  int getBackgroundColorIdx();
+
+  void setBackgroundColorIdx(int backgroundColorIdx);
+
+  int getShapeIdx();
+
+  void setShapeIdx(int shapeIdx);
 }

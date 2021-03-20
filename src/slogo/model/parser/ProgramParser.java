@@ -18,7 +18,7 @@ public class ProgramParser implements Parser {
   private static final String NOTHING = "";
   private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
+  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\n";
   private final InfoBundle bundle;
   private final ASTCommandFactory commandFactory;
   private static final String LANGUAGES = "languages.";
@@ -36,11 +36,11 @@ public class ProgramParser implements Parser {
 
   public ASTNode parseCommand(String command)
       throws
-        UnknownIdentifierException,
-        InvalidSyntaxException,
-        IncorrectParameterCountException,
-        InvalidCommandIdentifierException,
-        UnmatchedSquareBracketException {
+      UnknownIdentifierException,
+      InvalidSyntaxException,
+      IncorrectParameterCountException,
+      InvalidCommandIdentifierException,
+      UnmatchedSquareBracketException {
 
     // remove comments
     currCommand = command.replaceAll(COMMENT_MATCHER, NOTHING);
@@ -85,8 +85,9 @@ public class ProgramParser implements Parser {
     }
 
     ASTNode out = scopeStack.pop().getCommands();
-    if (out.getNumChildren() == 1)
+    if (out.getNumChildren() == 1) {
       return out.getChildAt(0);
+    }
 
     return out;
   }
@@ -107,7 +108,7 @@ public class ProgramParser implements Parser {
 
     ASTNode newCommand;
 
-    if(commandName.equals("MakeUserInstruction")) {
+    if (commandName.equals("MakeUserInstruction")) {
       String identifier = assertNextIsCommand(token);
       newCommand = new ASTMakeUserInstruction(identifier, bundle);
 
@@ -150,13 +151,15 @@ public class ProgramParser implements Parser {
   }
 
   private void assertCanTakeChild(String token) {
-    if (scopeStack.size() == 1 && !currScope.addNextAsChild())
+    if (scopeStack.size() == 1 && !currScope.addNextAsChild()) {
       throw new InvalidSyntaxException(token, currCommand);
+    }
   }
 
   private String assertNextIsCommand(String token) {
-    if (lines.isEmpty())
+    if (lines.isEmpty()) {
       throw new InvalidSyntaxException(token, currCommand);
+    }
 
     String identifier = lines.remove(0);
     if (!tc.getSymbol(identifier).equals("Command")) {

@@ -1,5 +1,6 @@
 package slogo.view;
 
+import slogo.model.notifiers.ModelTracker;
 import com.jfoenix.controls.JFXListView;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -32,11 +33,13 @@ public class EnvironmentPane extends GridPane {
   private TitledPane commandsToggle;
   private TitledPane variablesToggle;
   private TitledPane prevCommands;
+  private ModelTracker environment;
   private ViewController viewController;
   private TextInputDialog changeVarDialog;
   private int keycodeUpCount = 0;
 
-  public EnvironmentPane(ViewController viewController) {
+  public EnvironmentPane(ViewController viewController, ModelTracker environment) {
+    this.environment = environment;
     this.viewController = viewController;
     this.resources = viewController.getResources();
     variablesTable = new TableView<>();
@@ -130,8 +133,9 @@ public class EnvironmentPane extends GridPane {
             String variableName = variable.name();
             Optional<String> res = changeVarDialog.showAndWait();
             if (res.isPresent()) {
-              double value = Double.parseDouble(res.get());
-              viewController.changeVariable(variableName, value);
+              String value = res.get();
+              DisplayVariable dv = new DisplayVariable(variableName, value);
+              environment.requestVarUpdate(dv);
             }
           }
         });

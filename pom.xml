@@ -36,6 +36,16 @@
         <artifactId>javafx-controls</artifactId>
         <version>15</version>
     </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>15</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-swing</artifactId>
+        <version>15</version>
+    </dependency>
     <!-- allows javafx testing without seeing tests run -->
     <dependency>
         <groupId>org.testfx</groupId>
@@ -79,7 +89,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M3</version>
             <configuration>
-                <argLine>@{argLine}</argLine>
+                <argLine>@{argLine} --enable-preview</argLine>
             </configuration>
         </plugin>
         <!-- check for violations of code style -->
@@ -113,7 +123,7 @@
         <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
+            <version>0.8.6</version>
             <executions>
                 <execution>
                     <id>default-prepare-agent</id>

@@ -24,7 +24,6 @@ public class Environment implements TrackableEnvironment {
   private Parser myParser =
       new ProgramParser(DEFAULT_LANG, executionEnvironment);
 
-
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
@@ -77,8 +76,6 @@ public class Environment implements TrackableEnvironment {
 
   }
 
-
-
   public void setLanguage(String language) {
     myParser.changeLanguage(language);
   }
@@ -96,5 +93,4 @@ public class Environment implements TrackableEnvironment {
   public void setCurrTurtle(List<Integer> currTurtles) {
     executionEnvironment.setCurrTurtle(currTurtles);
   }
-
 }

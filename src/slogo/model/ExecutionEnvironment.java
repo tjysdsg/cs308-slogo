@@ -14,7 +14,7 @@ import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
-class ExecutionEnvironment implements InfoBundle {
+public class ExecutionEnvironment implements InfoBundle {
 
   private Map<String, ASTNumberLiteral> variableTable = new HashMap<>();
   private Map<String, ASTFunctionCall> commandTable = new HashMap<>();
@@ -38,22 +38,30 @@ class ExecutionEnvironment implements InfoBundle {
     this.currTurtles = currTurtles;
   }
 
-  public ExecutionEnvironment(Map<String, ASTNumberLiteral> variableTable,
+  public ExecutionEnvironment(List<Turtle> turtles, List<Integer> currTurtles, Map<String, ASTNumberLiteral> variableTable,
       Map<String, ASTFunctionCall> commandTable) {
+    this(turtles, currTurtles);
     this.variableTable = variableTable;
     this.commandTable = commandTable;
   }
 
   @Override
   public ExecutionEnvironment clone() {
+
     HashMap<String, ASTNumberLiteral> varCopy = new HashMap<>();
     for (var entry : variableTable.entrySet()) {
       varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
     }
 
     ExecutionEnvironment instance = new ExecutionEnvironment(
-        varCopy,
-        new HashMap<>(commandTable));
+        turtles, currTurtles,
+        varCopy, new HashMap<>(commandTable));
+
+    instance.setOnCommandUpdate(updateCommandsCallback);
+    instance.setOnTurtleUpdate(updateTurtleCallback);
+    instance.setOnEnvironmentUpdate(updateEnvironmentCallback);
+    instance.setOnClear(clearEnvironmentCallback);
+
     instance.isOuterScope = false;
     return instance;
   }
@@ -223,7 +231,6 @@ class ExecutionEnvironment implements InfoBundle {
   public void setShapeIdx(int _shapeIdx) {
     shapeIdx = _shapeIdx;
     notifyEnvironmentUpdate();
-
   }
 
   public void setPalette(int idx, double r, double g, double b) {

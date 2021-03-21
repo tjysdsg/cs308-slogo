@@ -1,6 +1,8 @@
 package slogo.model;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,21 +50,51 @@ public class Environment implements TrackableEnvironment, Serializable {
   }
 
   @Override
-  public void saveEnv(File saveLocation) {
+  public void save(File saveLocation) {
     try {
+      saveLocation.createNewFile();
       FileOutputStream fileOut = new FileOutputStream(saveLocation);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(this);
       out.close();
       fileOut.close();
+    } catch (FileNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not found\n", saveLocation.getName());
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public void loadEnv(File loadLocation) {
+  public void load(File loadLocation) {
+    try {
+      FileInputStream fileIn = new FileInputStream(loadLocation);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+      Environment newEnv = (Environment) in.readObject();
+      in.close();
+      fileIn.close();
+      mergeWith(newEnv);
+    } catch (FileNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not found\n", loadLocation.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not read correctly.\n", loadLocation.getName());
+    }
+  }
 
+  private void mergeWith(Environment newEnv) {
+    for (var entry : newEnv.executionScope.getCommands()) {
+      executionScope.setCommand(entry.getKey(), entry.getValue());
+    }
+
+    for (var entry : newEnv.executionScope.getVariables()) {
+      executionScope.setVariable(entry.getKey(), entry.getValue());
+    }
+
+    for (Turtle currTurtle : newEnv.turtles) {
+      turtles.add(currTurtle.clone(turtles.size(), turtleNotifier));
+    }
   }
 
 //  private void writeObject(ObjectOutputStream out) throws IOException {

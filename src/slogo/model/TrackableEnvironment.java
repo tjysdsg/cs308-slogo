@@ -35,7 +35,7 @@ public interface TrackableEnvironment {
 
   ModelTracker getTracker();
 
-  void saveEnv(File saveLocation);
+  void save(File saveLocation);
 
-  void loadEnv(File loadLocation);
+  void load(File loadLocation);
 }

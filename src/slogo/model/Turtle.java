@@ -31,9 +31,18 @@ public class Turtle implements Serializable {
     this.id = id;
   }
 
+  public Turtle clone(int newId, TurtleNotifier newCallback) {
+    Turtle instance = new Turtle(newId, newCallback);
+    instance.update(createRecord());
+    return instance;
+  }
+
   public void sendUpdate() {
-    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
-    notifier.notifyTurtleUpdate(record);
+    notifier.notifyTurtleUpdate(createRecord());
+  }
+
+  private TurtleRecord createRecord() {
+    return new TurtleRecord(id, x, y, rotation, visible, penDown);
   }
 
   /**

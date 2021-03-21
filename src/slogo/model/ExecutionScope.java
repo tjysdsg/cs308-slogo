@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import slogo.records.CommandsRecord;
 import slogo.records.DisplayCommand;
 import slogo.records.DisplayVariable;
@@ -42,6 +44,7 @@ public class ExecutionScope implements InfoBundle, Serializable {
   public ExecutionScope(List<Turtle> turtles, List<Integer> currTurtles,
       EnvironmentNotifier envNotifier,
       TurtleNotifier turtleNotifier) {
+
     this.turtles = turtles;
     this.currTurtles = currTurtles;
     this.envNotifier = envNotifier;
@@ -243,11 +246,11 @@ public class ExecutionScope implements InfoBundle, Serializable {
         mainTurtleIdx, penSize));
   }
 
-//  private void writeObject(ObjectOutputStream out) throws IOException {
-//    out.defaultWriteObject();
-//  }
-//
-//  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-//
-//  }
+  public Set<Entry<String, ASTFunctionCall>> getCommands() {
+    return commandTable.entrySet();
+  }
+
+  public Set<Entry<String, ASTNumberLiteral>> getVariables() {
+    return variableTable.entrySet();
+  }
 }

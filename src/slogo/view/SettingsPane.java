@@ -1,5 +1,6 @@
 package slogo.view;
 
+import java.util.prefs.Preferences;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,7 @@ public class SettingsPane extends Pane {
   private FileChooser fileChooser;
   private File userFile;
   private Node node;
+  private Preferences settings;
   private ViewController vcon;
   private PopupSettings popupSettings;
 
@@ -48,10 +50,11 @@ public class SettingsPane extends Pane {
    *
    * @param vcon
    */
-  public SettingsPane(ViewController vcon) {
+  public SettingsPane(ViewController vcon, Preferences settings) {
     this.vcon = vcon;
     createHbox();
     getChildren().add(hbox);
+    this.settings = settings;
   }
 
   private void createHbox() {
@@ -60,7 +63,7 @@ public class SettingsPane extends Pane {
     createPenAndBackground();
     createTurtleOptions();
     createTurtleUpload();
-    popupSettings = new PopupSettings();
+    popupSettings = new PopupSettings(settings);
     hbox = new HBox(title, languageList, penPane, backgroundPane, popupSettings);
     hbox.setAlignment(Pos.CENTER);
     hbox.setSpacing(20);
@@ -76,7 +79,6 @@ public class SettingsPane extends Pane {
         e -> {
           node = (Node) e.getSource();
           userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
-          System.out.println(userFile.toString());
           vcon.setTurtleLogo(userFile.toString());
           if (userFile == null) {
             System.out.println("empty file");
@@ -142,11 +144,16 @@ public class SettingsPane extends Pane {
         });
   }
 
+  protected void setSetting(Preferences settings) {
+    this.settings = settings;
+  }
+
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     popupSettings.setResources(resource);
     displayLabels();
   }
+
 
   private void displayLabels() {
     title.setText(resources.getString("title"));

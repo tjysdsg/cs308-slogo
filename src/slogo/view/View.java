@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.prefs.Preferences;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -43,6 +45,7 @@ public class View {
   private Label workspaceLabel;
   private BorderPane borderPane;
   private ResourceBundle resources;
+  private Preferences settings;
   private static final String STYLESHEET = "gui.css";
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
 
@@ -62,10 +65,11 @@ public class View {
     this.borderPane = new BorderPane();
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
     this.helpPane = new HelpPane(resources);
-    this.settingsPane = new SettingsPane(viewCon);
+    this.settings = Preferences.userRoot().node(this.getClass().getName());
+    //System.out.println(other);
+    this.settingsPane = new SettingsPane(viewCon, settings);
     this.topPane = new HBox();
     this.workspaces = new ArrayList<>();
-
     scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
     stage.setScene(scene);
     stage.setMinHeight(HEIGHT);
@@ -115,8 +119,8 @@ public class View {
     EnvironmentPane environmentPane = new EnvironmentPane(viewCon);
     TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon);
     CommandPane commandPane = new CommandPane(viewCon);
+    int workspaceID = workspaces.size();
     Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);
-
     // Doesn't work within css for some reason :/
     environmentPane.setStyle("-fx-background-color: white");
     commandPane.setStyle("-fx-background-color: white");

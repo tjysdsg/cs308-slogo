@@ -1,5 +1,6 @@
 package slogo.view;
 
+import java.util.prefs.Preferences;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -51,9 +52,10 @@ public class PopupSettings extends Pane {
   private Label fontSizeLabel = new Label();
   private Label themeLabel = new Label();
   private Label turtleLabel = new Label();
+  private Preferences settings;
 
-
-  public PopupSettings() {
+  public PopupSettings(Preferences settings) {
+    this.settings = settings;
     createPopup();
     getChildren().add(gearImage);
   }
@@ -76,6 +78,10 @@ public class PopupSettings extends Pane {
       }
     });
 
+  }
+
+  protected void setSetting(Preferences settings) {
+    this.settings = settings;
   }
 
   private void setIconSize() {

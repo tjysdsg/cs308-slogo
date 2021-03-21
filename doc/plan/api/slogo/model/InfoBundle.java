@@ -1,9 +1,9 @@
 package slogo.model;
 
 import java.util.Map;
-import slogo.events.CommandsRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
+import slogo.records.CommandsRecord;
+import slogo.records.TurtleRecord;
+import slogo.records.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
 
 /**

@@ -14,12 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import slogo.events.CommandsRecord;
-import slogo.events.DisplayCommand;
-import slogo.events.DisplayVariable;
-import slogo.events.VariablesRecord;
+import slogo.records.CommandsRecord;
+import slogo.records.DisplayCommand;
+import slogo.records.DisplayVariable;
+import slogo.records.VariablesRecord;
 
 public class EnvironmentPane extends GridPane {
 

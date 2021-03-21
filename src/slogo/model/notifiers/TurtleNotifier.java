@@ -1,6 +1,6 @@
 package slogo.model.notifiers;
 
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 
 public interface TurtleNotifier {
 

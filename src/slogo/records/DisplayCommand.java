@@ -1,4 +1,4 @@
-package slogo.events;
+package slogo.records;
 
 /**
  * The state of a command within the environment at a specific instance.

@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +11,7 @@ import slogo.model.InfoBundle;
  * <p>
  * This class sets up the common instance variables that each ASTNode will use.
  */
-public abstract class ASTNode {
+public abstract class ASTNode implements Serializable {
 
   private List<ASTNode> children;
 

@@ -186,4 +186,15 @@ public class TestBundle implements InfoBundle {
   public void setShapeIdx(int shapeIdx) {
     // TODO: implement this
   }
+
+  @Override
+  public void setPalette(int idx, double r, double g, double b) {
+    // TODO: implement this
+  }
+
+  @Override
+  public Color getPalette(int idx) {
+    // TODO: implement this
+    return null;
+  }
 }

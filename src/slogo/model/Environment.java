@@ -36,44 +36,29 @@ public class Environment implements TrackableEnvironment {
     commandTree.evaluate(executionScope);
   }
 
-  @Override
-  public void setOnEnvironmentUpdate(Consumer<EnvironmentRecord> callback) {
-     executionScope.setOnEnvironmentUpdate(callback);
-  }
+//  @Override
+//  public void setOnEnvironmentUpdate(Consumer<EnvironmentRecord> callback) {
+//     executionScope.setOnEnvironmentUpdate(callback);
+//  }
+//
+//  public void setOnClear(Runnable callback) {
+//    executionScope.setOnClear(callback);
+//  }
+//
+//  public void setOnTurtleUpdate(Consumer<TurtleRecord> callback) {
+//    executionScope.setOnTurtleUpdate(callback);
+//  }
+//
+//  public void setOnVariableUpdate(Consumer<VariablesRecord> callback) {
+//    executionScope.setOnVariableUpdate(callback);
+//  }
+//
+//  public void setOnCommandUpdate(Consumer<CommandsRecord> callback) {
+//    executionScope.setOnCommandUpdate(callback);
+//  }
 
-  public void setOnClear(Runnable callback) {
-    executionScope.setOnClear(callback);
-  }
-
-  public void setOnTurtleUpdate(Consumer<TurtleRecord> callback) {
-    executionScope.setOnTurtleUpdate(callback);
-  }
-
-  public void setOnVariableUpdate(Consumer<VariablesRecord> callback) {
-    executionScope.setOnVariableUpdate(callback);
-  }
-
-  public void setOnCommandUpdate(Consumer<CommandsRecord> callback) {
-    executionScope.setOnCommandUpdate(callback);
-  }
-
-  @Override
-  public void requestVariablesUpdate(DisplayVariable variable) {
-    ASTNode variableSetter = new ASTMakeVariable();
-    variableSetter.addChild(new ASTVariable(variable.name()));
-    variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
-    variableSetter.evaluate(executionScope);
-  }
-
-  @Override
-  public void requestTurtleUpdate(TurtleRecord record) {
-    Turtle toUpdate = turtles.get(record.id());
-    toUpdate.update(record);
-  }
-
-  @Override
-  public void requestEnvironmentUpdate(EnvironmentRecord record) {
-    executionScope.updateEnvironment(record);
+  public TrackableScope getTracker() {
+    return executionScope;
   }
 
   public void setLanguage(String language) {

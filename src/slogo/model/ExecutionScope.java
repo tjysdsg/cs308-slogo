@@ -12,9 +12,12 @@ import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeVariable;
+import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 
-public class ExecutionScope implements InfoBundle {
+public class ExecutionScope implements InfoBundle, TrackableScope {
 
   private Map<String, ASTNumberLiteral> variableTable = new HashMap<>();
   private Map<String, ASTFunctionCall> commandTable = new HashMap<>();
@@ -265,7 +268,22 @@ public class ExecutionScope implements InfoBundle {
     updateCommandsCallback = callback;
   }
 
-  public void updateEnvironment(EnvironmentRecord record) {
+  @Override
+  public void requestVariablesUpdate(DisplayVariable variable) {
+    ASTNode variableSetter = new ASTMakeVariable();
+    variableSetter.addChild(new ASTVariable(variable.name()));
+    variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
+    variableSetter.evaluate(this);
+  }
+
+  @Override
+  public void requestTurtleUpdate(TurtleRecord record) {
+    Turtle toUpdate = turtles.get(record.id());
+    toUpdate.update(record);
+  }
+
+  @Override
+  public void requestEnvironmentUpdate(EnvironmentRecord record) {
     backgroundColorIdx = record.currBGColor();
     penColorIdx = record.currPenColor();
     mainTurtleIdx = record.mainTurtle();

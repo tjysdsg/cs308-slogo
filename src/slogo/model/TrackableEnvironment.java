@@ -16,27 +16,7 @@ import slogo.events.VariablesRecord;
  */
 public interface TrackableEnvironment {
 
-  /**
-   * Sets the callback is called whenever there is an update to the turtle within the environment.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnTurtleUpdate(Consumer<TurtleRecord> callback);
-
-  /**
-   * Sets the callback is called whenever there is an update to the variables within the
-   * environment.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnVariableUpdate(Consumer<VariablesRecord> callback);
-
-  /**
-   * Sets the callback is called whenever there is an update to the userdefined commands.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnCommandUpdate(Consumer<CommandsRecord> callback);
+  TrackableScope getTracker();
 
   /**
    * Parses and executes a passed in command.
@@ -57,15 +37,4 @@ public interface TrackableEnvironment {
   void setCurrTurtle(int turtle);
 
   void setCurrTurtle(List<Integer> turtle);
-
-  void setOnClear(Runnable callback);
-
-  void requestVariablesUpdate(DisplayVariable variable);
-
-  void requestTurtleUpdate(TurtleRecord record);
-
-  void requestEnvironmentUpdate(EnvironmentRecord record);
-
-  void setOnEnvironmentUpdate(Consumer<EnvironmentRecord> callback);
-
 }

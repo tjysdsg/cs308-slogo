@@ -14,7 +14,7 @@ import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
-public class ExecutionEnvironment implements InfoBundle {
+public class ExecutionScope implements InfoBundle {
 
   private Map<String, ASTNumberLiteral> variableTable = new HashMap<>();
   private Map<String, ASTFunctionCall> commandTable = new HashMap<>();
@@ -32,12 +32,12 @@ public class ExecutionEnvironment implements InfoBundle {
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
 
-  public ExecutionEnvironment(List<Turtle> turtles, List<Integer> currTurtles) {
+  public ExecutionScope(List<Turtle> turtles, List<Integer> currTurtles) {
     this.turtles = turtles;
     this.currTurtles = currTurtles;
   }
 
-  public ExecutionEnvironment(List<Turtle> turtles, List<Integer> currTurtles, Map<String, ASTNumberLiteral> variableTable,
+  public ExecutionScope(List<Turtle> turtles, List<Integer> currTurtles, Map<String, ASTNumberLiteral> variableTable,
       Map<String, ASTFunctionCall> commandTable) {
     this(turtles, currTurtles);
     this.variableTable = variableTable;
@@ -45,14 +45,14 @@ public class ExecutionEnvironment implements InfoBundle {
   }
 
   @Override
-  public ExecutionEnvironment clone() {
+  public ExecutionScope clone() {
 
     HashMap<String, ASTNumberLiteral> varCopy = new HashMap<>();
     for (var entry : variableTable.entrySet()) {
       varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
     }
 
-    ExecutionEnvironment instance = new ExecutionEnvironment(
+    ExecutionScope instance = new ExecutionScope(
         turtles, currTurtles,
         varCopy, new HashMap<>(commandTable));
 

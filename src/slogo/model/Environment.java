@@ -19,42 +19,42 @@ public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles = new ArrayList<>();
   private List<Integer> currTurtles = new ArrayList<>();
-  private ExecutionEnvironment executionEnvironment =
-      new ExecutionEnvironment(turtles, currTurtles);
+  private ExecutionScope executionScope =
+      new ExecutionScope(turtles, currTurtles);
   private Parser myParser =
-      new ProgramParser(DEFAULT_LANG, executionEnvironment);
+      new ProgramParser(DEFAULT_LANG, executionScope);
 
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
-    turtles.add(new Turtle(0, executionEnvironment));
+    turtles.add(new Turtle(0, executionScope));
     currTurtles.add(0);
   }
 
   public void runCommand(String command) {
     ASTNode commandTree = myParser.parseCommand(command);
-    commandTree.evaluate(executionEnvironment);
+    commandTree.evaluate(executionScope);
   }
 
   @Override
   public void setOnEnvironmentUpdate(Consumer<EnvironmentRecord> callback) {
-     executionEnvironment.setOnEnvironmentUpdate(callback);
+     executionScope.setOnEnvironmentUpdate(callback);
   }
 
   public void setOnClear(Runnable callback) {
-    executionEnvironment.setOnClear(callback);
+    executionScope.setOnClear(callback);
   }
 
   public void setOnTurtleUpdate(Consumer<TurtleRecord> callback) {
-    executionEnvironment.setOnTurtleUpdate(callback);
+    executionScope.setOnTurtleUpdate(callback);
   }
 
   public void setOnVariableUpdate(Consumer<VariablesRecord> callback) {
-    executionEnvironment.setOnVariableUpdate(callback);
+    executionScope.setOnVariableUpdate(callback);
   }
 
   public void setOnCommandUpdate(Consumer<CommandsRecord> callback) {
-    executionEnvironment.setOnCommandUpdate(callback);
+    executionScope.setOnCommandUpdate(callback);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class Environment implements TrackableEnvironment {
     ASTNode variableSetter = new ASTMakeVariable();
     variableSetter.addChild(new ASTVariable(variable.name()));
     variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
-    variableSetter.evaluate(executionEnvironment);
+    variableSetter.evaluate(executionScope);
   }
 
   @Override
@@ -73,7 +73,7 @@ public class Environment implements TrackableEnvironment {
 
   @Override
   public void requestEnvironmentUpdate(EnvironmentRecord record) {
-    executionEnvironment.updateEnvironment(record);
+    executionScope.updateEnvironment(record);
   }
 
   public void setLanguage(String language) {
@@ -81,16 +81,16 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void addTurtle() {
-    Turtle turtle = new Turtle(turtles.size(), executionEnvironment);
+    Turtle turtle = new Turtle(turtles.size(), executionScope);
     currTurtles.add(turtles.size());
     turtles.add(turtle);
   }
 
   public void setCurrTurtle(int currTurtle) {
-    executionEnvironment.setMainTurtle(currTurtle);
+    executionScope.setMainTurtle(currTurtle);
   }
 
   public void setCurrTurtle(List<Integer> currTurtles) {
-    executionEnvironment.setCurrTurtle(currTurtles);
+    executionScope.setCurrTurtle(currTurtles);
   }
 }

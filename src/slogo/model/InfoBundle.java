@@ -51,7 +51,7 @@ public interface InfoBundle {
 
   void notifyEnvironmentClear();
 
-  void notifyEnvironmentUpdate(EnvironmentRecord info);
+  void notifyEnvironmentUpdate();
 
   ASTNumberLiteral getVariable(String name);
 
@@ -88,4 +88,6 @@ public interface InfoBundle {
   void setPalette(int idx, double r, double g, double b);
 
   Color getPalette(int idx);
+
+  void setPenSize(double val);
 }

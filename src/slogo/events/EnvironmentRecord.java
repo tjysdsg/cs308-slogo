@@ -1,6 +1,9 @@
 package slogo.events;
 
-import java.util.Map;
+import slogo.model.Palette;
 
-public record EnvironmentRecord(Map<Integer, String> colorIndexes, int backgroundIndex) {
+public record EnvironmentRecord(
+    Palette colors,
+    int currPenColor, int currShape,
+    int currBGColor, int currPenSize) {
 }

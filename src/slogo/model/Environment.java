@@ -34,6 +34,7 @@ public class Environment implements TrackableEnvironment {
   private int penColorIdx = 0;
   private int backgroundColorIdx = 0;
   private int shapeIdx = 0;
+  private int penSize = 5;
   private Palette palette = new Palette();
 
   private static final String DEFAULT_LANG = "English";
@@ -84,8 +85,7 @@ public class Environment implements TrackableEnvironment {
 
   @Override
   public void requestEnvironmentUpdate(EnvironmentRecord record) {
-    record.backgroundIndex();
-    record.colorIndexes();
+
   }
 
   @Override
@@ -218,9 +218,12 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
-    public void notifyEnvironmentUpdate(EnvironmentRecord info) {
+    public void notifyEnvironmentUpdate() {
       if (updateEnvironmentCallback != null) {
-        updateEnvironmentCallback.accept(info);
+        updateEnvironmentCallback.accept(
+            new EnvironmentRecord(palette,
+                penColorIdx, shapeIdx,
+                backgroundColorIdx, penSize));
       }
     }
 
@@ -243,11 +246,6 @@ public class Environment implements TrackableEnvironment {
       }
       return ret;
     }
-
-//    @Override
-//    public Map<String, ASTFunctionCall> getCommandTable() {
-//      return commandTable;
-//    }
 
     @Override
     public ASTFunctionCall getCommand(String name) {
@@ -284,16 +282,13 @@ public class Environment implements TrackableEnvironment {
       }
     }
 
-
-
     public int getPenColorIdx() {
       return penColorIdx;
     }
 
     public void setPenColorIdx(int _penColorIdx) {
       penColorIdx = _penColorIdx;
-      // TODO: notify view about changes
-
+      notifyEnvironmentUpdate();
     }
 
     public int getBackgroundColorIdx() {
@@ -302,8 +297,7 @@ public class Environment implements TrackableEnvironment {
 
     public void setBackgroundColorIdx(int _backgroundColorIdx) {
       backgroundColorIdx = _backgroundColorIdx;
-      // TODO: notify view about changes
-      //notifyEnvironmentUpdate(new EnvironmentRecord(palette, backgroundColorIdx));
+      notifyEnvironmentUpdate();
     }
 
     public int getShapeIdx() {
@@ -312,15 +306,22 @@ public class Environment implements TrackableEnvironment {
 
     public void setShapeIdx(int _shapeIdx) {
       shapeIdx = _shapeIdx;
-      // TODO: notify view about changes
+      notifyEnvironmentUpdate();
+
     }
 
     public void setPalette(int idx, double r, double g, double b) {
       palette.setColor(idx, new Color(r, g, b));
+      notifyEnvironmentUpdate();
     }
 
     public Color getPalette(int idx) {
       return palette.getColor(idx);
+    }
+
+    public void setPenSize(int newSize) {
+      penSize = newSize;
+      notifyEnvironmentUpdate();
     }
   }
 }

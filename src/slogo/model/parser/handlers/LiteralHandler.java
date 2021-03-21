@@ -15,9 +15,9 @@ public abstract class LiteralHandler implements Handler {
     currScope = scopeStack.peek();
   }
 
-  protected void assertScopeNeedsChild() {
+  protected void assertScopeNeedsChild(String currentToken) {
     if (scopeStack.size() == 1 && !currScope.addNextAsChild())
-      throw new FloatingValueException();
+      throw new FloatingValueException(currentToken);
   }
 
   protected void addNode(ASTNode toAdd) {

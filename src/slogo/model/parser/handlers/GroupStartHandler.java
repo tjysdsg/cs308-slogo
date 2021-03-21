@@ -21,9 +21,9 @@ public class GroupStartHandler extends LookAheadHandler {
   }
 
   @Override
-  public void handle(String token) {
-    String identifier = assertNextIs(EXPECTED_NEXT);
-    commandHandler.handle(identifier);
-    listStartHandler.handle(token);
+  public void handle(String currentToken) {
+    String nextToken = assertNextIs(currentToken, EXPECTED_NEXT);
+    commandHandler.handle(nextToken);
+    listStartHandler.handle(currentToken);
   }
 }

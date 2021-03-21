@@ -5,23 +5,25 @@ package slogo.exceptions;
  */
 public class InvalidTokenTypeException extends ModelException {
   private static final String name = "InvalidCommandIdentifierException";
-  private String identifier;
+  private String nextToken;
   private String expected;
   private String actual;
+  private String currentToken;
 
   /**
    * Creates a new instance of this exception.
-   * @param identifier the invalid name
+   * @param nextToken the invalid name
    */
-  public InvalidTokenTypeException(String identifier, String expected, String actual) {
+  public InvalidTokenTypeException(String currentToken, String nextToken, String expected, String actual) {
     super(name);
-    this.identifier = identifier;
+    this.currentToken = currentToken;
+    this.nextToken = nextToken;
     this.expected = expected;
     this.actual = actual;
   }
 
   @Override
   public String buildException(String format) {
-    return String.format(format, identifier, expected, actual);
+    return String.format(format, currentToken, expected, nextToken, actual);
   }
 }

@@ -30,20 +30,20 @@ public class CommandHandler extends LookAheadHandler {
   }
 
   @Override
-  public void handle(String token) {
+  public void handle(String currentToken) {
     String commandName;
 
     try {
-      commandName = commandClassifier.getSymbol(token);
+      commandName = commandClassifier.getSymbol(currentToken);
     } catch (UnknownIdentifierException e) {
-      commandName = token;
+      commandName = currentToken;
     }
 
     ASTNode newCommand;
 
     if(commandName.equals(MAKE_USER_INSTRUCTION)) {
-      String identifier = assertNextIs(EXPECTED_NEXT);
-      newCommand = new ASTMakeUserInstruction(identifier, environmentInfo);
+      String nextToken = assertNextIs(currentToken, EXPECTED_NEXT);
+      newCommand = new ASTMakeUserInstruction(nextToken, environmentInfo);
 
     } else {
       newCommand = commandFactory.getCommand(commandName);

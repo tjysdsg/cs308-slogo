@@ -11,7 +11,7 @@ public class VariableHandler extends LiteralHandler {
 
   @Override
   public void handle(String token) {
-    assertScopeNeedsChild();
+    assertScopeNeedsChild(token);
     addNode(new ASTVariable(token));
   }
 }

@@ -18,17 +18,17 @@ public abstract class LookAheadHandler implements Handler {
     this.tokensLeft = tokensLeft;
   }
 
-  protected String assertNextIs(String expectedType) {
+  protected String assertNextIs(String currentToken, String expectedType) {
     if (tokensLeft.isEmpty())
-      throw new NotEnoughTokensException();
+      throw new NotEnoughTokensException(currentToken, expectedType);
 
-    String identifier = tokensLeft.remove(LAST);
-    String actualType = syntaxClassifier.getSymbol(identifier);
+    String nextToken = tokensLeft.remove(LAST);
+    String actualType = syntaxClassifier.getSymbol(nextToken);
     if (!actualType.equals(expectedType)) {
       throw new InvalidTokenTypeException
-          (identifier, expectedType, actualType);
+          (nextToken, expectedType, currentToken, actualType);
     }
 
-    return identifier;
+    return nextToken;
   }
 }

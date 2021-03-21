@@ -1,16 +1,11 @@
 package slogo.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import slogo.events.CommandsRecord;
-import slogo.events.DisplayCommand;
 import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.notifiers.Delegate;
 
 public class TestBundle extends ExecutionScope {
 
@@ -21,19 +16,19 @@ public class TestBundle extends ExecutionScope {
       List<Turtle> turtles, List<Integer> currTurtles,
       Map<String, ASTNumberLiteral> variableTable,
       Map<String, ASTFunctionCall> commandTable,
-     TransmissionLine transmissionLine) {
+     Delegate delegate) {
 
     super(turtles, currTurtles,
         variableTable, commandTable,
-        transmissionLine, info -> {});
+        delegate, info -> {});
 
-    transmissionLine.setOnTurtleUpdate(record -> turtleRecord = record);
+    delegate.setOnTurtleUpdate(record -> turtleRecord = record);
 
-    transmissionLine.setOnClear(() -> environmentCleared = true);
+    delegate.setOnClear(() -> environmentCleared = true);
   }
 
   public TestBundle() {
-    super(null, null, new TransmissionLine(), new TransmissionLine());
+    super(null, null, new Delegate(), new Delegate());
   }
 
   //reset();

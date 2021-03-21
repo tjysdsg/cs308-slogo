@@ -1,14 +1,13 @@
-package slogo.model;
+package slogo.model.notifiers;
 
 import java.util.function.Consumer;
 import slogo.events.CommandsRecord;
-import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
 import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 
-public class TransmissionLine implements Tracker, EnvironmentNotifier, TurtleNotifier {
+public class Delegate implements ModelTracker, EnvironmentNotifier, TurtleNotifier {
 
   private Consumer<TurtleRecord> updateTurtleCallback;
   private Consumer<CommandsRecord> updateCommandsCallback;
@@ -20,10 +19,9 @@ public class TransmissionLine implements Tracker, EnvironmentNotifier, TurtleNot
   private Consumer<DisplayVariable> requestVarCallback;
   private Consumer<EnvironmentRecord> requestEnvCallback;
 
+  public Delegate() {};
 
-  public TransmissionLine() {};
-
-  public TransmissionLine(
+  public Delegate(
       Consumer<TurtleRecord> updateTurtleCallback,
       Consumer<CommandsRecord> updateCommandsCallback,
       Consumer<EnvironmentRecord> updateEnvironmentCallback,
@@ -37,14 +35,11 @@ public class TransmissionLine implements Tracker, EnvironmentNotifier, TurtleNot
 
   @Override
   public EnvironmentNotifier clone() {
-    TransmissionLine instance =
-        new TransmissionLine(
-            updateTurtleCallback,
-            updateCommandsCallback,
-            updateEnvironmentCallback,
-            clearEnvironmentCallback);
-
-    return instance;
+    return new Delegate(
+        updateTurtleCallback,
+        updateCommandsCallback,
+        updateEnvironmentCallback,
+        clearEnvironmentCallback);
   }
 
   @Override

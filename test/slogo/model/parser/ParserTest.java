@@ -30,7 +30,7 @@ import slogo.model.ASTNodes.ASTSum;
 import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.InfoBundle;
 import slogo.model.TestBundle;
-import slogo.model.TransmissionLine;
+import slogo.model.notifiers.Delegate;
 import slogo.model.Turtle;
 import slogo.model.parser.classifiers.CommandClassifier;
 import slogo.model.parser.factories.ClassifierFactory;
@@ -51,11 +51,11 @@ public class ParserTest {
   private Turtle turtle;
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
-  private TransmissionLine transmissionLine = new TransmissionLine();
+  private Delegate delegate = new Delegate();
 
   @BeforeEach
   void setUp() {
-    turtle = new Turtle(0, transmissionLine);
+    turtle = new Turtle(0, delegate);
     turtles = new ArrayList<>(List.of(turtle));
     currTurtles = new ArrayList<>(List.of(0));
 
@@ -65,7 +65,7 @@ public class ParserTest {
     infoBundle = new TestBundle(
         turtles,
         currTurtles, variableTable,
-        commandTable, transmissionLine);
+        commandTable, delegate);
 
     turtle = new Turtle(0, null);
 

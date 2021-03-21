@@ -1,4 +1,4 @@
-package slogo.model;
+package slogo.model.notifiers;
 
 import java.util.function.Consumer;
 import slogo.events.CommandsRecord;
@@ -7,7 +7,7 @@ import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 
-public interface Tracker {
+public interface ModelTracker {
   void setOnEnvUpdate(Consumer<EnvironmentRecord> callback);
 
   void setOnClear(Runnable callback);

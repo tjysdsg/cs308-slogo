@@ -12,7 +12,7 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.model.TestBundle;
-import slogo.model.TransmissionLine;
+import slogo.model.notifiers.Delegate;
 import slogo.model.Turtle;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
@@ -31,13 +31,13 @@ public class ASTNodeTest {
   private Turtle turtle;
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
-  private TransmissionLine transmissionLine = new TransmissionLine();
+  private Delegate delegate = new Delegate();
   private Parser parser;
 
   @BeforeEach
   void setUp() {
     
-    turtle = new Turtle(0, transmissionLine);
+    turtle = new Turtle(0, delegate);
     turtles = new ArrayList<>(List.of(turtle));
     currTurtles = new ArrayList<>(List.of(0));
 
@@ -47,7 +47,7 @@ public class ASTNodeTest {
     infoBundle = new TestBundle(
         turtles,
         currTurtles, variableTable,
-        commandTable, transmissionLine);
+        commandTable, delegate);
 
     turtle = new Turtle(0, null);
     parser = new ProgramParser("English", infoBundle);

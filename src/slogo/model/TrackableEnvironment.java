@@ -1,6 +1,7 @@
 package slogo.model;
 
 import java.util.List;
+import slogo.model.notifiers.ModelTracker;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.
@@ -30,5 +31,5 @@ public interface TrackableEnvironment {
 
   void setCurrTurtle(List<Integer> turtle);
 
-  Tracker getTracker();
+  ModelTracker getTracker();
 }

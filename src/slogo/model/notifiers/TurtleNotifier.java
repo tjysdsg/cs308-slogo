@@ -1,4 +1,4 @@
-package slogo.model;
+package slogo.model.notifiers;
 
 import slogo.events.TurtleRecord;
 

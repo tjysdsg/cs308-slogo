@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import slogo.events.TurtleRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.notifiers.Delegate;
 
 
 public class TurtleTest {
@@ -20,11 +21,11 @@ public class TurtleTest {
   private Turtle turtle;
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
-  private TransmissionLine transmissionLine = new TransmissionLine();
+  private Delegate delegate = new Delegate();
 
   @BeforeEach
   void setUp() {
-    turtle = new Turtle(0, transmissionLine);
+    turtle = new Turtle(0, delegate);
     turtles = new ArrayList<>(List.of(turtle));
     currTurtles = new ArrayList<>(List.of(0));
 
@@ -34,7 +35,7 @@ public class TurtleTest {
     infoBundle = new TestBundle(
         turtles,
         currTurtles, variableTable,
-        commandTable, transmissionLine);
+        commandTable, delegate);
   }
 
   @Test
@@ -53,7 +54,7 @@ public class TurtleTest {
   }
 
   void testRotateAndMoveHelper(double rotation, double delta, double x, double y) {
-    turtle = new Turtle(0, transmissionLine);
+    turtle = new Turtle(0, delegate);
     turtle.rotate(rotation);
     TurtleRecord record = infoBundle.getTurtleRecord();
     assertEquals(rotation, record.rotation());

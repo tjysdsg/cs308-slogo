@@ -1,6 +1,7 @@
 package slogo.model;
 
 import slogo.events.TurtleRecord;
+import slogo.model.notifiers.TurtleNotifier;
 
 /**
  * Contains the information of the turtle, such as position and orientation.

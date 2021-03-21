@@ -6,6 +6,8 @@ import slogo.model.ASTNodes.ASTMakeVariable;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.ASTNodes.ASTVariable;
+import slogo.model.notifiers.ModelTracker;
+import slogo.model.notifiers.Delegate;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
@@ -13,19 +15,19 @@ public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles = new ArrayList<>();
   private List<Integer> currTurtles = new ArrayList<>();
-  private TransmissionLine transmissionLine = new TransmissionLine();
+  private Delegate delegate = new Delegate();
   private ExecutionScope executionScope =
-      new ExecutionScope(turtles, currTurtles, transmissionLine, transmissionLine);
+      new ExecutionScope(turtles, currTurtles, delegate, delegate);
   private Parser myParser =
       new ProgramParser(DEFAULT_LANG, executionScope);
 
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
-    turtles.add(new Turtle(0, transmissionLine));
+    turtles.add(new Turtle(0, delegate));
     currTurtles.add(0);
 
-    transmissionLine.onRequestVarUpdate(variable -> {
+    delegate.onRequestVarUpdate(variable -> {
       ASTNode variableSetter = new ASTMakeVariable();
       variableSetter.addChild(new ASTVariable(variable.name()));
       variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
@@ -38,8 +40,8 @@ public class Environment implements TrackableEnvironment {
     commandTree.evaluate(executionScope);
   }
 
-  public Tracker getTracker() {
-    return transmissionLine;
+  public ModelTracker getTracker() {
+    return delegate;
   }
 
   public void setLanguage(String language) {
@@ -47,7 +49,7 @@ public class Environment implements TrackableEnvironment {
   }
 
   public void addTurtle() {
-    Turtle turtle = new Turtle(turtles.size(), transmissionLine);
+    Turtle turtle = new Turtle(turtles.size(), delegate);
     currTurtles.add(turtles.size());
     turtles.add(turtle);
   }

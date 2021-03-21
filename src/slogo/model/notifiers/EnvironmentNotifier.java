@@ -1,4 +1,4 @@
-package slogo.model;
+package slogo.model.notifiers;
 
 import java.util.function.Consumer;
 import slogo.events.CommandsRecord;

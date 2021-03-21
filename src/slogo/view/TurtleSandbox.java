@@ -1,5 +1,6 @@
 package slogo.view;
 
+import slogo.model.notifiers.ModelTracker;
 import slogo.events.EnvironmentRecord;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
@@ -54,9 +55,10 @@ public class TurtleSandbox extends GridPane {
   private FileChooser fileChooser;
   private ViewController viewController;
   private double penThickness;
+  private ModelTracker modelTracker;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
-  public TurtleSandbox(ViewController viewController) {
+  public TurtleSandbox(ViewController viewController, ModelTracker tracker) {
     this.turtles = new ArrayList<>();
     this.lines = new StackPane();
     this.sandbox = new StackPane();
@@ -64,6 +66,7 @@ public class TurtleSandbox extends GridPane {
     this.controls = createControls();
     this.fileChooser = new FileChooser();
     this.penThickness = 5;
+    this.modelTracker = tracker;
 
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);

@@ -119,7 +119,7 @@ public class View {
   public Workspace createWorkspace() {
     TrackableEnvironment environment = EnvironmentFactory.createEnvironment();
     EnvironmentPane environmentPane = new EnvironmentPane(viewCon, environment.getTracker());
-    TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon);
+    TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon, environment.getTracker());
     CommandPane commandPane = new CommandPane(viewCon);
     int workspaceID = workspaces.size();
     Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);

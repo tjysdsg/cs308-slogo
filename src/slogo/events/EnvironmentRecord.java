@@ -1,9 +1,9 @@
 package slogo.events;
 
-import slogo.model.Palette;
+import slogo.model.PaletTable;
 
 public record EnvironmentRecord(
-    Palette colors,
+    PaletTable colors,
     int currPenColor, int currShape,
     int currBGColor,
     int mainTurtle, double currPenSize) {

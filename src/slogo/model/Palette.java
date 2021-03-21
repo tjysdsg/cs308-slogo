@@ -3,7 +3,7 @@ package slogo.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Palette {
+public class Palette implements PaletTable {
 
   private final Map<Integer, Color> colors = new HashMap<>();
   private static final Color DEFAULT_COLOR = new Color(0, 0, 0);

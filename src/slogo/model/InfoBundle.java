@@ -81,4 +81,8 @@ public interface InfoBundle {
   int getShapeIdx();
 
   void setShapeIdx(int shapeIdx);
+
+  void setPalette(int idx, double r, double g, double b);
+
+  Color getPalette(int idx);
 }

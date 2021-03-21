@@ -30,6 +30,7 @@ public class Environment implements TrackableEnvironment {
   private int penColorIdx = 0;
   private int backgroundColorIdx = 0;
   private int shapeIdx = 0;
+  private Palette palette = new Palette();
 
   private static final String DEFAULT_LANG = "English";
 
@@ -167,7 +168,8 @@ public class Environment implements TrackableEnvironment {
       for (Turtle t : turtles) {
         notifyTurtleUpdate(
             new TurtleRecord(
-                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown(), t.getPenThickness()
+                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown(),
+                t.getPenThickness()
             )
         );
       }
@@ -272,6 +274,14 @@ public class Environment implements TrackableEnvironment {
     public void setShapeIdx(int _shapeIdx) {
       shapeIdx = _shapeIdx;
       // TODO: notify view about changes
+    }
+
+    public void setPalette(int idx, double r, double g, double b) {
+      palette.setColor(idx, new Color(r, g, b));
+    }
+
+    public Color getPalette(int idx) {
+      return palette.getColor(idx);
     }
   }
 }

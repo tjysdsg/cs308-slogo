@@ -191,7 +191,7 @@ public class ExecutionScope implements InfoBundle {
     notifyEnvironment();
   }
 
-  public int getShapeIdx() {
+   public int getShapeIdx() {
     return shapeIdx;
   }
 

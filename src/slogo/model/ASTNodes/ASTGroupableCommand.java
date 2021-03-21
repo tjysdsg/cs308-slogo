@@ -24,19 +24,26 @@ public abstract class ASTGroupableCommand extends ASTCommand {
     List<ASTNode> children = getChildren();
     int n = children.size();
     int nParams = getNumParams();
-
-    // to be correctly grouped, the number of children should be the multiple of this.numParams
-    if (n % nParams != 0) {
-      throw new IncorrectParameterCountException(this);
-    }
-
     double ret = 0;
-    for (int i = 0; i < n; i += nParams) {
-      ArrayList<ASTNode> params = new ArrayList<>();
-      for (int j = 0; j < nParams; ++j) {
-        params.add(children.get(i + j));
+
+    if (nParams == 0) { // commands that don't need any parameters run correctly
+      if (n != 0) {
+        throw new IncorrectParameterCountException(this);
       }
-      ret = doEvaluate(info, params);
+      ret = doEvaluate(info, new ArrayList<>());
+    } else { // commands that need 1 or more parameters
+      // to be correctly grouped, the number of children should be the multiple of this.numParams
+      if (n % nParams != 0) {
+        throw new IncorrectParameterCountException(this);
+      }
+
+      for (int i = 0; i < n; i += nParams) {
+        ArrayList<ASTNode> params = new ArrayList<>();
+        for (int j = 0; j < nParams; ++j) {
+          params.add(children.get(i + j));
+        }
+        ret = doEvaluate(info, params);
+      }
     }
     return ret;
   }

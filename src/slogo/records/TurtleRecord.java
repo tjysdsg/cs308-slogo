@@ -1,4 +1,4 @@
-package slogo.events;
+package slogo.records;
 
 /**
  * The state of a turtle at a specific instance.

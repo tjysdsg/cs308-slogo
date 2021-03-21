@@ -1,9 +1,9 @@
 package slogo.model;
 
 import java.util.ResourceBundle;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
+import slogo.records.UpdateCommands;
+import slogo.records.UpdateTurtle;
+import slogo.records.UpdateVariables;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.

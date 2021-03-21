@@ -1,6 +1,6 @@
 package slogo.view;
 import javafx.scene.layout.Pane;
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 
 /**
  * @author marthaaboagye

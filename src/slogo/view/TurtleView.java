@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 
 public class TurtleView extends Group {
   private double currX;

@@ -1,5 +1,7 @@
 package slogo.model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import slogo.model.notifiers.ModelTracker;
 
@@ -32,4 +34,8 @@ public interface TrackableEnvironment {
   void setCurrTurtle(List<Integer> turtle);
 
   ModelTracker getTracker();
+
+  void saveEnv(File saveLocation);
+
+  void loadEnv(File loadLocation);
 }

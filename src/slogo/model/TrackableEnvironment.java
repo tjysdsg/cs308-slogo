@@ -45,9 +45,9 @@ public interface TrackableEnvironment {
   void runCommand(String command);
 
   /**
-   * Sets the bundle to use for translating commands
+   * Sets the environmentInfo to use for translating commands
    *
-   * @param bundle - The bundle to use.
+   * @param bundle - The environmentInfo to use.
    */
   void setLanguage(String language);
 

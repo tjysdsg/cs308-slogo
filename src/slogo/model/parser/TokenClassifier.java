@@ -71,9 +71,9 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
 //      pp.addPatterns("Syntax");
 //
 //      String toTest = "fd [ fd 50 ]";
-//      List<String> lines = Arrays.asList(toTest.split(SPLITTER));
+//      List<String> tokensLeft = Arrays.asList(toTest.split(SPLITTER));
 //
-//      for (String line : lines) {
+//      for (String line : tokensLeft) {
 //          if (line.trim().length() > 0) {
 //              System.out.println(pp.getSymbol(line));
 //          }

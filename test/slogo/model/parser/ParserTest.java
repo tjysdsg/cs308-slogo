@@ -7,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
+import slogo.exceptions.FloatingValueException;
 import slogo.exceptions.IncorrectParameterCountException;
-import slogo.exceptions.InvalidSyntaxException;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.exceptions.UnmatchedSquareBracketException;
 import slogo.model.ASTNodes.ASTBackward;
@@ -25,13 +25,15 @@ import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTRemainder;
 import slogo.model.ASTNodes.ASTRepeat;
 import slogo.model.ASTNodes.ASTSum;
-import slogo.model.ASTNodes.ASTUnaryOperator;
 import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.InfoBundle;
 import slogo.model.TestBundle;
+import slogo.model.notifiers.Delegate;
+import slogo.model.Turtle;
+import slogo.model.parser.classifiers.CommandClassifier;
+import slogo.model.parser.factories.ClassifierFactory;
 
 
 /**
@@ -44,9 +46,29 @@ public class ParserTest {
   private CommandClassifier commandClassifier;
   private InfoBundle infoBundle;
 
+  private Map<String, ASTNumberLiteral> variableTable;
+  private Map<String, ASTFunctionCall> commandTable;
+  private Turtle turtle;
+  private List<Turtle> turtles;
+  private List<Integer> currTurtles;
+  private Delegate delegate = new Delegate();
+
   @BeforeEach
   void setUp() {
-    infoBundle = new TestBundle();
+    turtle = new Turtle(0, delegate);
+    turtles = new ArrayList<>(List.of(turtle));
+    currTurtles = new ArrayList<>(List.of(0));
+
+    variableTable = new HashMap<>();
+    commandTable = new HashMap<>();
+
+    infoBundle = new TestBundle(
+        turtles,
+        currTurtles, variableTable,
+        commandTable, delegate);
+
+    turtle = new Turtle(0, null);
+
     parser = new ProgramParser("English", infoBundle);
     commandClassifier = ClassifierFactory.buildCommandClassifier("English");
   }
@@ -58,7 +80,7 @@ public class ParserTest {
     System.out.println("=================");
   }
 
-  void assertDoubleEquals(double expected, double actual) {
+  static void assertDoubleEquals(double expected, double actual) {
     assertEquals(expected, actual, FLOATING_POINT_EPSILON);
   }
 
@@ -168,7 +190,7 @@ public class ParserTest {
     List<ASTNode> commands = new ArrayList<>();
 
     ASTNode forward = new ASTForward();
-    forward.addChild(new ASTVariable("repcount"));
+    forward.addChild(new ASTVariable(":repcount"));
     commands.add(forward);
 
     forward = new ASTForward();
@@ -317,7 +339,7 @@ public class ParserTest {
   @Test
   void testAddLiteralFirst() {
     String TEST_STRING = "50";
-    assertThrows(InvalidSyntaxException.class, () -> {
+    assertThrows(FloatingValueException.class, () -> {
       parser.parseCommand(TEST_STRING);
     });
   }
@@ -325,7 +347,7 @@ public class ParserTest {
   @Test
   void testGroupings() {
     String TEST_STRING = "( sum 50 50 50 )";
-    ASTNode expected = new ASTForward();
+    ASTNode expected = new ASTSum();
     for (int i = 0; i < 3; i++) {
       expected.addChild(new ASTNumberLiteral(50));
     }
@@ -334,17 +356,21 @@ public class ParserTest {
 
   @Test
   void testExitingScope() {
-    String TEST_STRING = "sum 50 50 50 )";
-    assertThrows(InvalidSyntaxException.class , () -> parser.parseCommand(TEST_STRING));
+    String TEST_STRING = "sum 50 50 )";
+    assertThrows(EmptyStackException.class , () -> parser.parseCommand(TEST_STRING));
   }
 
 
   public static void assertNodeStructure(ASTNode expected, ASTNode actual) {
-    assertEquals(expected.getToken(), actual.getToken());
-    assertEquals(expected.getNumChildren(), actual.getNumChildren());
+    if (expected instanceof ASTNumberLiteral)
+      assertDoubleEquals(Double.parseDouble(expected.getToken()), Double.parseDouble(actual.getToken()));
+    else {
+      assertEquals(expected.getToken(), actual.getToken());
+      assertEquals(expected.getNumChildren(), actual.getNumChildren());
 
-    for (int i = 0; i < expected.getNumChildren(); i++) {
-      assertNodeStructure(expected.getChildAt(i), actual.getChildAt(i));
+      for (int i = 0; i < expected.getNumChildren(); i++) {
+        assertNodeStructure(expected.getChildAt(i), actual.getChildAt(i));
+      }
     }
   }
 }

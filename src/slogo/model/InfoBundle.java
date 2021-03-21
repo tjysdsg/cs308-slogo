@@ -2,6 +2,7 @@ package slogo.model;
 
 import java.util.List;
 import slogo.events.CommandsRecord;
+import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
@@ -26,29 +27,6 @@ public interface InfoBundle {
   void setMainTurtle(int idx);
 
   int getTotalNumTurtles();
-
-  /**
-   * Notifies the listener of an update to the turtle.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyTurtleUpdate(TurtleRecord info);
-
-  /**
-   * Notifies the listener of an update to the user-defined commands.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyCommandUpdate(CommandsRecord info);
-
-  /**
-   * Notifies the listener of an update to the variables within the environment.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyVariableUpdate(VariablesRecord info);
-
-  void notifyEnvironmentClear();
 
   ASTNumberLiteral getVariable(String name);
 
@@ -81,4 +59,12 @@ public interface InfoBundle {
   int getShapeIdx();
 
   void setShapeIdx(int shapeIdx);
+
+  void setPalette(int idx, double r, double g, double b);
+
+  Color getPalette(int idx);
+
+  void setPenSize(double val);
+
+  void clear();
 }

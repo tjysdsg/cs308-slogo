@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.InfoBundle;
 
@@ -13,7 +14,7 @@ public class ASTVariable extends ASTNamed {
   }
 
   @Override
-  public double doEvaluate(InfoBundle info) throws UnknownIdentifierException {
+  public double doEvaluate(InfoBundle info, List<ASTNode> params) throws UnknownIdentifierException {
     ASTNumberLiteral referred = info.getVariable(getName());
     if (referred == null) { // default to 0
       ASTNumberLiteral value = new ASTNumberLiteral(0);

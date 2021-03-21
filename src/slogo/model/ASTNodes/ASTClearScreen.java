@@ -19,7 +19,7 @@ public class ASTClearScreen extends ASTTurtleCommand {
       InfoBundle info) {
     Vec2D src = new Vec2D(turtle.getX(), turtle.getY());
     turtle.setPosition(0, 0);
-    info.notifyEnvironmentClear();
+    info.clear();
     return (new Vec2D(0, 0)).minus(src).magnitude();
   }
 }

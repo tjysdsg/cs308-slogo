@@ -1,6 +1,7 @@
 package slogo.model;
 
 import slogo.events.TurtleRecord;
+import slogo.model.notifiers.TurtleNotifier;
 
 /**
  * Contains the information of the turtle, such as position and orientation.
@@ -17,22 +18,22 @@ public class Turtle {
   private boolean visible = true;
   private double rotation = 0;
   private boolean penDown = true;
-  private InfoBundle env;
+  private TurtleNotifier notifier;
   private double penThickness;
 
   public int getId() {
     return id;
   }
 
-  public Turtle(int id, InfoBundle infoBundle) {
-    env = infoBundle;
+  public Turtle(int id, TurtleNotifier notifier) {
+    this.notifier = notifier;
     this.id = id;
     penThickness = 5.0;
   }
 
-  private void sendUpdate() {
+  public void sendUpdate() {
     TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown, penThickness);
-    env.notifyTurtleUpdate(record);
+    notifier.notifyTurtleUpdate(record);
   }
 
   /**
@@ -134,5 +135,10 @@ public class Turtle {
 
   public boolean isPenDown() {
     return this.penDown;
+  }
+
+  public void update(TurtleRecord record) {
+    setPosition(record.xCoord(), record.yCoord());
+    setRotation(record.rotation());
   }
 }

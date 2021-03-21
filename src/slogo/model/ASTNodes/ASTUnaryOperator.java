@@ -1,8 +1,9 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
-public abstract class ASTUnaryOperator extends ASTCommand {
+public abstract class ASTUnaryOperator extends ASTGroupableCommand {
 
   public ASTUnaryOperator(String name) {
     super(name, 1);
@@ -11,7 +12,7 @@ public abstract class ASTUnaryOperator extends ASTCommand {
   protected abstract double calculate(double ret1);
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    return calculate(getChildAt(0).evaluate(info));
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    return calculate(params.get(0).evaluate(info));
   }
 }

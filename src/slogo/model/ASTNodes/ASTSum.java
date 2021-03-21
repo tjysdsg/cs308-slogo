@@ -1,6 +1,6 @@
 package slogo.model.ASTNodes;
 
-public class ASTSum extends ASTBinaryOperator {
+public class ASTSum extends ASTReducibleBinaryOperator {
 
   private static final String NAME = "Sum";
 

@@ -59,7 +59,7 @@ try {
 	model.sendCommand("Bad Command");
 } catch (ModelException e) {
 	String comName = e.getName();
-	String format = bundle.getString(comName); // Gets the translated format from the bundle (i.e Incorrect Parameter Count for %s, expected: %d, actual %d in the current langauge)
+	String format = bundle.getString(comName); // Gets the translated format from the environmentInfo (i.e Incorrect Parameter Count for %s, expected: %d, actual %d in the current langauge)
 	String translatedRes = e.formatException(format); // internally does String.format(format, var1, var2);
 	view.showAlert(bundle.getString("Error"), translatedRes);
 }

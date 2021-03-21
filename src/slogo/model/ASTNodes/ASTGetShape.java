@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTGetShape extends ASTCommand {
@@ -12,7 +13,7 @@ public class ASTGetShape extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     return info.getShapeIdx();
   }
 }

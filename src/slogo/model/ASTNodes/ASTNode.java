@@ -74,10 +74,9 @@ public abstract class ASTNode {
    *
    * @return The return value of evaluated method
    */
-  public final double evaluate(InfoBundle info) {
+  public double evaluate(InfoBundle info) {
     preEvaluate(info);
-    return doEvaluate(info);
-    // postEvaluate(info);
+    return doEvaluate(info, children);
   }
 
   /**
@@ -90,7 +89,7 @@ public abstract class ASTNode {
   /**
    * Subclasses implement this method to do the actual evaluation
    */
-  protected abstract double doEvaluate(InfoBundle info);
+  protected abstract double doEvaluate(InfoBundle info, List<ASTNode> params);
 
   public abstract boolean isDone();
 

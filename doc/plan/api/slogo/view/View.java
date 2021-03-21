@@ -9,7 +9,7 @@ import slogo.model.TrackableEnvironment;
  * @author marthaaboagye
  * This class coordinates between all other classes
  * from the view package. It needs to be initialized with a stage and a model
- * controller object.  It also contains a private View bundle class
+ * controller object.  It also contains a private View environmentInfo class
  * that implements the view controller and allows the user to change the
  *  color for the pen and background.
  */

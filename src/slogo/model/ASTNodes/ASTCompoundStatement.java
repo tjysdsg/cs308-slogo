@@ -12,7 +12,7 @@ public class ASTCompoundStatement extends ASTNode {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     double ret = 0;
     for (ASTNode node : getChildren()) {
       ret = node.evaluate(info);

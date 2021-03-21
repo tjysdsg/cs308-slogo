@@ -47,7 +47,7 @@ public class CommandPane extends Pane {
     uploadToTextArea = new Button();
     run.setOnMouseClicked(e -> sendCodeArea());
     fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Slogo files",  "*.*logo"),
+        new ExtensionFilter("Slogo files","*.slogo", "*.logo"),
         new ExtensionFilter("All files", "*.*" )
     );
     uploadToRun.setOnMouseClicked(e->{

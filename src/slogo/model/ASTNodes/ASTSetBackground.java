@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTSetBackground extends ASTCommand {
@@ -12,8 +13,8 @@ public class ASTSetBackground extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    double arg = getChildAt(0).evaluate(info);
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    double arg = params.get(0).evaluate(info);
     info.setBackgroundColorIdx((int) arg);
     return arg;
   }

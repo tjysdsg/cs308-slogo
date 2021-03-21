@@ -19,9 +19,8 @@ import slogo.model.parser.ProgramParser;
 public class Environment implements TrackableEnvironment {
 
   private List<Turtle> turtles;
-  private int mainTurtleIdx = 0;
   private List<Integer> currTurtles;
-  private ExecutionEnvironment executionEnvironment;
+  private AbstractBundle executionEnvironment;
   private Consumer<TurtleRecord> updateTurtleCallback;
   private Consumer<VariablesRecord> updateVariablesCallback;
   private Consumer<CommandsRecord> updateCommandsCallback;
@@ -31,13 +30,12 @@ public class Environment implements TrackableEnvironment {
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
-    executionEnvironment = new ExecutionEnvironment();
-
-    myParser = new ProgramParser(DEFAULT_LANG, executionEnvironment);
     turtles = new ArrayList<>();
-    turtles.add(new Turtle(0, executionEnvironment));
     currTurtles = new ArrayList<>();
-    currTurtles.add(0);
+
+    executionEnvironment = new ExecutionEnvironment();
+    myParser = new ProgramParser(DEFAULT_LANG, executionEnvironment);
+    addTurtle();
   }
 
   public void setOnTurtleUpdate(Consumer<TurtleRecord> callback) {
@@ -79,16 +77,15 @@ public class Environment implements TrackableEnvironment {
     executionEnvironment.setCurrTurtle(currTurtles);
   }
 
-  private class ExecutionEnvironment implements InfoBundle {
+  private class ExecutionEnvironment extends AbstractBundle {
 
     private Map<String, ASTNumberLiteral> variableTable;
     private Map<String, ASTFunctionCall> commandTable;
     private boolean isOuterScope = false;
 
     public ExecutionEnvironment() {
-      variableTable = new HashMap<>();
-      commandTable = new HashMap<>();
       isOuterScope = true;
+      setTurtles(turtles, currTurtles);
     }
 
     public ExecutionEnvironment(Map<String, ASTNumberLiteral> variableTable,
@@ -99,7 +96,7 @@ public class Environment implements TrackableEnvironment {
 
     @Override
     public ExecutionEnvironment clone() {
-      HashMap<String, ASTNumberLiteral> varCopy = new HashMap<>();
+      Map<String, ASTNumberLiteral> varCopy = getVars();
       for (var entry : variableTable.entrySet()) {
         varCopy.put(entry.getKey(), new ASTNumberLiteral(entry.getValue().getValue()));
       }
@@ -111,54 +108,6 @@ public class Environment implements TrackableEnvironment {
       return instance;
     }
 
-    @Override
-    public void setCurrTurtle(List<Integer> newTurtles) {
-      for (int currTurtle : newTurtles) {
-        if (currTurtle >= turtles.size()) {
-          for (int i = turtles.size(); i <= currTurtle; ++i) {
-            Turtle turtle = new Turtle(i, executionEnvironment);
-            turtles.add(turtle);
-          }
-        }
-      }
-
-      currTurtles.clear();
-      currTurtles.addAll(newTurtles);
-
-      notifyAllTurtleUpdates();
-    }
-
-    @Override
-    public void setMainTurtle(int idx) {
-      mainTurtleIdx = idx;
-    }
-
-    @Override
-    public List<Turtle> getActiveTurtles() {
-      ArrayList<Turtle> ret = new ArrayList<>();
-      for (int idx : currTurtles) {
-        ret.add(turtles.get(idx));
-      }
-      return ret;
-    }
-
-    @Override
-    public Turtle getMainTurtle() {
-      return turtles.get(mainTurtleIdx);
-    }
-
-    /**
-     * Notify all turtle information
-     */
-    private void notifyAllTurtleUpdates() {
-      for (Turtle t : turtles) {
-        notifyTurtleUpdate(
-            new TurtleRecord(
-                t.getId(), t.getX(), t.getY(), t.getRotation(), t.isVisible(), t.isPenDown(), t.getPenThickness()
-            )
-        );
-      }
-    }
 
     @Override
     public void notifyTurtleUpdate(TurtleRecord info) {
@@ -177,47 +126,6 @@ public class Environment implements TrackableEnvironment {
     @Override
     public ASTNumberLiteral getVariable(String name) {
       return variableTable.get(name);
-    }
-
-    @Override
-    public boolean setVariable(String name, ASTNumberLiteral value) {
-      boolean ret = !variableTable.containsKey(name);
-      variableTable.put(name, value);
-      if (isOuterScope) {
-        ArrayList<DisplayVariable> vars = new ArrayList<>();
-        for (var entry : variableTable.entrySet()) {
-          double val = entry.getValue().evaluate(this);
-          vars.add(new DisplayVariable(entry.getKey(), Double.toString(val)));
-        }
-        notifyVariableUpdate(new VariablesRecord(vars));
-      }
-      return ret;
-    }
-
-//    @Override
-//    public Map<String, ASTFunctionCall> getCommandTable() {
-//      return commandTable;
-//    }
-
-    @Override
-    public ASTFunctionCall getCommand(String name) {
-      return commandTable.get(name);
-    }
-
-    @Override
-    public boolean setCommand(String name, ASTFunctionCall command) {
-      boolean ret = !commandTable.containsKey(name);
-      if (ret) {
-        commandTable.put(name, command);
-      }
-      if (isOuterScope) {
-        ArrayList<DisplayCommand> commands = new ArrayList<>();
-        for (var entry : commandTable.entrySet()) {
-          commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
-        }
-        notifyCommandUpdate(new CommandsRecord(commands));
-      }
-      return ret;
     }
 
     @Override

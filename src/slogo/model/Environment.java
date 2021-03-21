@@ -6,8 +6,10 @@ import slogo.model.ASTNodes.ASTMakeVariable;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.ASTNodes.ASTVariable;
+import slogo.model.notifiers.EnvironmentNotifier;
 import slogo.model.notifiers.ModelTracker;
 import slogo.model.notifiers.Delegate;
+import slogo.model.notifiers.TurtleNotifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
@@ -16,8 +18,10 @@ public class Environment implements TrackableEnvironment {
   private List<Turtle> turtles = new ArrayList<>();
   private List<Integer> currTurtles = new ArrayList<>();
   private Delegate delegate = new Delegate();
+  private EnvironmentNotifier envNotifier = delegate;
+  private TurtleNotifier turtleNotifier = delegate;
   private ExecutionScope executionScope =
-      new ExecutionScope(turtles, currTurtles, delegate, delegate);
+      new ExecutionScope(turtles, currTurtles, envNotifier, turtleNotifier);
   private Parser myParser =
       new ProgramParser(DEFAULT_LANG, executionScope);
 

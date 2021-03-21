@@ -221,9 +221,10 @@ public class Environment implements TrackableEnvironment {
     public void notifyEnvironmentUpdate() {
       if (updateEnvironmentCallback != null) {
         updateEnvironmentCallback.accept(
-            new EnvironmentRecord(palette,
-                penColorIdx, shapeIdx,
-                backgroundColorIdx, penSize));
+            new EnvironmentRecord(
+                palette, penColorIdx,
+                shapeIdx, backgroundColorIdx,
+                mainTurtleIdx, penSize));
       }
     }
 

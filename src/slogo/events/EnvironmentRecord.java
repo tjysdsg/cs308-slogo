@@ -5,5 +5,6 @@ import slogo.model.Palette;
 public record EnvironmentRecord(
     Palette colors,
     int currPenColor, int currShape,
-    int currBGColor, double currPenSize) {
+    int currBGColor,
+    int mainTurtle, double currPenSize) {
 }

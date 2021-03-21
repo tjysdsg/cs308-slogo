@@ -22,7 +22,7 @@ public class ASTAsk extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     double ret = 0;
 
     // get previous active turtles so that we can restore them later
@@ -34,8 +34,8 @@ public class ASTAsk extends ASTCommand {
     // get previous main turtle
     int prevMainTurtle = info.getMainTurtle().getId();
 
-    ASTCompoundStatement comp = (ASTCompoundStatement) getChildAt(0);
-    ASTCompoundStatement commands = (ASTCompoundStatement) getChildAt(1);
+    ASTCompoundStatement comp = (ASTCompoundStatement) params.get(0);
+    ASTCompoundStatement commands = (ASTCompoundStatement) params.get(1);
 
     // run all commands for each turtle index
     for (ASTNode child : comp.getChildren()) {

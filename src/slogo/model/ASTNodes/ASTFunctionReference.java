@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTFunctionReference extends ASTCommand {
@@ -9,7 +10,7 @@ public class ASTFunctionReference extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     ASTNode body = info.getCommand(getName()).clone();
     for (ASTNode child : getChildren()) {
       body.addChild(child);

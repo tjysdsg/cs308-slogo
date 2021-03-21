@@ -1,6 +1,7 @@
 package slogo.model.ASTNodes;
 
 import java.util.ArrayList;
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -19,8 +20,8 @@ public class ASTTell extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    ASTCompoundStatement comp = (ASTCompoundStatement) getChildAt(0);
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    ASTCompoundStatement comp = (ASTCompoundStatement) params.get(0);
     double ret = info.getMainTurtle().getId();
     ArrayList<Integer> indices = new ArrayList<>();
     for (ASTNode node : comp.getChildren()) {

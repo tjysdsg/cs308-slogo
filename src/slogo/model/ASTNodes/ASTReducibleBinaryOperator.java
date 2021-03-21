@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -16,7 +17,7 @@ public abstract class ASTReducibleBinaryOperator extends ASTBinaryOperator {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     double ret = calculate(
         getChildAt(0).evaluate(info),
         getChildAt(1).evaluate(info)

@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTSetPalette extends ASTCommand {
@@ -12,11 +13,11 @@ public class ASTSetPalette extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    double idx = getChildAt(0).evaluate(info);
-    double r = getChildAt(1).evaluate(info);
-    double g = getChildAt(2).evaluate(info);
-    double b = getChildAt(3).evaluate(info);
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    double idx = params.get(0).evaluate(info);
+    double r = params.get(1).evaluate(info);
+    double g = params.get(2).evaluate(info);
+    double b = params.get(3).evaluate(info);
 
     info.setPalette((int) idx, r, g, b);
     return idx;

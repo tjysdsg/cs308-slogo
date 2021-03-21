@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTSetPenSize extends ASTCommand {
@@ -11,8 +12,8 @@ public class ASTSetPenSize extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    double val = getChildAt(0).evaluate(info);
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    double val = params.get(0).evaluate(info);
     info.setPenSize(val);
     return val;
   }

@@ -1,7 +1,6 @@
 package slogo.model.ASTNodes;
 
 import java.util.List;
-import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
@@ -39,10 +38,10 @@ public class ASTFunctionCall extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     // insert actual parameters into the lookup table
     for (int i = 0; i < getNumParams(); ++i) {
-      ASTNumberLiteral value = new ASTNumberLiteral(getChildAt(i).evaluate(info));
+      ASTNumberLiteral value = new ASTNumberLiteral(params.get(i).evaluate(info));
       info.setVariable(parameterNames.get(i), value);
     }
 

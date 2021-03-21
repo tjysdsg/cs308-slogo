@@ -8,12 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashMap;
 import java.util.ResourceBundle;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.TestBundle;
+import slogo.model.parser.factories.ASTCommandFactory;
 
 public class ASTCommandFactoryTest {
   private static final String RESOURCES_PACKAGE = "resources.commands.";

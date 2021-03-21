@@ -27,7 +27,7 @@ public class Scope {
     return myStack.peek();
   }
 
-  public void push(ASTNode command) {
+  public void addNode(ASTNode command) {
     if (addNextAsChild()) {
       myStack.peek().addChild(command);
     }
@@ -35,7 +35,7 @@ public class Scope {
     collapse();
   }
 
-  public void pushAll(List<ASTNode> orphanage) {
+  public void addAllNodes(List<ASTNode> orphanage) {
     for (ASTNode child : orphanage) {
       myStack.peek().addChild(child);
     }

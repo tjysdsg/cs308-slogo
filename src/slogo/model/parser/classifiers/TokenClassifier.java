@@ -1,4 +1,4 @@
-package slogo.model.parser;
+package slogo.model.parser.classifiers;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
   /**
    * Adds the given resource file to this language's recognized types
    */
-  protected void addPatterns (String syntax) {
+  public void addPatterns (String syntax) {
       ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
       for (String key : Collections.list(resources.getKeys())) {
           String regex = resources.getString(key);
@@ -71,9 +71,9 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
 //      pp.addPatterns("Syntax");
 //
 //      String toTest = "fd [ fd 50 ]";
-//      List<String> lines = Arrays.asList(toTest.split(SPLITTER));
+//      List<String> tokensLeft = Arrays.asList(toTest.split(SPLITTER));
 //
-//      for (String line : lines) {
+//      for (String line : tokensLeft) {
 //          if (line.trim().length() > 0) {
 //              System.out.println(pp.getSymbol(line));
 //          }

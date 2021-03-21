@@ -154,7 +154,7 @@ package Model {
 		+ setOnVariableUpdate(UpdateVariable callback);
 		+ setOnCommandUpdate(UpdateCommands callback);
 		+ runCommand(String command)
-		+ setBundle(ResourceBundle bundle)
+		+ setBundle(ResourceBundle environmentInfo)
 	}
 
 	note bottom of TrackableEnvironment
@@ -355,7 +355,7 @@ package Model {
 		+ setOnVariableUpdate(UpdateVariable callback);
 		+ setOnCommandUpdate(UpdateCommands callback);
 		+ runCommand(String command)
-		+ setBundle(ResourceBundle bundle)
+		+ setBundle(ResourceBundle environmentInfo)
 	}
 
 	note bottom of TrackableEnvironment

@@ -1,4 +1,8 @@
-package slogo.model.parser;
+package slogo.model.parser.factories;
+
+import slogo.model.parser.classifiers.CommandClassifier;
+import slogo.model.parser.classifiers.SyntaxClassifier;
+import slogo.model.parser.classifiers.TokenClassifier;
 
 public class ClassifierFactory {
   private static final String PACKAGE = "languages.";

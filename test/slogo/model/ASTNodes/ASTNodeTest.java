@@ -4,21 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import slogo.events.CommandsRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
-import slogo.model.ASTNodes.ASTNode;
-import slogo.model.InfoBundle;
 import slogo.model.TestBundle;
-import slogo.model.Turtle;
-import slogo.model.parser.CommandClassifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 

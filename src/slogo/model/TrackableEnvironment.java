@@ -1,12 +1,6 @@
 package slogo.model;
 
 import java.util.List;
-import java.util.function.Consumer;
-import slogo.events.CommandsRecord;
-import slogo.events.DisplayVariable;
-import slogo.events.EnvironmentRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.
@@ -15,8 +9,6 @@ import slogo.events.VariablesRecord;
  * environment.
  */
 public interface TrackableEnvironment {
-
-  TrackableScope getTracker();
 
   /**
    * Parses and executes a passed in command.
@@ -37,4 +29,6 @@ public interface TrackableEnvironment {
   void setCurrTurtle(int turtle);
 
   void setCurrTurtle(List<Integer> turtle);
+
+  Tracker getTracker();
 }

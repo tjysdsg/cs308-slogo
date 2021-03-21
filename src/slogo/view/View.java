@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
-import slogo.model.TrackableScope;
+import slogo.model.Tracker;
 
 /**
  * @author Joshua Pettima
@@ -125,9 +125,9 @@ public class View {
     helpPane.setStyle("-fx-background-color: white");
     borderPane.setStyle("-fx-background-color: white");
 
-    TrackableScope tracker = environment.getTracker();
+    Tracker tracker = environment.getTracker();
     tracker.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
-    tracker.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
+    tracker.setOnVarUpdate(e -> environmentPane.updateVariables(e));
     tracker.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
     tracker.setOnClear(() -> turtleSandbox.clearLines());
 

@@ -28,31 +28,6 @@ public interface InfoBundle {
 
   int getTotalNumTurtles();
 
-  /**
-   * Notifies the listener of an update to the turtle.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyTurtleUpdate(TurtleRecord info);
-
-  /**
-   * Notifies the listener of an update to the user-defined commands.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyCommandUpdate(CommandsRecord info);
-
-  /**
-   * Notifies the listener of an update to the variables within the environment.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyVariableUpdate(VariablesRecord info);
-
-  void notifyEnvironmentClear();
-
-  void notifyEnvironmentUpdate();
-
   ASTNumberLiteral getVariable(String name);
 
   /**
@@ -90,4 +65,6 @@ public interface InfoBundle {
   Color getPalette(int idx);
 
   void setPenSize(double val);
+
+  void clear();
 }

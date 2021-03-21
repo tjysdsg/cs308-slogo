@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ import slogo.model.ASTNodes.ASTSum;
 import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.InfoBundle;
 import slogo.model.TestBundle;
+import slogo.model.TransmissionLine;
+import slogo.model.Turtle;
 import slogo.model.parser.classifiers.CommandClassifier;
 import slogo.model.parser.factories.ClassifierFactory;
 
@@ -42,9 +46,29 @@ public class ParserTest {
   private CommandClassifier commandClassifier;
   private InfoBundle infoBundle;
 
+  private Map<String, ASTNumberLiteral> variableTable;
+  private Map<String, ASTFunctionCall> commandTable;
+  private Turtle turtle;
+  private List<Turtle> turtles;
+  private List<Integer> currTurtles;
+  private TransmissionLine transmissionLine = new TransmissionLine();
+
   @BeforeEach
   void setUp() {
-    infoBundle = new TestBundle();
+    turtle = new Turtle(0, transmissionLine);
+    turtles = new ArrayList<>(List.of(turtle));
+    currTurtles = new ArrayList<>(List.of(0));
+
+    variableTable = new HashMap<>();
+    commandTable = new HashMap<>();
+
+    infoBundle = new TestBundle(
+        turtles,
+        currTurtles, variableTable,
+        commandTable, transmissionLine);
+
+    turtle = new Turtle(0, null);
+
     parser = new ProgramParser("English", infoBundle);
     commandClassifier = ClassifierFactory.buildCommandClassifier("English");
   }

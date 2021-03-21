@@ -248,6 +248,14 @@ public class View {
       System.out.println(String.format("Change: %s to %.2f", variable, newValue));
     }
 
+    public void setFontSize(int size) {
+      borderPane.setStyle("-fx-font-size: " + size);
+    }
+
+    public void setFont(String font) {
+      borderPane.setStyle("-fx-font-family: " + font);
+    }
+
     public void changeCommand(String command, String newValue) {}
 
     public void sendCommand(String command) {

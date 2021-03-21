@@ -63,7 +63,7 @@ public class SettingsPane extends Pane {
     createPenAndBackground();
     createTurtleOptions();
     createTurtleUpload();
-    popupSettings = new PopupSettings(settings);
+    popupSettings = new PopupSettings(settings, vcon);
     hbox = new HBox(title, languageList, penPane, backgroundPane, popupSettings);
     hbox.setAlignment(Pos.CENTER);
     hbox.setSpacing(20);

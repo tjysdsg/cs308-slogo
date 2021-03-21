@@ -124,7 +124,7 @@ public class SettingsPane extends Pane {
     turtleList.setValue("TurtleLogo");
     turtleList.setOnAction(
         (e -> {
-          vcon.setTurtleLogo(turtleList.getValue().toString());
+          //vcon.setTurtleLogo(turtleList.getValue().toString());
         }));
   }
 

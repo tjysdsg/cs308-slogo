@@ -1,15 +1,11 @@
 package slogo.model;
 
 import java.util.List;
-import java.util.Map;
 import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTMakeUserInstruction;
-import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTVariable;
 
 /**
  * Information that ASTNodes required in order to evaluate.
@@ -20,6 +16,12 @@ public interface InfoBundle {
    * @return The active turtles
    */
   List<Turtle> getActiveTurtles();
+
+  Turtle getMainTurtle();
+
+  void setCurrTurtle(List<Integer> currTurtles);
+
+  void setMainTurtle(int idx);
 
   /**
    * Notifies the listener of an update to the turtle.
@@ -53,10 +55,13 @@ public interface InfoBundle {
 
   /**
    * Returns the mapping of command names to command node.
+   * @return
    */
-  Map<String, ASTFunctionCall> getCommandTable();
+//  Map<String, ASTFunctionCall> getCommandTable();
 
-  ASTMakeUserInstruction getCommand(String name);
+  ASTFunctionCall getCommand(String name);
+
+  boolean setCommand(String name, ASTFunctionCall command);
 
   InfoBundle clone();
 }

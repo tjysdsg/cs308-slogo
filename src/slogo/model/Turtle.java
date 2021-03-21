@@ -18,14 +18,20 @@ public class Turtle {
   private double rotation = 0;
   private boolean penDown = true;
   private InfoBundle env;
+  private double penThickness;
+
+  public int getId() {
+    return id;
+  }
 
   public Turtle(int id, InfoBundle infoBundle) {
     env = infoBundle;
     this.id = id;
+    penThickness = 5.0;
   }
 
   private void sendUpdate() {
-    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
+    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown, penThickness);
     env.notifyTurtleUpdate(record);
   }
 
@@ -98,6 +104,10 @@ public class Turtle {
    */
   public double getRotation() {
     return this.rotation;
+  }
+
+  public double getPenThickness() {
+    return this.penThickness;
   }
 
   public double getX() {

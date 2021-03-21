@@ -2,14 +2,9 @@ package slogo.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import slogo.events.CommandsRecord;
 import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
-import slogo.model.ASTNodes.ASTFunctionCall;
-import slogo.model.ASTNodes.ASTNode;
 
 
 public class TurtleTest {
@@ -26,7 +21,7 @@ public class TurtleTest {
   @Test
   void testMove() {
     turtle.move(10.0);
-    TurtleRecord record = infoBundle.getInfo();
+    TurtleRecord record = infoBundle.getTurtleRecord();
     assertEquals(0.0, record.xCoord());
     assertEquals(10.0, record.yCoord());
   }
@@ -34,18 +29,18 @@ public class TurtleTest {
   @Test
   void testRotate() {
     turtle.rotate(20.0);
-    TurtleRecord record = infoBundle.getInfo();
+    TurtleRecord record = infoBundle.getTurtleRecord();
     assertEquals(20.0, record.rotation());
   }
 
   void testRotateAndMoveHelper(double rotation, double delta, double x, double y) {
     turtle = new Turtle(0, infoBundle);
     turtle.rotate(rotation);
-    TurtleRecord record = infoBundle.getInfo();
+    TurtleRecord record = infoBundle.getTurtleRecord();
     assertEquals(rotation, record.rotation());
 
     turtle.move(delta);
-    record = infoBundle.getInfo();
+    record = infoBundle.getTurtleRecord();
     assertEquals(x, record.xCoord(), 1E-5);
     assertEquals(y, record.yCoord(), 1E-5);
   }
@@ -62,7 +57,7 @@ public class TurtleTest {
   void testMoveAndMove() {
     turtle.move(10.0);
     turtle.move(-10.0);
-    TurtleRecord record = infoBundle.getInfo();
+    TurtleRecord record = infoBundle.getTurtleRecord();
     assertEquals(0.0, record.xCoord());
     assertEquals(0.0, record.yCoord());
   }

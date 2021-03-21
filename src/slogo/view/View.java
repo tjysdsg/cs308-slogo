@@ -78,6 +78,7 @@ public class View {
 
 
     topPane.getChildren().addAll(settingsPane);
+    topPane.getStyleClass().add("component-pane");
     topPane.setAlignment(Pos.CENTER_LEFT);
     createWorkspaceSelector(topPane);
     borderPane.setTop(topPane);
@@ -122,11 +123,10 @@ public class View {
     int workspaceID = workspaces.size();
     Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);
     // Doesn't work within css for some reason :/
-    environmentPane.setStyle("-fx-background-color: white");
-    commandPane.setStyle("-fx-background-color: white");
-    settingsPane.setStyle("-fx-background-color: white");
-    helpPane.setStyle("-fx-background-color: white");
-    borderPane.setStyle("-fx-background-color: white");
+    commandPane.getStyleClass().add("component-pane");
+    environmentPane.getStyleClass().add("component-pane");
+    settingsPane.getStyleClass().add("component-pane");
+    helpPane.getStyleClass().add("component-pane");
 
     environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
     environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
@@ -216,6 +216,8 @@ public class View {
      *
      * @param turtleLogo - the turtle logo the user picked.
      */
+    public void setTurtleLogo(int turtleLogo) {}
+
     public void setTurtleLogo(String turtleLogo) {}
 
     public void sendAlert(String title, String message) {

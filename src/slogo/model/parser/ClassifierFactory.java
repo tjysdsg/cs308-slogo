@@ -5,7 +5,7 @@ public class ClassifierFactory {
   private static final String BUNDLE = "Syntax";
 
   public static SyntaxClassifier buildSyntaxClassifier() {
-    TokenParser instance = new TokenParser();
+    TokenClassifier instance = new TokenClassifier();
     instance.addPatterns(BUNDLE);
     return instance;
   }
@@ -15,7 +15,7 @@ public class ClassifierFactory {
    * @param language to use for classification
    */
   public static CommandClassifier buildCommandClassifier(String language) {
-    TokenParser instance = new TokenParser();
+    TokenClassifier instance = new TokenClassifier();
     instance.addPatterns(PACKAGE + language);
     return instance;
   }

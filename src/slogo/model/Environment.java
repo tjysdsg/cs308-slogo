@@ -37,6 +37,7 @@ public class Environment implements TrackableEnvironment {
   private Parser myParser;
 
   private static final String DEFAULT_LANG = "English";
+
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
     myParser = new ProgramParser(DEFAULT_LANG, executionEnvironment);

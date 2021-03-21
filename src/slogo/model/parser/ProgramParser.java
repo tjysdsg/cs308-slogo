@@ -15,13 +15,11 @@ import slogo.model.parser.handlers.Handler;
 public class ProgramParser implements Parser {
 
   private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
-  private static final String handlerPrefix = "handle";
   private static final String NOTHING = "";
   private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
   private final InfoBundle bundle;
-  private static final String LANGUAGES = "languages.";
 
   private Stack<Scope> scopeStack;
   private String currCommand;

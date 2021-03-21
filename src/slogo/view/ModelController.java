@@ -20,7 +20,7 @@ import slogo.exceptions.ModelException;
  */
 
 public class ModelController {
-  private static final String RESOURCES_PACKAGE = "resources.commands.";
+  private static final String RESOURCES_PACKAGE = "resources.";
   private ViewController vc;
   private TrackableEnvironment env;
   private ResourceBundle exceptions;

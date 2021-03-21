@@ -1,5 +1,6 @@
 package slogo.view;
 
+import slogo.events.EnvironmentRecord;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class TurtleSandbox extends GridPane {
   private double dragY;
   private FileChooser fileChooser;
   private ViewController viewController;
+  private double penThickness;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox(ViewController viewController) {
@@ -61,6 +63,8 @@ public class TurtleSandbox extends GridPane {
     this.viewController = viewController;
     this.controls = createControls();
     this.fileChooser = new FileChooser();
+    this.penThickness = 5;
+
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
@@ -240,6 +244,10 @@ public class TurtleSandbox extends GridPane {
     turtles.get(0).setPenColor(color);
   }
 
+  public void updateEnvironment(EnvironmentRecord record) {
+    this.penThickness = record.currPenSize();
+  }
+
   /**
    * This method updates turtles position after the user command is executed on the backend.
    *
@@ -257,7 +265,7 @@ public class TurtleSandbox extends GridPane {
     if (info.penDown() && (tx != info.xCoord() || ty != info.yCoord())) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
-      line.setStrokeWidth(turtle.getPenThickness());
+      line.setStrokeWidth(this.penThickness);
       line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {

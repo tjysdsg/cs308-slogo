@@ -133,6 +133,7 @@ public class View {
     tracker.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
     tracker.setOnVarUpdate(e -> environmentPane.updateVariables(e));
     tracker.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
+    tracker.setOnEnvUpdate( e -> turtleSandbox.updateEnvironment(e));
     tracker.setOnClear(() -> turtleSandbox.clearLines());
 
     workspaces.add(workspace);

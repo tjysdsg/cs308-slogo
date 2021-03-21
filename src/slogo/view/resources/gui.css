@@ -35,10 +35,13 @@
   -fx-font-size: 7px;
 }
 
-/*#helpWindow{*/
-/*-fx-border-color: black;*/
-/*-fx-border-width: 3;*/
-/*}*/
+#settingsTitle{
+  -fx-font-size: 20pt;
+  -fx-font-family: "American Typewriter";
+  -fx-base: white;
+  -fx-padding: 10,0,0,0;
+
+}
 
 #helpLabel{
   -fx-font-size: 18px;
@@ -59,6 +62,13 @@
   -fx-effect: dropshadow( gaussian , rgba(200,255,255,0.5) , 5,5,5,0 )
 }
 
+#verticalContainer{
+  -fx-background-color: LIGHTBLUE;
+}
+
+#titlePane{
+  -fx-background-color: WHITE;
+}
 .component-pane {
   -fx-background-color: #ffffff;
 }

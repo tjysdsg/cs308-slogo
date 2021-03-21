@@ -32,6 +32,7 @@ public class CommandPane extends Pane {
   public CommandPane(ViewController viewcon){
     vcon = viewcon;
     makeBottomPane();
+    setChildrenIDs();
     getChildren().add(pane);
     pane.setTranslateX(300);
 

@@ -1,9 +1,7 @@
 package slogo.model.parser;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
-public class ScopeTest {
+public class ParsingScopeTest {
   private ParsingScope myScope;
 
   @BeforeEach
@@ -62,5 +60,25 @@ public class ScopeTest {
   void assertNextNotChild() {
     //assertFalse(myScope.isIncomplete());
     assertFalse(myScope.addNextAsChild());
+  }
+
+  @Test
+  void testPushAll() {
+    List<ASTNode> nodes = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      nodes.add(buildTestNode());
+    }
+
+    myScope.addNode(new ASTForward());
+    myScope.addAllNodes(nodes);
+
+    ASTNode actual = myScope.getCommands();
+    assertEquals(actual.getNumChildren(), 1);
+    assertEquals(actual.getChildAt(0).getNumChildren(), 10);
+
+  }
+
+  ASTNode buildTestNode() {
+    return new ASTNumberLiteral(20);
   }
 }

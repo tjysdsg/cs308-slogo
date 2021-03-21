@@ -1,6 +1,6 @@
 package slogo.model.ASTNodes;
 
-public class ASTQuotient extends ASTBinaryOperator {
+public class ASTQuotient extends ASTReducibleBinaryOperator {
 
   private static final String NAME = "Quotient";
 

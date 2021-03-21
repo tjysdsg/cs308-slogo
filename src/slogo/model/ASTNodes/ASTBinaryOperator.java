@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.InfoBundle;
 
 public abstract class ASTBinaryOperator extends ASTCommand {
@@ -9,6 +10,15 @@ public abstract class ASTBinaryOperator extends ASTCommand {
   }
 
   protected abstract double calculate(double ret1, double ret2);
+
+  @Override
+  protected void preEvaluate(InfoBundle info) {
+    super.preEvaluate(info);
+
+    if (getNumChildren() < 2) {
+      throw new IncorrectParameterCountException(this);
+    }
+  }
 
   @Override
   protected double doEvaluate(InfoBundle info) {

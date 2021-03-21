@@ -22,10 +22,6 @@ public abstract class ASTCommand extends ASTNamed {
 
   @Override
   protected void preEvaluate(InfoBundle info) {
-    int size = getNumChildren();
-//    if (size > numParams) {
-//      throw new IncorrectParameterCountException(this);
-//    }
   }
 
   @Override

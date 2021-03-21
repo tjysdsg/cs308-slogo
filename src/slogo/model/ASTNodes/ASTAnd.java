@@ -1,6 +1,6 @@
  package slogo.model.ASTNodes;
 
-public class ASTAnd extends ASTBinaryOperator {
+public class ASTAnd extends ASTReducibleBinaryOperator {
 
   private static final String NAME = "And";
 

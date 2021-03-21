@@ -1,6 +1,6 @@
 package slogo.model.ASTNodes;
 
-public class ASTOr extends ASTBinaryOperator {
+public class ASTOr extends ASTReducibleBinaryOperator {
 
   private static final String NAME = "Or";
 

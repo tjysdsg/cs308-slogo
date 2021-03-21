@@ -1,5 +1,6 @@
 package slogo.model;
 
+import java.io.Serializable;
 import slogo.records.TurtleRecord;
 import slogo.model.notifiers.TurtleNotifier;
 
@@ -10,7 +11,7 @@ import slogo.model.notifiers.TurtleNotifier;
  * <p>
  * NOTE: the x-coordinate used is pointing RIGHT, and the y-coordinate is pointing UP
  */
-public class Turtle {
+public class Turtle implements Serializable {
 
   private int id;
   private double x = 0;
@@ -18,8 +19,8 @@ public class Turtle {
   private boolean visible = true;
   private double rotation = 0;
   private boolean penDown = true;
-  private TurtleNotifier notifier;
-  private double penThickness;
+
+  private transient TurtleNotifier notifier;
 
   public int getId() {
     return id;
@@ -28,11 +29,10 @@ public class Turtle {
   public Turtle(int id, TurtleNotifier notifier) {
     this.notifier = notifier;
     this.id = id;
-    penThickness = 5.0;
   }
 
   public void sendUpdate() {
-    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown, penThickness);
+    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
     notifier.notifyTurtleUpdate(record);
   }
 
@@ -105,10 +105,6 @@ public class Turtle {
    */
   public double getRotation() {
     return this.rotation;
-  }
-
-  public double getPenThickness() {
-    return this.penThickness;
   }
 
   public double getX() {

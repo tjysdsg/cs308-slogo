@@ -3,14 +3,12 @@ package slogo.model;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import slogo.model.ASTNodes.ASTMakeVariable;
 import slogo.model.ASTNodes.ASTNode;
-import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.notifiers.EnvironmentNotifier;
 import slogo.model.notifiers.ModelTracker;
 import slogo.model.notifiers.Delegate;
@@ -22,12 +20,15 @@ public class Environment implements TrackableEnvironment, Serializable {
 
   private List<Turtle> turtles = new ArrayList<>();
   private List<Integer> currTurtles = new ArrayList<>();
-  private Delegate delegate = new Delegate();
-  private EnvironmentNotifier envNotifier = delegate;
-  private TurtleNotifier turtleNotifier = delegate;
+
+  private transient Delegate delegate = new Delegate();
+  private transient TurtleNotifier turtleNotifier = delegate;
+  private transient EnvironmentNotifier envNotifier = delegate;
+
   private ExecutionScope executionScope =
       new ExecutionScope(turtles, currTurtles, envNotifier, turtleNotifier);
-  private Parser myParser =
+
+  private transient Parser myParser =
       new ProgramParser(DEFAULT_LANG, executionScope);
 
   private static final String DEFAULT_LANG = "English";
@@ -63,6 +64,14 @@ public class Environment implements TrackableEnvironment, Serializable {
   public void loadEnv(File loadLocation) {
 
   }
+
+//  private void writeObject(ObjectOutputStream out) throws IOException {
+//    out.defaultWriteObject();
+//  }
+//
+//  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+//
+//  }
 
   public void setLanguage(String language) {
     myParser.changeLanguage(language);

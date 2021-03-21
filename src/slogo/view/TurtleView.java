@@ -200,7 +200,6 @@ public class TurtleView extends Group {
     penDown = info.penDown();
     turtleImage.setVisible(info.visible());
     updateTracker();
-    penThickness = info.penThickness();
     if (getCurrRot() != info.rotation()) {
       RotateTransition rt = new RotateTransition(Duration.millis(ANIMATION_SPEED), turtleImage);
       rt.setByAngle(info.rotation() - getCurrRot());

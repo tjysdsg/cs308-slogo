@@ -1,5 +1,9 @@
 package slogo.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,20 +21,23 @@ import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.notifiers.EnvironmentNotifier;
 import slogo.model.notifiers.TurtleNotifier;
 
-public class ExecutionScope implements InfoBundle {
+public class ExecutionScope implements InfoBundle, Serializable {
 
   private Map<String, ASTNumberLiteral> variableTable = new HashMap<>();
   private Map<String, ASTFunctionCall> commandTable = new HashMap<>();
+
   private int penColorIdx = 0;
   private int backgroundColorIdx = 0;
   private int shapeIdx = 0;
   private double penSize = 5;
   private Palette palette = new Palette();
   private int mainTurtleIdx = 0;
+
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
-  private EnvironmentNotifier envNotifier;
-  private TurtleNotifier turtleNotifier;
+
+  private transient EnvironmentNotifier envNotifier;
+  private transient TurtleNotifier turtleNotifier;
 
   public ExecutionScope(List<Turtle> turtles, List<Integer> currTurtles,
       EnvironmentNotifier envNotifier,
@@ -235,4 +242,12 @@ public class ExecutionScope implements InfoBundle {
         shapeIdx, backgroundColorIdx,
         mainTurtleIdx, penSize));
   }
+
+//  private void writeObject(ObjectOutputStream out) throws IOException {
+//    out.defaultWriteObject();
+//  }
+//
+//  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+//
+//  }
 }

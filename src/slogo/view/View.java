@@ -66,7 +66,7 @@ public class View {
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
     this.helpPane = new HelpPane(resources);
     this.settings = Preferences.userRoot().node(this.getClass().getName());
-    //System.out.println(other);
+
     this.settingsPane = new SettingsPane(viewCon, settings);
     this.topPane = new HBox();
     this.workspaces = new ArrayList<>();
@@ -80,7 +80,6 @@ public class View {
     topPane.setAlignment(Pos.CENTER_LEFT);
     createWorkspaceSelector(topPane);
     borderPane.setTop(topPane);
-
     Workspace mainWorkspace = createWorkspace();
     setWorkspace(mainWorkspace);
 

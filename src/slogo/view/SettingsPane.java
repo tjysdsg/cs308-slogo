@@ -52,9 +52,9 @@ public class SettingsPane extends Pane {
    */
   public SettingsPane(ViewController vcon, Preferences settings) {
     this.vcon = vcon;
+    this.settings = settings;
     createHbox();
     getChildren().add(hbox);
-    this.settings = settings;
   }
 
   private void createHbox() {

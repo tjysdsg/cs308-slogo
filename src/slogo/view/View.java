@@ -45,6 +45,7 @@ public class View {
   private Label workspaceLabel;
   private BorderPane borderPane;
   private ResourceBundle resources;
+  private Preferences mainSettings;
   private Preferences settings;
   private static final String STYLESHEET = "gui.css";
   public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
@@ -67,13 +68,8 @@ public class View {
     this.helpPane = new HelpPane(resources);
     this.topPane = new HBox();
     this.workspaces = new ArrayList<>();
-    this.settings = Preferences.userRoot().node(this.getClass().getName());
-    settings.addPreferenceChangeListener( e -> {
-      viewCon.setBackground(settings.get("background", "#03A9F4"));
-      viewCon.setLanguage(settings.get("language", "English"));
-      viewCon.setTurtleLogo(settings.get("turtleLogo", "turtle"));
-      viewCon.setPenColor(settings.get("penColor", "20 20 20"));
-    });
+    this.mainSettings = Preferences.userRoot().node(this.getClass().getName());
+    this.settings = mainSettings.node("0");
     this.settingsPane = new SettingsPane(viewCon, settings);
     scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
     stage.setScene(scene);
@@ -82,7 +78,6 @@ public class View {
 
 
     topPane.getChildren().addAll(settingsPane);
-    topPane.setStyle("-fx-background-color: white");
     topPane.setAlignment(Pos.CENTER_LEFT);
     createWorkspaceSelector(topPane);
     borderPane.setTop(topPane);

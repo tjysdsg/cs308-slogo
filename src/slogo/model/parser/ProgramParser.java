@@ -14,14 +14,14 @@ import slogo.model.parser.handlers.Handler;
 
 public class ProgramParser implements Parser {
 
-  private final SyntaxClassifier tc = ClassifierFactory.buildSyntaxClassifier();
+  private final SyntaxClassifier tokenClassifier = ClassifierFactory.buildSyntaxClassifier();
   private static final String NOTHING = "";
   private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
   private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|\\n";
   private final InfoBundle bundle;
 
-  private Stack<Scope> scopeStack;
+  private Stack<ParsingScope> scopeStack;
   private String currCommand;
   private List<String> tokensLeft;
   private HandlerFactory handlerFactory;
@@ -52,16 +52,12 @@ public class ProgramParser implements Parser {
     tokensLeft.removeIf(String::isBlank);
 
     scopeStack = new Stack<>();
-    scopeStack.push(new Scope());
+    scopeStack.push(new ParsingScope());
 
     handlerFactory = new HandlerFactory(
         new ParserRecord(
-        scopeStack,
-            tokensLeft,
-        language,
-        bundle,
-        currCommand));
-
+        scopeStack, tokensLeft,
+        language, bundle, currCommand));
 
     String token;
 
@@ -73,7 +69,7 @@ public class ProgramParser implements Parser {
         String type;
 
         try {
-          type = tc.getSymbol(token);
+          type = tokenClassifier.getSymbol(token);
         } catch (UnknownIdentifierException e) {
           throw new InvalidSyntaxException(token, command);
         }

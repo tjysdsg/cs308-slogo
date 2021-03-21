@@ -4,11 +4,11 @@ import java.util.Stack;
 import slogo.exceptions.FloatingValueException;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.parser.ParserRecord;
-import slogo.model.parser.Scope;
+import slogo.model.parser.ParsingScope;
 
 public abstract class LiteralHandler implements Handler {
-  private Stack<Scope> scopeStack;
-  private Scope currScope;
+  private Stack<ParsingScope> scopeStack;
+  private ParsingScope currScope;
 
   public LiteralHandler(ParserRecord parserInfo) {
     scopeStack = parserInfo.scopeStack();

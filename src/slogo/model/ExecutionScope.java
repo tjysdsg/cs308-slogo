@@ -42,7 +42,7 @@ public class ExecutionScope implements InfoBundle {
       penColorIdx = record.currPenColor();
       mainTurtleIdx = record.mainTurtle();
       penSize = record.currPenSize();
-      palette = record.colors();
+      palette = (Palette) record.colors();
     });
 
     envNotifier.onRequestTurtleUpdate(record -> {

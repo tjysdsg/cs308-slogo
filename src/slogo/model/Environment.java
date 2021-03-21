@@ -73,7 +73,7 @@ public class Environment implements TrackableEnvironment {
 
   @Override
   public void requestEnvironmentUpdate(EnvironmentRecord record) {
-
+    executionEnvironment.updateEnvironment(record);
   }
 
   public void setLanguage(String language) {

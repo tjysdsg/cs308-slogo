@@ -264,4 +264,12 @@ public class ExecutionEnvironment implements InfoBundle {
   public void setOnCommandUpdate(Consumer<CommandsRecord> callback) {
     updateCommandsCallback = callback;
   }
+
+  public void updateEnvironment(EnvironmentRecord record) {
+    backgroundColorIdx = record.currBGColor();
+    penColorIdx = record.currPenColor();
+    mainTurtleIdx = record.mainTurtle();
+    penSize = record.currPenSize();
+    palette = record.colors();
+  }
 }

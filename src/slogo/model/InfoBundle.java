@@ -2,6 +2,7 @@ package slogo.model;
 
 import java.util.List;
 import slogo.events.CommandsRecord;
+import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
@@ -49,6 +50,8 @@ public interface InfoBundle {
   void notifyVariableUpdate(VariablesRecord info);
 
   void notifyEnvironmentClear();
+
+  void notifyEnvironmentUpdate(EnvironmentRecord info);
 
   ASTNumberLiteral getVariable(String name);
 

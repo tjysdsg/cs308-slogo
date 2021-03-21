@@ -218,6 +218,13 @@ public class Environment implements TrackableEnvironment {
     }
 
     @Override
+    public void notifyEnvironmentUpdate(EnvironmentRecord info) {
+      if (updateEnvironmentCallback != null) {
+        updateEnvironmentCallback.accept(info);
+      }
+    }
+
+    @Override
     public ASTNumberLiteral getVariable(String name) {
       return variableTable.get(name);
     }
@@ -277,6 +284,8 @@ public class Environment implements TrackableEnvironment {
       }
     }
 
+
+
     public int getPenColorIdx() {
       return penColorIdx;
     }
@@ -284,6 +293,7 @@ public class Environment implements TrackableEnvironment {
     public void setPenColorIdx(int _penColorIdx) {
       penColorIdx = _penColorIdx;
       // TODO: notify view about changes
+
     }
 
     public int getBackgroundColorIdx() {
@@ -293,6 +303,7 @@ public class Environment implements TrackableEnvironment {
     public void setBackgroundColorIdx(int _backgroundColorIdx) {
       backgroundColorIdx = _backgroundColorIdx;
       // TODO: notify view about changes
+      //notifyEnvironmentUpdate(new EnvironmentRecord(palette, backgroundColorIdx));
     }
 
     public int getShapeIdx() {

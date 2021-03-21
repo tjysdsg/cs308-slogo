@@ -65,15 +65,21 @@ public class View {
     this.borderPane = new BorderPane();
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
     this.helpPane = new HelpPane(resources);
-    this.settings = Preferences.userRoot().node(this.getClass().getName());
-
-    this.settingsPane = new SettingsPane(viewCon, settings);
     this.topPane = new HBox();
     this.workspaces = new ArrayList<>();
+    this.settings = Preferences.userRoot().node(this.getClass().getName());
+    settings.addPreferenceChangeListener( e -> {
+      viewCon.setBackground(settings.get("background", "#03A9F4"));
+      viewCon.setLanguage(settings.get("language", "English"));
+      viewCon.setTurtleLogo(settings.get("turtleLogo", "turtle"));
+      viewCon.setPenColor(settings.get("penColor", "20 20 20"));
+    });
+    this.settingsPane = new SettingsPane(viewCon, settings);
     scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
     stage.setScene(scene);
     stage.setMinHeight(HEIGHT);
     stage.setMinWidth(WIDTH);
+
 
     topPane.getChildren().addAll(settingsPane);
     topPane.setStyle("-fx-background-color: white");

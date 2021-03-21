@@ -181,7 +181,6 @@ public class ExecutionScope implements InfoBundle {
   public void setPenColorIdx(int _penColorIdx) {
     penColorIdx = _penColorIdx;
     notifyEnvironment();
-
   }
 
   public int getBackgroundColorIdx() {

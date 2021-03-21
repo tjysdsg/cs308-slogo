@@ -29,7 +29,6 @@ public class ExecutionEnvironment implements InfoBundle {
   private double penSize = 5;
   private Palette palette = new Palette();
   private int mainTurtleIdx = 0;
-  private boolean isOuterScope = true;
   private List<Turtle> turtles;
   private List<Integer> currTurtles;
 
@@ -62,7 +61,6 @@ public class ExecutionEnvironment implements InfoBundle {
     instance.setOnEnvironmentUpdate(updateEnvironmentCallback);
     instance.setOnClear(clearEnvironmentCallback);
 
-    instance.isOuterScope = false;
     return instance;
   }
 
@@ -159,15 +157,15 @@ public class ExecutionEnvironment implements InfoBundle {
   @Override
   public boolean setVariable(String name, ASTNumberLiteral value) {
     boolean ret = !variableTable.containsKey(name);
+
     variableTable.put(name, value);
-    if (isOuterScope) {
-      ArrayList<DisplayVariable> vars = new ArrayList<>();
-      for (var entry : variableTable.entrySet()) {
-        double val = entry.getValue().evaluate(this);
-        vars.add(new DisplayVariable(entry.getKey(), Double.toString(val)));
-      }
-      notifyVariableUpdate(new VariablesRecord(vars));
+    ArrayList<DisplayVariable> vars = new ArrayList<>();
+    for (var entry : variableTable.entrySet()) {
+      double val = entry.getValue().evaluate(this);
+      vars.add(new DisplayVariable(entry.getKey(), Double.toString(val)));
     }
+    notifyVariableUpdate(new VariablesRecord(vars));
+
     return ret;
   }
 
@@ -182,13 +180,12 @@ public class ExecutionEnvironment implements InfoBundle {
     if (ret) {
       commandTable.put(name, command);
     }
-    if (isOuterScope) {
-      ArrayList<DisplayCommand> commands = new ArrayList<>();
-      for (var entry : commandTable.entrySet()) {
-        commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
-      }
-      notifyCommandUpdate(new CommandsRecord(commands));
+
+    ArrayList<DisplayCommand> commands = new ArrayList<>();
+    for (var entry : commandTable.entrySet()) {
+      commands.add(new DisplayCommand(entry.getKey(), entry.getValue().toString()));
     }
+    notifyCommandUpdate(new CommandsRecord(commands));
     return ret;
   }
 
@@ -201,7 +198,7 @@ public class ExecutionEnvironment implements InfoBundle {
 
   @Override
   public void notifyVariableUpdate(VariablesRecord info) {
-    if (isOuterScope && updateVariablesCallback != null) {
+    if (updateVariablesCallback != null) {
       updateVariablesCallback.accept(info);
     }
   }

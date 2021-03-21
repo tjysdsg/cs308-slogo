@@ -3,7 +3,7 @@ package slogo.model.ASTNodes;
 import java.util.List;
 import slogo.model.InfoBundle;
 
-public abstract class ASTUnaryOperator extends ASTCommand {
+public abstract class ASTUnaryOperator extends ASTGroupableCommand {
 
   public ASTUnaryOperator(String name) {
     super(name, 1);

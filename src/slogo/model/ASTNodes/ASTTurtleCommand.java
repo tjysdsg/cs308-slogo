@@ -5,7 +5,7 @@ import java.util.List;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
-public abstract class ASTTurtleCommand extends ASTCommand {
+public abstract class ASTTurtleCommand extends ASTGroupableCommand {
 
   public ASTTurtleCommand(String name, int numParams) {
     super(name, numParams);

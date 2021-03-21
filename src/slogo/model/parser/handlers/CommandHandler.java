@@ -5,9 +5,10 @@ import slogo.exceptions.UnknownIdentifierException;
 import slogo.model.ASTNodes.ASTMakeUserInstruction;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.InfoBundle;
-import slogo.model.parser.ASTCommandFactory;
-import slogo.model.parser.ClassifierFactory;
-import slogo.model.parser.CommandClassifier;
+import slogo.model.parser.factories.ASTCommandFactory;
+import slogo.model.parser.factories.ClassifierFactory;
+import slogo.model.parser.classifiers.CommandClassifier;
+import slogo.model.parser.ParserRecord;
 import slogo.model.parser.Scope;
 
 public class CommandHandler extends LookAheadHandler {

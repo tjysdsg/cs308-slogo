@@ -1,10 +1,12 @@
-package slogo.model.parser.handlers;
+package slogo.model.parser.factories;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import slogo.model.parser.ParserRecord;
+import slogo.model.parser.handlers.Handler;
 
 public class HandlerFactory {
-  private static final String PACKAGE = HandlerFactory.class.getPackageName() + ".";
+  private static final String PACKAGE = Handler.class.getPackageName() + ".";
   private static final String SUFFIX = "Handler";
   private ParserRecord parserInfo;
 

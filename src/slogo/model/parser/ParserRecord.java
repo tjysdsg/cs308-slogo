@@ -1,4 +1,4 @@
-package slogo.model.parser.handlers;
+package slogo.model.parser;
 
 import java.util.List;
 import java.util.Stack;

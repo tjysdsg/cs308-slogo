@@ -8,16 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import slogo.exceptions.FloatingValueException;
 import slogo.exceptions.IncorrectParameterCountException;
-import slogo.exceptions.InvalidSyntaxException;
 import slogo.exceptions.UnknownIdentifierException;
 import slogo.exceptions.UnmatchedSquareBracketException;
 import slogo.model.ASTNodes.ASTBackward;
@@ -27,13 +23,13 @@ import slogo.model.ASTNodes.ASTForward;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
-import slogo.model.ASTNodes.ASTRemainder;
 import slogo.model.ASTNodes.ASTRepeat;
 import slogo.model.ASTNodes.ASTSum;
-import slogo.model.ASTNodes.ASTUnaryOperator;
 import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.InfoBundle;
 import slogo.model.TestBundle;
+import slogo.model.parser.classifiers.CommandClassifier;
+import slogo.model.parser.factories.ClassifierFactory;
 
 
 /**

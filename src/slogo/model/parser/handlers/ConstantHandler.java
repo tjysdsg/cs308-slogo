@@ -1,6 +1,7 @@
 package slogo.model.parser.handlers;
 
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.parser.ParserRecord;
 
 public class ConstantHandler extends LiteralHandler {
 

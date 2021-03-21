@@ -1,6 +1,7 @@
 package slogo.model.parser.handlers;
 
 import slogo.model.ASTNodes.ASTVariable;
+import slogo.model.parser.ParserRecord;
 
 public class VariableHandler extends LiteralHandler {
 

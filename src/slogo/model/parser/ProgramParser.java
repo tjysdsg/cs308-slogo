@@ -7,9 +7,10 @@ import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
 import slogo.model.InfoBundle;
+import slogo.model.parser.classifiers.SyntaxClassifier;
+import slogo.model.parser.factories.ClassifierFactory;
+import slogo.model.parser.factories.HandlerFactory;
 import slogo.model.parser.handlers.Handler;
-import slogo.model.parser.handlers.HandlerFactory;
-import slogo.model.parser.handlers.ParserRecord;
 
 public class ProgramParser implements Parser {
 

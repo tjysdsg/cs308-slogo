@@ -3,8 +3,8 @@ package slogo.model.parser.handlers;
 import java.util.List;
 import slogo.exceptions.InvalidTokenTypeException;
 import slogo.exceptions.NotEnoughTokensException;
-import slogo.model.parser.ClassifierFactory;
-import slogo.model.parser.SyntaxClassifier;
+import slogo.model.parser.factories.ClassifierFactory;
+import slogo.model.parser.classifiers.SyntaxClassifier;
 
 public abstract class LookAheadHandler implements Handler {
 

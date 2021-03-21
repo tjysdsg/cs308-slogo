@@ -26,7 +26,7 @@ public abstract class LookAheadHandler implements Handler {
     String actualType = syntaxClassifier.getSymbol(nextToken);
     if (!actualType.equals(expectedType)) {
       throw new InvalidTokenTypeException
-          (nextToken, expectedType, currentToken, actualType);
+          (currentToken, expectedType, nextToken, actualType);
     }
 
     return nextToken;

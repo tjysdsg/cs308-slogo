@@ -4,7 +4,7 @@ package slogo.exceptions;
  * This Exception is used when a token is given the wrong number of parameters. It can greater or higher than the required amount
  */
 public class InvalidTokenTypeException extends ModelException {
-  private static final String name = "InvalidCommandIdentifierException";
+  private static final String name = "InvalidTokenTypeException";
   private String nextToken;
   private String expected;
   private String actual;
@@ -14,7 +14,7 @@ public class InvalidTokenTypeException extends ModelException {
    * Creates a new instance of this exception.
    * @param nextToken the invalid name
    */
-  public InvalidTokenTypeException(String currentToken, String nextToken, String expected, String actual) {
+  public InvalidTokenTypeException(String currentToken, String expected, String nextToken, String actual) {
     super(name);
     this.currentToken = currentToken;
     this.nextToken = nextToken;

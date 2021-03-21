@@ -1,9 +1,12 @@
 package slogo.model;
 
 import java.util.List;
-import java.util.ResourceBundle;
 import slogo.events.ClearEnvironment;
+import slogo.events.DisplayVariable;
+import slogo.events.EnvironmentRecord;
+import slogo.events.TurtleRecord;
 import slogo.events.UpdateCommands;
+import slogo.events.UpdateEnvironment;
 import slogo.events.UpdateTurtle;
 import slogo.events.UpdateVariables;
 
@@ -45,9 +48,9 @@ public interface TrackableEnvironment {
   void runCommand(String command);
 
   /**
-   * Sets the environmentInfo to use for translating commands
+   * Sets the language to use for translating commands
    *
-   * @param bundle - The environmentInfo to use.
+   * @param language - The language to use.
    */
   void setLanguage(String language);
 
@@ -58,4 +61,13 @@ public interface TrackableEnvironment {
   void setCurrTurtle(List<Integer> turtle);
 
   void setOnClear(ClearEnvironment callback);
+
+  void requestVariablesUpdate(DisplayVariable variable);
+
+  void requestTurtleUpdate(TurtleRecord record);
+
+  void requestEnvironmentUpdate(EnvironmentRecord record);
+
+  void setOnEnvironmentUpdate(UpdateEnvironment callback);
+
 }

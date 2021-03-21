@@ -10,8 +10,8 @@ public class ConstantHandler extends LiteralHandler {
   }
 
   @Override
-  public void handle(String token) {
-    assertScopeNeedsChild(token);
-    addNode(new ASTNumberLiteral(Double.parseDouble(token)));
+  public void handle(String currentToken) {
+    assertScopeNeedsChild(currentToken);
+    addNode(new ASTNumberLiteral(Double.parseDouble(currentToken)));
   }
 }

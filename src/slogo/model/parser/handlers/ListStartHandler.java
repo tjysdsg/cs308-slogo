@@ -12,7 +12,7 @@ public class ListStartHandler implements Handler  {
   }
 
   @Override
-  public void handle(String token) {
+  public void handle(String currentToken) {
     scopeStack.push(new Scope());
   }
 }

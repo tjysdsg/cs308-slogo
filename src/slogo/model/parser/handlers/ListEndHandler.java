@@ -10,7 +10,7 @@ public class ListEndHandler extends ScopeEndHandler {
   }
 
   @Override
-  public void handle(String token) {
+  public void handle(String currentToken) {
     ASTNode child = popCurrentScope();
     getCurrentScope().addNode(child);
   }

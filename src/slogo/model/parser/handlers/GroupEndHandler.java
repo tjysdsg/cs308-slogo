@@ -10,7 +10,7 @@ public class GroupEndHandler extends ScopeEndHandler {
   }
 
   @Override
-  public void handle(String token) {
+  public void handle(String currentToken) {
     ASTNode orphanage = popCurrentScope();
     getCurrentScope().addAllNodes(orphanage.getChildren());
   }

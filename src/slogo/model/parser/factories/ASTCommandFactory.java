@@ -1,4 +1,4 @@
-package slogo.model.parser;
+package slogo.model.parser.factories;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

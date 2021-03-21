@@ -16,11 +16,11 @@ import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
 public class ScopeTest {
-  private Scope myScope;
+  private ParsingScope myScope;
 
   @BeforeEach
   void setUp() {
-    myScope = new Scope();
+    myScope = new ParsingScope();
   }
 
   @Test
@@ -32,10 +32,10 @@ public class ScopeTest {
 
   @Test
   void testCollapse() {
-    myScope.push(new ASTForward());
+    myScope.addNode(new ASTForward());
     assertNextIsChild();
 
-    myScope.push(new ASTNumberLiteral(50));
+    myScope.addNode(new ASTNumberLiteral(50));
     assertNextNotChild();
 
     ASTNode child = new ASTForward();
@@ -50,7 +50,7 @@ public class ScopeTest {
     ASTNode child = new ASTForward();
     child.addChild(new ASTNumberLiteral(50));
     ASTNode expected = new ASTCompoundStatement(List.of(child, new ASTNumberLiteral(50)));
-    myScope.push(new ASTNumberLiteral(50));
+    myScope.addNode(new ASTNumberLiteral(50));
     ParserTest.assertNodeStructure(expected, myScope.getCommands());
   }
 

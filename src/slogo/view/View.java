@@ -18,12 +18,13 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
+import slogo.model.notifiers.ModelTracker;
 
 /**
  * @author Joshua Pettima
  * @author marthaaboagye This class coordinates between all other classes from the view package. It
  *     needs to be initialized with a stage and a model controller object. It also contains a
- *     private View bundle class that implements the view controller and allows the user to change
+ *     private View environmentInfo class that implements the view controller and allows the user to change
  *     the color for the pen and background.
  */
 public class View {
@@ -128,10 +129,11 @@ public class View {
     settingsPane.getStyleClass().add("component-pane");
     helpPane.getStyleClass().add("component-pane");
 
-    environment.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
-    environment.setOnVariableUpdate(e -> environmentPane.updateVariables(e));
-    environment.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
-    environment.setOnClear(() -> turtleSandbox.clearLines());
+    ModelTracker tracker = environment.getTracker();
+    tracker.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
+    tracker.setOnVarUpdate(e -> environmentPane.updateVariables(e));
+    tracker.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
+    tracker.setOnClear(() -> turtleSandbox.clearLines());
 
     workspaces.add(workspace);
     return workspace;

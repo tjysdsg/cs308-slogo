@@ -7,7 +7,7 @@ import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTNode;
 
-public class Scope {
+public class ParsingScope {
   private Stack<ASTNode> myStack = new Stack<>();
   private List<ASTNode> commands = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class Scope {
     return myStack.peek();
   }
 
-  public void push(ASTNode command) {
+  public void addNode(ASTNode command) {
     if (addNextAsChild()) {
       myStack.peek().addChild(command);
     }
@@ -35,7 +35,7 @@ public class Scope {
     collapse();
   }
 
-  public void pushAll(List<ASTNode> orphanage) {
+  public void addAllNodes(List<ASTNode> orphanage) {
     for (ASTNode child : orphanage) {
       myStack.peek().addChild(child);
     }

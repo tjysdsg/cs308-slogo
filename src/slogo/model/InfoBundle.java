@@ -2,6 +2,7 @@ package slogo.model;
 
 import java.util.List;
 import slogo.events.CommandsRecord;
+import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
@@ -17,34 +18,15 @@ public interface InfoBundle {
    */
   List<Turtle> getActiveTurtles();
 
+  List<Turtle> getAllTurtles();
+
   Turtle getMainTurtle();
 
   void setCurrTurtle(List<Integer> currTurtles);
 
   void setMainTurtle(int idx);
 
-  /**
-   * Notifies the listener of an update to the turtle.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyTurtleUpdate(TurtleRecord info);
-
-  /**
-   * Notifies the listener of an update to the user-defined commands.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyCommandUpdate(CommandsRecord info);
-
-  /**
-   * Notifies the listener of an update to the variables within the environment.
-   *
-   * @param info - The information to pass to listeners
-   */
-  void notifyVariableUpdate(VariablesRecord info);
-
-  void notifyEnvironmentClear();
+  int getTotalNumTurtles();
 
   ASTNumberLiteral getVariable(String name);
 
@@ -55,6 +37,7 @@ public interface InfoBundle {
 
   /**
    * Returns the mapping of command names to command node.
+   *
    * @return
    */
 //  Map<String, ASTFunctionCall> getCommandTable();
@@ -64,4 +47,24 @@ public interface InfoBundle {
   boolean setCommand(String name, ASTFunctionCall command);
 
   InfoBundle clone();
+
+  int getPenColorIdx();
+
+  void setPenColorIdx(int penColorIdx);
+
+  int getBackgroundColorIdx();
+
+  void setBackgroundColorIdx(int backgroundColorIdx);
+
+  int getShapeIdx();
+
+  void setShapeIdx(int shapeIdx);
+
+  void setPalette(int idx, double r, double g, double b);
+
+  Color getPalette(int idx);
+
+  void setPenSize(double val);
+
+  void clear();
 }

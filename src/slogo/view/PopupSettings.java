@@ -62,15 +62,26 @@ public class PopupSettings extends Pane {
 
   //TODO: I THINK THIS IS WHERE JOSH PLACES THE
   //GLOBAL PREFERENCES THING
+  //
+  //IT IS!
   private void createPreferencesAction() {
     fontPicker.setOnAction(e -> {
-      ;
+      String font = fontPicker.getSelectionModel().getSelectedItem();
+      if (font != null) {
+        settings.put("font",font);
+      }
     });
     turtlePicker.setOnAction(e -> {
-      ;
+      String logo =  turtlePicker.getSelectionModel().getSelectedItem();
+      if (logo != null) {
+        settings.put("turtleLogo", logo);
+      }
     });
     themePicker.setOnAction(e -> {
-      ;
+      String theme =  themePicker.getSelectionModel().getSelectedItem();
+      if (theme != null) {
+        settings.put("theme", theme);
+      }
     });
     fontSizePicker.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {

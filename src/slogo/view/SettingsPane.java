@@ -92,7 +92,9 @@ public class SettingsPane extends Pane {
     penColorPicker = new ColorPicker();
     penColorPicker.setOnAction(
         e -> {
-          vcon.setPenColor(penColorPicker.getValue().toString());
+          String penColor = penColorPicker.getValue().toString();
+          vcon.setPenColor(penColor);
+          settings.put("penColor", penColor);
         });
 
     penPane.add(penColorLabel, 0, 0);
@@ -104,7 +106,9 @@ public class SettingsPane extends Pane {
 
     backgroundColorPicker.setOnAction(
         e -> {
-          vcon.setBackground(backgroundColorPicker.getValue().toString());
+          String bgColor = backgroundColorPicker.getValue().toString();
+          vcon.setBackground(bgColor);
+          settings.put("background", bgColor);
         });
 
     backgroundPane = new GridPane();
@@ -140,7 +144,9 @@ public class SettingsPane extends Pane {
     languageList.setValue("English");
     languageList.setOnAction(
         e -> {
-          vcon.setLanguage(languageList.getValue());
+          String lang = languageList.getValue();
+          vcon.setLanguage(lang);
+          settings.put("language", lang);
         });
   }
 

@@ -1,5 +1,10 @@
 package slogo.model;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import slogo.model.ASTNodes.ASTMakeVariable;
@@ -13,7 +18,7 @@ import slogo.model.notifiers.TurtleNotifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
-public class Environment implements TrackableEnvironment {
+public class Environment implements TrackableEnvironment, Serializable {
 
   private List<Turtle> turtles = new ArrayList<>();
   private List<Integer> currTurtles = new ArrayList<>();
@@ -30,13 +35,6 @@ public class Environment implements TrackableEnvironment {
   public Environment() {
     turtles.add(new Turtle(0, delegate));
     currTurtles.add(0);
-
-    delegate.onRequestVarUpdate(variable -> {
-      ASTNode variableSetter = new ASTMakeVariable();
-      variableSetter.addChild(new ASTVariable(variable.name()));
-      variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
-      variableSetter.evaluate(executionScope);
-    });
   }
 
   public void runCommand(String command) {
@@ -46,6 +44,24 @@ public class Environment implements TrackableEnvironment {
 
   public ModelTracker getTracker() {
     return delegate;
+  }
+
+  @Override
+  public void saveEnv(File saveLocation) {
+    try {
+      FileOutputStream fileOut = new FileOutputStream(saveLocation);
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      out.writeObject(this);
+      out.close();
+      fileOut.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void loadEnv(File loadLocation) {
+
   }
 
   public void setLanguage(String language) {

@@ -10,7 +10,10 @@ import slogo.events.DisplayVariable;
 import slogo.events.EnvironmentRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeVariable;
+import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.notifiers.EnvironmentNotifier;
 import slogo.model.notifiers.TurtleNotifier;
 
@@ -48,6 +51,13 @@ public class ExecutionScope implements InfoBundle {
     envNotifier.onRequestTurtleUpdate(record -> {
       Turtle toUpdate = turtles.get(record.id());
       toUpdate.update(record);
+    });
+
+    envNotifier.onRequestVarUpdate(variable -> {
+      ASTNode variableSetter = new ASTMakeVariable();
+      variableSetter.addChild(new ASTVariable(variable.name()));
+      variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
+      variableSetter.evaluate(this);
     });
   }
 

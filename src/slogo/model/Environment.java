@@ -34,7 +34,7 @@ public class Environment implements TrackableEnvironment {
   private int penColorIdx = 0;
   private int backgroundColorIdx = 0;
   private int shapeIdx = 0;
-  private int penSize = 5;
+  private double penSize = 5;
   private Palette palette = new Palette();
 
   private static final String DEFAULT_LANG = "English";
@@ -319,7 +319,8 @@ public class Environment implements TrackableEnvironment {
       return palette.getColor(idx);
     }
 
-    public void setPenSize(int newSize) {
+    @Override
+    public void setPenSize(double newSize) {
       penSize = newSize;
       notifyEnvironmentUpdate();
     }

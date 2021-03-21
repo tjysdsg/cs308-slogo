@@ -95,6 +95,11 @@ public class TestBundle implements InfoBundle {
   }
 
   @Override
+  public void notifyEnvironmentUpdate() {
+
+  }
+
+  @Override
   public ASTNumberLiteral getVariable(String name) {
     return variableTable.get(name);
   }
@@ -196,5 +201,10 @@ public class TestBundle implements InfoBundle {
   public Color getPalette(int idx) {
     // TODO: implement this
     return null;
+  }
+
+  @Override
+  public void setPenSize(double val) {
+
   }
 }

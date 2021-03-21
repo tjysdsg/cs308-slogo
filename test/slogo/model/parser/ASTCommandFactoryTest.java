@@ -15,7 +15,7 @@ import slogo.model.TestBundle;
 import slogo.model.parser.factories.ASTCommandFactory;
 
 public class ASTCommandFactoryTest {
-  private static final String RESOURCES_PACKAGE = "resources.commands.";
+  private static final String RESOURCES_PACKAGE = "resources.";
   private static final String LANGUAGE = "languages.English";
   public static final String packagePath = "slogo.";
   public static final String classPrefix = "model.ASTNodes.AST";

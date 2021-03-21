@@ -135,4 +135,9 @@ public class Turtle {
   public boolean isPenDown() {
     return this.penDown;
   }
+
+  public void update(TurtleRecord record) {
+    setPosition(record.xCoord(), record.yCoord());
+    setRotation(record.rotation());
+  }
 }

@@ -9,11 +9,11 @@ import slogo.model.parser.factories.ASTCommandFactory;
 import slogo.model.parser.factories.ClassifierFactory;
 import slogo.model.parser.classifiers.CommandClassifier;
 import slogo.model.parser.ParserRecord;
-import slogo.model.parser.Scope;
+import slogo.model.parser.ParsingScope;
 
 public class CommandHandler extends LookAheadHandler {
 
-  private Stack<Scope> scopeStack;
+  private Stack<ParsingScope> scopeStack;
   private CommandClassifier commandClassifier;
   private ASTCommandFactory commandFactory;
   private InfoBundle environmentInfo;
@@ -49,7 +49,7 @@ public class CommandHandler extends LookAheadHandler {
       newCommand = commandFactory.getCommand(commandName);
     }
 
-    Scope currScope = scopeStack.peek();
+    ParsingScope currScope = scopeStack.peek();
     currScope.addNode(newCommand);
   }
 }

@@ -16,7 +16,7 @@ import slogo.exceptions.UnknownIdentifierException;
 */
 public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
   // where to find resources specifically for this class
-  private static final String RESOURCES_PACKAGE = "resources.commands.";
+  private static final String RESOURCES_PACKAGE = "resources.";
   // "types" and the regular expression patterns that recognize those types
   // note, it is a list because order matters (some patterns may be more generic)
   private List<Entry<String, Pattern>> mySymbols;

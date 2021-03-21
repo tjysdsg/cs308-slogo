@@ -2,10 +2,10 @@ package slogo.model.parser.handlers;
 
 import java.util.Stack;
 import slogo.model.parser.ParserRecord;
-import slogo.model.parser.Scope;
+import slogo.model.parser.ParsingScope;
 
 public class ListStartHandler implements Handler  {
-  private Stack<Scope> scopeStack;
+  private Stack<ParsingScope> scopeStack;
 
   public ListStartHandler(ParserRecord parserInfo) {
     scopeStack = parserInfo.scopeStack();
@@ -13,6 +13,6 @@ public class ListStartHandler implements Handler  {
 
   @Override
   public void handle(String currentToken) {
-    scopeStack.push(new Scope());
+    scopeStack.push(new ParsingScope());
   }
 }

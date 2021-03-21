@@ -16,11 +16,11 @@ import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 
 public class ScopeTest {
-  private Scope myScope;
+  private ParsingScope myScope;
 
   @BeforeEach
   void setUp() {
-    myScope = new Scope();
+    myScope = new ParsingScope();
   }
 
   @Test

@@ -8,11 +8,14 @@ import java.util.function.Consumer;
 import slogo.events.CommandsRecord;
 import slogo.events.DisplayCommand;
 import slogo.events.DisplayVariable;
+import slogo.events.EnvironmentRecord;
 import slogo.events.TurtleRecord;
 import slogo.events.VariablesRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
+import slogo.model.ASTNodes.ASTMakeVariable;
 import slogo.model.ASTNodes.ASTNode;
 import slogo.model.ASTNodes.ASTNumberLiteral;
+import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
@@ -26,6 +29,7 @@ public class Environment implements TrackableEnvironment {
   private Consumer<VariablesRecord> updateVariablesCallback;
   private Consumer<CommandsRecord> updateCommandsCallback;
   private Runnable clearEnvironmentCallback;
+  private Consumer<EnvironmentRecord> updateEnvironmentCallback;
   private Parser myParser;
   private int penColorIdx = 0;
   private int backgroundColorIdx = 0;
@@ -36,7 +40,6 @@ public class Environment implements TrackableEnvironment {
 
   public Environment() {
     executionEnvironment = new ExecutionEnvironment();
-
     myParser = new ProgramParser(DEFAULT_LANG, executionEnvironment);
     turtles = new ArrayList<>();
     turtles.add(new Turtle(0, executionEnvironment));
@@ -63,6 +66,31 @@ public class Environment implements TrackableEnvironment {
 
   public void setOnClear(Runnable callback) {
     this.clearEnvironmentCallback = callback;
+  }
+
+  @Override
+  public void requestVariablesUpdate(DisplayVariable variable) {
+    ASTNode variableSetter = new ASTMakeVariable();
+    variableSetter.addChild(new ASTVariable(variable.name()));
+    variableSetter.addChild(new ASTNumberLiteral(Double.parseDouble(variable.value())));
+    variableSetter.evaluate(executionEnvironment);
+  }
+
+  @Override
+  public void requestTurtleUpdate(TurtleRecord record) {
+    Turtle toUpdate = turtles.get(record.id());
+    toUpdate.update(record);
+  }
+
+  @Override
+  public void requestEnvironmentUpdate(EnvironmentRecord record) {
+    record.backgroundIndex();
+    record.colorIndexes();
+  }
+
+  @Override
+  public void setOnEnvironmentUpdate(Consumer<EnvironmentRecord> callback) {
+    updateEnvironmentCallback = callback;
   }
 
   public void setLanguage(String language) {

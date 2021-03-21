@@ -15,7 +15,7 @@ import slogo.model.parser.classifiers.CommandClassifier;
 import slogo.model.parser.factories.ClassifierFactory;
 
 public class CommandClassifierTest {
-  private static final String RESOURCES_PACKAGE = "resources.commands.";
+  private static final String RESOURCES_PACKAGE = "resources.";
   private static final String LANGUAGES = "languages.";
 
   private String[] languages = new String[] {

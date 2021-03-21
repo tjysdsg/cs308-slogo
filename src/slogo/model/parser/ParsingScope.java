@@ -7,7 +7,7 @@ import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.ASTNodes.ASTCompoundStatement;
 import slogo.model.ASTNodes.ASTNode;
 
-public class Scope {
+public class ParsingScope {
   private Stack<ASTNode> myStack = new Stack<>();
   private List<ASTNode> commands = new ArrayList<>();
 

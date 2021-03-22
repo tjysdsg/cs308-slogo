@@ -50,9 +50,6 @@ public class EnvironmentPaneTest extends util.DukeApplicationTest {
 
   }
 
-  //not sure how to specify model elements
-  //for the view. clicking run doesnt do anything.
-  //there is no where to pass a parser object.
 
   @Test
   void testPreviousCommandList(){
@@ -63,9 +60,6 @@ public class EnvironmentPaneTest extends util.DukeApplicationTest {
     clickOn(run);
     sleep(1, TimeUnit.SECONDS);
     prevCommands = (JFXListView<Label>) environmentPane.lookup("#prevCommands");
-    //System.out.println(prevCommands.getItems().get(0));
-    //assertEquals(expected, prevCommands.getItems().get(0).toString());
-
 
   }
 

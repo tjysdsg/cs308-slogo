@@ -33,6 +33,7 @@ public class CommandPane extends Pane {
     vcon = viewcon;
     makeBottomPane();
     getChildren().add(pane);
+    setChildrenIDs();
     pane.setTranslateX(300);
 
 

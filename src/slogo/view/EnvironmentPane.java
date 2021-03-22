@@ -97,6 +97,7 @@ public class EnvironmentPane extends GridPane {
 
   private void setID() {
     previousCommands.setId("prevCommands");
+
   }
 
   public void setResources(ResourceBundle resources) {

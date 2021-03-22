@@ -34,6 +34,7 @@ public class EnvironmentPane extends GridPane {
   private ModelTracker environment;
   private ViewController viewController;
   private TextInputDialog changeVarDialog;
+  private TextInputDialog sendCommandDialog;
   private int keycodeUpCount = 0;
 
   public EnvironmentPane(ViewController viewController, ModelTracker environment) {
@@ -48,6 +49,9 @@ public class EnvironmentPane extends GridPane {
     variablesToggle = new TitledPane();
     variablesToggle.setContent(variablesTable);
     createVariableDialog();
+
+    this.sendCommandDialog = new TextInputDialog();
+    sendCommandDialog.setHeaderText("Enter Parameters: ");
 
     previousCommands = new JFXListView<Label>();
     previousCommands.setMinHeight(TABLE_SIZE);
@@ -135,6 +139,19 @@ public class EnvironmentPane extends GridPane {
               String value = res.get();
               DisplayVariable dv = new DisplayVariable(variableName, value);
               environment.requestVarUpdate(dv);
+            }
+          }
+        });
+
+    commandsTable.setOnMouseClicked(
+        e -> {
+          if (e.getClickCount() == 2) {
+            DisplayCommand command = commandsTable.getSelectionModel().getSelectedItem();
+            String commandName = command.name();
+            Optional<String> res = sendCommandDialog.showAndWait();
+            if (res.isPresent()) {
+              String value = res.get();
+              viewController.sendCommand(commandName + " " + value);
             }
           }
         });

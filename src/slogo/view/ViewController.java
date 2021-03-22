@@ -48,5 +48,13 @@ public interface ViewController {
 
   void fillCommandArea(String text);
 
+  void setFontSize(int size);
+
+  void setFont(String font);
+
+  void saveEnvironment();
+
+  void loadEnvironment();
+
   ResourceBundle getResources();
 }

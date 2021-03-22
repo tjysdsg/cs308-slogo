@@ -15,15 +15,18 @@ import org.junit.jupiter.api.Test;
 import slogo.Main;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
+import util.DukeApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
-public class EnvironmentPaneTest extends util.DukeApplicationTest {
+
+public class EnvironmentPaneTest extends DukeApplicationTest {
 
   private Main myApp;
   private Pane environmentPane;
   private Pane commandPane;
   private TextArea codeArea;
   private Button run;
-  private JFXListView<Label>prevCommands;
+  private JFXListView<Label> prevCommands;
 
 
   @Override
@@ -35,16 +38,15 @@ public class EnvironmentPaneTest extends util.DukeApplicationTest {
   }
 
   @Test
-  void testCodeArea(){
-    codeArea= (TextArea) commandPane.lookup("#codeArea");
+  void testCodeArea() {
+    codeArea = (TextArea) commandPane.lookup("#codeArea");
     String expected = "Forward 50";
-    sleep(1, TimeUnit.SECONDS);
     writeTo(codeArea, expected);
     assertEquals(expected, codeArea.getText());
     expected = "back 200\n# WITH A COMMENT IN BETWEEN \n fd 100";
     writeTo(codeArea, expected);
     assertEquals(expected, codeArea.getText());
-    expected  = "frente 60";
+    expected = "frente 60";
     writeTo(codeArea, expected);
     assertEquals(expected, codeArea.getText());
 
@@ -52,15 +54,13 @@ public class EnvironmentPaneTest extends util.DukeApplicationTest {
 
 
   @Test
-  void testPreviousCommandList(){
-    codeArea= (TextArea) commandPane.lookup("#codeArea");
-    String expected = "error error";
-    writeTo(codeArea, expected);
+  void testPreviousCommandList() throws InterruptedException {
+    codeArea = (TextArea) commandPane.lookup("#codeArea");
+    String expected = "Forward 50";
     run = (Button) commandPane.lookup("#runButton");
-    clickOn(run);
-    sleep(1, TimeUnit.SECONDS);
     prevCommands = (JFXListView<Label>) environmentPane.lookup("#prevCommands");
-
+    prevCommands.getItems().add(new Label(expected));
+    assertEquals(expected, prevCommands.getItems().get(0).toString());
   }
 
 

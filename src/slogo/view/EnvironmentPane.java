@@ -1,5 +1,6 @@
 package slogo.view;
 
+import slogo.model.notifiers.ModelTracker;
 import com.jfoenix.controls.JFXListView;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -30,11 +31,13 @@ public class EnvironmentPane extends GridPane {
   private TitledPane commandsToggle;
   private TitledPane variablesToggle;
   private TitledPane prevCommands;
+  private ModelTracker environment;
   private ViewController viewController;
   private TextInputDialog changeVarDialog;
   private int keycodeUpCount = 0;
 
-  public EnvironmentPane(ViewController viewController) {
+  public EnvironmentPane(ViewController viewController, ModelTracker environment) {
+    this.environment = environment;
     this.viewController = viewController;
     this.resources = viewController.getResources();
     variablesTable = new TableView<>();
@@ -129,8 +132,9 @@ public class EnvironmentPane extends GridPane {
             String variableName = variable.name();
             Optional<String> res = changeVarDialog.showAndWait();
             if (res.isPresent()) {
-              double value = Double.parseDouble(res.get());
-              viewController.changeVariable(variableName, value);
+              String value = res.get();
+              DisplayVariable dv = new DisplayVariable(variableName, value);
+              environment.requestVarUpdate(dv);
             }
           }
         });
@@ -151,12 +155,13 @@ public class EnvironmentPane extends GridPane {
 
   public String getPreviousCommand() {
     keycodeUpCount++;
-    while (keycodeUpCount <=previousCommands.getItems().size()) {
+    while (keycodeUpCount <= previousCommands.getItems().size()) {
       int index = previousCommands.getItems().size() - keycodeUpCount;
       return lastRanCommand != null ? previousCommands.getItems().get(index).getText() : "";
-    };
-    keycodeUpCount =0;
-    return previousCommands.getItems().get(0).getText();
+    }
+    ;
+    keycodeUpCount = 0;
+    return "";
 
   }
 

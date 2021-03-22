@@ -1,5 +1,6 @@
 package slogo.view;
 
+import java.util.prefs.Preferences;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,7 @@ public class SettingsPane extends Pane {
   private FileChooser fileChooser;
   private File userFile;
   private Node node;
+  private Preferences settings;
   private ViewController vcon;
   private PopupSettings popupSettings;
 
@@ -48,8 +50,9 @@ public class SettingsPane extends Pane {
    *
    * @param vcon
    */
-  public SettingsPane(ViewController vcon) {
+  public SettingsPane(ViewController vcon, Preferences settings) {
     this.vcon = vcon;
+    this.settings = settings;
     createHbox();
     getChildren().add(hbox);
   }
@@ -60,7 +63,7 @@ public class SettingsPane extends Pane {
     createPenAndBackground();
     createTurtleOptions();
     createTurtleUpload();
-    popupSettings = new PopupSettings();
+    popupSettings = new PopupSettings(settings, vcon);
     hbox = new HBox(title, languageList, penPane, backgroundPane, popupSettings);
     hbox.setAlignment(Pos.CENTER);
     hbox.setSpacing(20);
@@ -76,8 +79,7 @@ public class SettingsPane extends Pane {
         e -> {
           node = (Node) e.getSource();
           userFile = fileChooser.showOpenDialog(node.getScene().getWindow());
-          System.out.println(userFile.toString());
-          //vcon.setTurtleLogo(userFile.toString());
+          vcon.setTurtleLogo(userFile.toString());
           if (userFile == null) {
             System.out.println("empty file");
           }
@@ -90,7 +92,9 @@ public class SettingsPane extends Pane {
     penColorPicker = new ColorPicker();
     penColorPicker.setOnAction(
         e -> {
-          vcon.setPenColor(penColorPicker.getValue().toString());
+          String penColor = penColorPicker.getValue().toString();
+          vcon.setPenColor(penColor);
+          settings.put("penColor", penColor);
         });
 
     penPane.add(penColorLabel, 0, 0);
@@ -102,7 +106,9 @@ public class SettingsPane extends Pane {
 
     backgroundColorPicker.setOnAction(
         e -> {
-          vcon.setBackground(backgroundColorPicker.getValue().toString());
+          String bgColor = backgroundColorPicker.getValue().toString();
+          vcon.setBackground(bgColor);
+          settings.put("background", bgColor);
         });
 
     backgroundPane = new GridPane();
@@ -138,8 +144,15 @@ public class SettingsPane extends Pane {
     languageList.setValue("English");
     languageList.setOnAction(
         e -> {
-          vcon.setLanguage(languageList.getValue());
+          String lang = languageList.getValue();
+          vcon.setLanguage(lang);
+          settings.put("language", lang);
         });
+  }
+
+  protected void setSettings(Preferences settings) {
+    this.settings = settings;
+    popupSettings.setSettings(settings);
   }
 
   public void setResources(ResourceBundle resource) {
@@ -147,6 +160,7 @@ public class SettingsPane extends Pane {
     popupSettings.setResources(resource);
     displayLabels();
   }
+
 
   private void displayLabels() {
     title.setText(resources.getString("title"));

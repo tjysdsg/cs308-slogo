@@ -1,5 +1,7 @@
 package slogo.view;
 
+import slogo.model.notifiers.ModelTracker;
+import slogo.records.EnvironmentRecord;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.ColumnConstraints;
@@ -41,20 +46,29 @@ public class TurtleSandbox extends GridPane {
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
+  private int mainTurtle = 0;
   private StackPane lines;
   private StackPane sandbox;
   private HBox controls;
   private double dragX;
   private double dragY;
+  private FileChooser fileChooser;
   private ViewController viewController;
+  private double penThickness;
+  private ModelTracker modelTracker;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
-  public TurtleSandbox(ViewController viewController) {
+  public TurtleSandbox(ViewController viewController, ModelTracker tracker) {
     this.turtles = new ArrayList<>();
     this.lines = new StackPane();
     this.sandbox = new StackPane();
     this.viewController = viewController;
     this.controls = createControls();
+    this.fileChooser = new FileChooser();
+    this.penThickness = 5;
+    this.modelTracker = tracker;
+
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
     getChildren().addAll(sandbox, controls);
@@ -121,8 +135,8 @@ public class TurtleSandbox extends GridPane {
 
   private HBox createControls() {
     HBox controls = new HBox();
-    controls.setSpacing(5);
-    controls.setStyle("-fx-background-color: rgba(95, 84, 87, 0.74)");
+    controls.setSpacing(10);
+    controls.getStyleClass().add("sandbox-controls");
 
     Button addTurtle = createControlButton("Add Turtle");
     addTurtle.setOnAction(
@@ -134,6 +148,11 @@ public class TurtleSandbox extends GridPane {
     addTip.setShowDelay(Duration.millis(200));
     addTurtle.setTooltip(addTip);
     Button centerButton = createControlButton("Center");
+    Button saveEnvironment = createControlButton("Save Environment");
+    saveEnvironment.setOnAction( e -> viewController.saveEnvironment());
+
+    Button loadEnvironment = createControlButton("Load Environment");
+    loadEnvironment.setOnAction( e -> viewController.loadEnvironment());
 
     TranslateTransition centerSandbox = new TranslateTransition();
     centerSandbox.setDuration(Duration.seconds(1));
@@ -147,29 +166,47 @@ public class TurtleSandbox extends GridPane {
     scaleCenter.setNode(sandbox);
     scaleCenter.setDuration(Duration.seconds(1));
     ParallelTransition center = new ParallelTransition(centerSandbox, scaleCenter);
-
+    HBox penThicknessSetting = createPenSettings();
     centerButton.setOnAction(
         (e) -> {
           center.play();
         });
     Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
-    saveImage.setOnAction(
-        (e) -> {
-          WritableImage wi = new WritableImage((int) sandbox.getWidth(), (int) sandbox.getHeight());
-          snapshot(null, wi);
-          File file = fileChooser.showSaveDialog(getScene().getWindow());
-          if (file == null) return;
-          try {
-            ImageIO.write(SwingFXUtils.fromFXImage(wi, null), "png", file);
-          } catch (IOException uhoh) {
-            uhoh.printStackTrace();
-          }
-        });
-    controls.getChildren().addAll(addTurtle, centerButton, saveImage);
+    saveImage.setOnAction((e) -> saveImage());
+    controls.getChildren().addAll(addTurtle, centerButton, saveImage, saveEnvironment, loadEnvironment, penThicknessSetting);
     return controls;
+  }
+
+  private HBox createPenSettings() {
+    Label penThicknessLabel = new Label("Pen Thickness");
+    HBox penThicknessSetting = new HBox();
+    penThicknessSetting.setAlignment(Pos.CENTER_RIGHT);
+    penThicknessSetting.setSpacing(10);
+    IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, 30, 0);
+    Spinner<Integer> penThicknessSpinner = new Spinner<>(spinValFac);
+    penThicknessSpinner.setPrefWidth(60);
+    penThicknessSpinner
+        .valueProperty()
+        .addListener(
+            (obs, old, newValue) -> {
+              turtles.get(mainTurtle).setPenThinkcess(newValue);
+            });
+
+    penThicknessSetting.getChildren().addAll(penThicknessLabel, penThicknessSpinner);
+    return penThicknessSetting;
+  }
+
+  private void saveImage() {
+    WritableImage wi = new WritableImage((int) sandbox.getWidth(), (int) sandbox.getHeight());
+    snapshot(null, wi);
+    File file = fileChooser.showSaveDialog(getScene().getWindow());
+    if (file == null) return;
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(wi, null), "png", file);
+    } catch (IOException uhoh) {
+      uhoh.printStackTrace();
+    }
   }
 
   private Button createControlButton(String name) {
@@ -196,6 +233,7 @@ public class TurtleSandbox extends GridPane {
 
   public void setTurtle(int index) {
     if (turtles.size() > 1) viewController.setCurrTurtle(index);
+    mainTurtle = index;
     for (TurtleView turtle : turtles) {
       turtle.setStyle("-fx-opacity: .5");
     }
@@ -212,6 +250,10 @@ public class TurtleSandbox extends GridPane {
 
   public void setPenColor(String color) {
     turtles.get(0).setPenColor(color);
+  }
+
+  public void updateEnvironment(EnvironmentRecord record) {
+    this.penThickness = record.currPenSize();
   }
 
   /**
@@ -231,7 +273,7 @@ public class TurtleSandbox extends GridPane {
     if (info.penDown() && (tx != info.xCoord() || ty != info.yCoord())) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
-      line.setStrokeWidth(turtle.getPenThickness());
+      line.setStrokeWidth(this.penThickness);
       line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {

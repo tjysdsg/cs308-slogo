@@ -1,14 +1,26 @@
 #guiname {
-  -fx-font-size: 30pt;
+  -fx-font-size: 20pt;
   -fx-font-family: "American Typewriter";
   -fx-base: white;
   -fx-alignment: center;
 }
 
+.sandbox-controls {
+  -fx-background-color: rgba(95, 84, 87, 0.74);
+}
+
+.sandbox-controls Spinner {
+
+
+}
 .turtle-tracker {
   -fx-effect: dropshadow( three-pass-box , rgba(200,255,255,0.5) , 2,2,2,0 );
-  -fx-background-color: transparent;
+  -fx-background-color: white;
   -fx-opacity: 0.7;
+}
+
+.turtle-tracker Label {
+ -fx-font-size: 10pt;
 }
 
 .color-picker{
@@ -23,10 +35,13 @@
   -fx-font-size: 7px;
 }
 
-/*#helpWindow{*/
-/*-fx-border-color: black;*/
-/*-fx-border-width: 3;*/
-/*}*/
+#settingsTitle{
+  -fx-font-size: 20pt;
+  -fx-font-family: "American Typewriter";
+  -fx-base: white;
+  -fx-padding: 10,0,0,0;
+
+}
 
 #helpLabel{
   -fx-font-size: 18px;
@@ -45,4 +60,15 @@
 .turtle {
   -fx-opacity: .5;
   -fx-effect: dropshadow( gaussian , rgba(200,255,255,0.5) , 5,5,5,0 )
+}
+
+#verticalContainer{
+  -fx-background-color: LIGHTBLUE;
+}
+
+#titlePane{
+  -fx-background-color: WHITE;
+}
+.component-pane {
+  -fx-background-color: #ffffff;
 }

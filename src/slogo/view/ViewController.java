@@ -1,6 +1,7 @@
 package slogo.view;
 
 import java.util.ResourceBundle;
+import slogo.model.Color;
 
 /** A controller to manipulate the current view. */
 public interface ViewController {
@@ -11,6 +12,8 @@ public interface ViewController {
    * @param color - The color to set the background to.
    */
   void setBackground(String color);
+
+  void setBackground(Color colorRecord);
 
   /**
    * Sets the language used within the environment.
@@ -25,6 +28,8 @@ public interface ViewController {
    * @param color - The color to set pen to.
    */
   void setPenColor(String color);
+
+  void setPenColor(Color penColor);
 
   /**
    * Set the turtle logo color for the view.

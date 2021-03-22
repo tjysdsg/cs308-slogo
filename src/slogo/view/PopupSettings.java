@@ -70,19 +70,19 @@ public class PopupSettings extends Pane {
     fontPicker.setOnAction(e -> {
       String font = fontPicker.getSelectionModel().getSelectedItem();
       if (font != null) {
-        settings.put("font",font);
+        settings.put("font", font);
         vcon.setFont(font);
       }
     });
     turtlePicker.setOnAction(e -> {
-      String logo =  turtlePicker.getSelectionModel().getSelectedItem();
+      String logo = turtlePicker.getSelectionModel().getSelectedItem();
       if (logo != null) {
         settings.put("turtleLogo", logo);
         vcon.setTurtleLogo(logo);
       }
     });
     themePicker.setOnAction(e -> {
-      String theme =  themePicker.getSelectionModel().getSelectedItem();
+      String theme = themePicker.getSelectionModel().getSelectedItem();
       if (theme != null) {
         settings.put("theme", theme);
       }

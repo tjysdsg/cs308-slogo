@@ -150,8 +150,9 @@ public class SettingsPane extends Pane {
         });
   }
 
-  protected void setSetting(Preferences settings) {
+  protected void setSettings(Preferences settings) {
     this.settings = settings;
+    popupSettings.setSettings(settings);
   }
 
   public void setResources(ResourceBundle resource) {

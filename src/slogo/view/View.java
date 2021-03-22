@@ -1,10 +1,17 @@
 package slogo.view;
 
-import java.util.prefs.Preferences;
-import java.util.Arrays;
+import com.jfoenix.controls.JFXButton;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.InvalidPreferencesFormatException;
+import java.util.prefs.Preferences;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,6 +22,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
@@ -24,14 +32,15 @@ import slogo.model.notifiers.ModelTracker;
  * @author Joshua Pettima
  * @author marthaaboagye This class coordinates between all other classes from the view package. It
  *     needs to be initialized with a stage and a model controller object. It also contains a
- *     private View environmentInfo class that implements the view controller and allows the user to change
- *     the color for the pen and background.
+ *     private View environmentInfo class that implements the view controller and allows the user to
+ *     change the color for the pen and background.
  */
 public class View {
 
-  private static final int WIDTH = 1200;
-  private static final int HEIGHT = 800;
+  private static final int WIDTH = 1500;
+  private static final int HEIGHT = 1000;
 
+  private FileChooser fileChooser;
   private ModelController modelCon;
   private List<Workspace> workspaces;
   private TrackableEnvironment environment;
@@ -60,9 +69,10 @@ public class View {
    * @param modelCon
    */
   public View(Stage stage, ModelController modelCon) {
+    this.fileChooser = new FileChooser();
+    this.viewCon = new ViewBundle();
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
-    this.viewCon = new ViewBundle();
     this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "English");
     this.borderPane = new BorderPane();
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
@@ -70,13 +80,12 @@ public class View {
     this.topPane = new HBox();
     this.workspaces = new ArrayList<>();
     this.mainSettings = Preferences.userRoot().node(this.getClass().getName());
-    this.settings = mainSettings.node("0");
+    this.settings = mainSettings.node("-1");
     this.settingsPane = new SettingsPane(viewCon, settings);
     scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
     stage.setScene(scene);
     stage.setMinHeight(HEIGHT);
     stage.setMinWidth(WIDTH);
-
 
     topPane.getChildren().addAll(settingsPane);
     topPane.getStyleClass().add("component-pane");
@@ -92,6 +101,13 @@ public class View {
     stage.show();
   }
 
+  public void setSettings(Preferences settings) {
+    String lang = settings.get("language", "English");
+    viewCon.setLanguage(lang);
+    settingsPane.setSettings(settings);
+    System.out.println(lang);
+  }
+
   public void createWorkspaceSelector(HBox topPane) {
     this.workspaceLabel = new Label("Workspace: ");
     IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0);
@@ -103,7 +119,38 @@ public class View {
             (obs, old, newValue) -> {
               updateWorkspace(newValue);
             });
-    topPane.getChildren().addAll(workspaceLabel, workspacesChoice);
+    JFXButton saveWs = new JFXButton("Save Workspace");
+    saveWs.setOnAction(e -> saveWorkspace());
+    
+    JFXButton loadWs = new JFXButton("Load Workspace");
+    loadWs.setOnAction(e -> loadWorkspace());
+    topPane.getChildren().addAll(workspaceLabel, workspacesChoice, saveWs, loadWs);
+  }
+
+  private void saveWorkspace() {
+    File file = fileChooser.showSaveDialog(scene.getWindow());
+    if (file != null) {
+      try {
+        FileOutputStream fos = new FileOutputStream(file);
+        settings.exportNode(fos);
+      } catch (IOException | BackingStoreException e) {
+        viewCon.sendAlert("Error", "Cannot write to file");
+      }
+    }
+  }
+
+  private void loadWorkspace() {
+    File file = fileChooser.showOpenDialog(scene.getWindow());
+    if (file != null) {
+      try {
+        FileInputStream fis = new FileInputStream(file);
+        settings.importPreferences(fis);
+        setSettings(settings);
+      } catch (IOException | InvalidPreferencesFormatException e) {
+        viewCon.sendAlert("Error", "Cannot read from file");
+      }
+    }
+
   }
 
   public void updateWorkspace(int space) {
@@ -121,8 +168,10 @@ public class View {
     EnvironmentPane environmentPane = new EnvironmentPane(viewCon, environment.getTracker());
     TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon, environment.getTracker());
     CommandPane commandPane = new CommandPane(viewCon);
+    this.settings = mainSettings.node("" + workspaces.size());
     int workspaceID = workspaces.size();
-    Workspace workspace = new Workspace(environment, commandPane, turtleSandbox, environmentPane);
+    Workspace workspace =
+        new Workspace(environment, commandPane, turtleSandbox, environmentPane, settings);
     // Doesn't work within css for some reason :/
     commandPane.getStyleClass().add("component-pane");
     environmentPane.getStyleClass().add("component-pane");
@@ -130,11 +179,11 @@ public class View {
     helpPane.getStyleClass().add("component-pane");
 
     ModelTracker tracker = environment.getTracker();
-    tracker.setOnTurtleUpdate(e -> turtleSandbox.updateTurtle(e));
-    tracker.setOnVarUpdate(e -> environmentPane.updateVariables(e));
-    tracker.setOnCommandUpdate(e -> environmentPane.updateCommands(e));
-    tracker.setOnEnvUpdate( e -> turtleSandbox.updateEnvironment(e));
-    tracker.setOnClear(() -> turtleSandbox.clearLines());
+    tracker.setOnTurtleUpdate(turtleSandbox::updateTurtle);
+    tracker.setOnVarUpdate(environmentPane::updateVariables);
+    tracker.setOnCommandUpdate(environmentPane::updateCommands);
+    tracker.setOnEnvUpdate(turtleSandbox::updateEnvironment);
+    tracker.setOnClear(turtleSandbox::clearLines);
 
     workspaces.add(workspace);
     return workspace;
@@ -145,7 +194,9 @@ public class View {
     this.turtleSandbox = workspace.turtleSandbox();
     this.commandPane = workspace.commandPane();
     this.environmentPane = workspace.environmentPane();
+    this.settings = workspace.settings();
     modelCon.setModel(environment);
+    setSettings(settings);
 
     refreshBundle();
     borderPane.setCenter(turtleSandbox);
@@ -270,4 +321,5 @@ record Workspace(
     TrackableEnvironment environment,
     CommandPane commandPane,
     TurtleSandbox turtleSandbox,
-    EnvironmentPane environmentPane) {}
+    EnvironmentPane environmentPane,
+    Preferences settings) {}

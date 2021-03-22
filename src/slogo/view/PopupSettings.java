@@ -89,14 +89,14 @@ public class PopupSettings extends Pane {
     });
     fontSizePicker.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
-        String font = fontSizePicker.getText();
-        vcon.setFontSize(Integer.parseInt(font));
+        int font = Integer.parseInt(fontSizePicker.getText());
+        vcon.setFontSize(font);
       }
     });
 
   }
 
-  protected void setSetting(Preferences settings) {
+  protected void setSettings(Preferences settings) {
     this.settings = settings;
   }
 

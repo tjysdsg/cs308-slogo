@@ -20,7 +20,7 @@ import slogo.records.TurtleRecord;
 
 public class EnvironmentTest {
 
-  private static final String DIR = "data/workspaces/";
+  private static final String DIR = "data/environments/";
   private static final String TEST_FILE_NAME = "test.ser";
   private TrackableEnvironment env;
   private File testFile;

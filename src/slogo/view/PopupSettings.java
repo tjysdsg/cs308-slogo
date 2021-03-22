@@ -209,6 +209,7 @@ public class PopupSettings extends Pane {
   }
 
   private void createDisplayText() {
+    removeListeners();
     fontSizePicker.setPromptText(resources.getString("fontSize"));
     fontPicker.setValue(resources.getString("fontPicker"));
     fontPicker.getItems().clear();
@@ -219,7 +220,13 @@ public class PopupSettings extends Pane {
     turtlePicker.getItems().clear();
     turtlePicker.setValue(resources.getString("turtleText"));
     turtlePicker.getItems().addAll(resources.getString("turtleList").split(","));
+    createIconAction();
+  }
 
+  private void removeListeners() {
+    fontPicker.setOnAction(null);
+    themePicker.setOnAction(null);
+    turtlePicker.setOnAction(null);
   }
 
 }

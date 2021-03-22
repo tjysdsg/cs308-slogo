@@ -32,7 +32,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 
 /**
  * @author marthaaboagye

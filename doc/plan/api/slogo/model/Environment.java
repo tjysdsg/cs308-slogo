@@ -2,12 +2,12 @@ package slogo.model;
 
 import java.util.Map;
 import java.util.ResourceBundle;
-import slogo.events.CommandsRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
-import slogo.events.VariablesRecord;
+import slogo.records.CommandsRecord;
+import slogo.records.TurtleRecord;
+import slogo.records.UpdateCommands;
+import slogo.records.UpdateTurtle;
+import slogo.records.UpdateVariables;
+import slogo.records.VariablesRecord;
 import slogo.model.ASTNodes.ASTNode;
 
 public class Environment implements TrackableEnvironment {

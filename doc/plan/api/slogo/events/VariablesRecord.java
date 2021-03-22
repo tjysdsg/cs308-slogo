@@ -1,4 +1,4 @@
-package slogo.events;
+package slogo.records;
 
 import java.util.List;
 

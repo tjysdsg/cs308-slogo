@@ -1,11 +1,11 @@
 package slogo.model.notifiers;
 
 import java.util.function.Consumer;
-import slogo.events.CommandsRecord;
-import slogo.events.DisplayVariable;
-import slogo.events.EnvironmentRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
+import slogo.records.CommandsRecord;
+import slogo.records.DisplayVariable;
+import slogo.records.EnvironmentRecord;
+import slogo.records.TurtleRecord;
+import slogo.records.VariablesRecord;
 
 public class Delegate implements ModelTracker, EnvironmentNotifier, TurtleNotifier {
 

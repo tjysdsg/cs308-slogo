@@ -2,7 +2,7 @@ package slogo.model;
 
 import java.util.List;
 import java.util.Map;
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNumberLiteral;
 import slogo.model.notifiers.Delegate;

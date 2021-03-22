@@ -1,4 +1,4 @@
-package slogo.model.parser;
+package slogo.model.parser.factories;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

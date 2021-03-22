@@ -1,10 +1,11 @@
 package slogo.records;
 
+import java.util.List;
 import slogo.model.PaletTable;
 
 public record EnvironmentRecord(
     PaletTable colors,
     int currPenColor, int currShape,
     int currBGColor,
-    int mainTurtle, double currPenSize) {
+    List<Integer> activeTurtles, double currPenSize) {
 }

@@ -73,6 +73,7 @@ public class EnvironmentTest {
 
     runFile("procedures_with_parameters/face.slogo");
     env.save(testFile);
+    assertTrue(testFile.exists());
 
     String expected = commands.get("face");
 

@@ -1,8 +1,5 @@
 package slogo.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +50,8 @@ public class ExecutionScope implements InfoBundle, Serializable {
     envNotifier.onRequestEnvUpdate(record -> {
       backgroundColorIdx = record.currBGColor();
       penColorIdx = record.currPenColor();
-      mainTurtleIdx = record.mainTurtle();
+      currTurtles.clear();
+      currTurtles.addAll(record.activeTurtles());
       penSize = record.currPenSize();
       palette = (Palette) record.colors();
     });
@@ -243,7 +241,7 @@ public class ExecutionScope implements InfoBundle, Serializable {
     envNotifier.notifyEnvUpdate(new EnvironmentRecord(
         palette, penColorIdx,
         shapeIdx, backgroundColorIdx,
-        mainTurtleIdx, penSize));
+        currTurtles, penSize));
   }
 
   public Set<Entry<String, ASTFunctionCall>> getCommands() {

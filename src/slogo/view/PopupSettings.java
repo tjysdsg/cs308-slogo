@@ -48,14 +48,16 @@ public class PopupSettings extends Pane {
   private ResourceBundle resources;
   private ImageView backButton;
   private ImageView prefImage;
+  private ViewController vcon;
   private Label fontLabel = new Label();
   private Label fontSizeLabel = new Label();
   private Label themeLabel = new Label();
   private Label turtleLabel = new Label();
   private Preferences settings;
 
-  public PopupSettings(Preferences settings) {
+  public PopupSettings(Preferences settings, ViewController vcon) {
     this.settings = settings;
+    this.vcon = vcon;
     createPopup();
     getChildren().add(gearImage);
   }
@@ -69,12 +71,14 @@ public class PopupSettings extends Pane {
       String font = fontPicker.getSelectionModel().getSelectedItem();
       if (font != null) {
         settings.put("font",font);
+        vcon.setFont(font);
       }
     });
     turtlePicker.setOnAction(e -> {
       String logo =  turtlePicker.getSelectionModel().getSelectedItem();
       if (logo != null) {
         settings.put("turtleLogo", logo);
+        vcon.setTurtleLogo(logo);
       }
     });
     themePicker.setOnAction(e -> {
@@ -85,13 +89,14 @@ public class PopupSettings extends Pane {
     });
     fontSizePicker.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
-        fontSizePicker.getText();
+        int font = Integer.parseInt(fontSizePicker.getText());
+        vcon.setFontSize(font);
       }
     });
 
   }
 
-  protected void setSetting(Preferences settings) {
+  protected void setSettings(Preferences settings) {
     this.settings = settings;
   }
 

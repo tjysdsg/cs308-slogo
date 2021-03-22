@@ -1,7 +1,5 @@
 package slogo.view;
 
-import slogo.model.notifiers.ModelTracker;
-import slogo.records.EnvironmentRecord;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +30,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
+import slogo.model.notifiers.ModelTracker;
+import slogo.records.EnvironmentRecord;
 import slogo.records.TurtleRecord;
 
 /**
@@ -46,6 +46,7 @@ public class TurtleSandbox extends GridPane {
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
+  private List<Integer> activeTurtles;
   private int mainTurtle = 0;
   private StackPane lines;
   private StackPane sandbox;
@@ -149,10 +150,10 @@ public class TurtleSandbox extends GridPane {
     addTurtle.setTooltip(addTip);
     Button centerButton = createControlButton("Center");
     Button saveEnvironment = createControlButton("Save Environment");
-    saveEnvironment.setOnAction( e -> viewController.saveEnvironment());
+    saveEnvironment.setOnAction(e -> viewController.saveEnvironment());
 
     Button loadEnvironment = createControlButton("Load Environment");
-    loadEnvironment.setOnAction( e -> viewController.loadEnvironment());
+    loadEnvironment.setOnAction(e -> viewController.loadEnvironment());
 
     TranslateTransition centerSandbox = new TranslateTransition();
     centerSandbox.setDuration(Duration.seconds(1));
@@ -174,7 +175,15 @@ public class TurtleSandbox extends GridPane {
     Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
     saveImage.setOnAction((e) -> saveImage());
-    controls.getChildren().addAll(addTurtle, centerButton, saveImage, saveEnvironment, loadEnvironment, penThicknessSetting);
+    controls
+        .getChildren()
+        .addAll(
+            addTurtle,
+            centerButton,
+            saveImage,
+            saveEnvironment,
+            loadEnvironment,
+            penThicknessSetting);
     return controls;
   }
 
@@ -222,9 +231,7 @@ public class TurtleSandbox extends GridPane {
     turtles.add(turtle);
     turtle.setOnMouseClicked(
         e -> {
-          if (e.isShiftDown()) {
-            setTurtle(turtles.indexOf(turtle));
-          }
+          setTurtle(turtles.indexOf(turtle));
         });
     turtle.getStyleClass().add("turtle");
     setTurtle(turtles.size() - 1);
@@ -253,7 +260,16 @@ public class TurtleSandbox extends GridPane {
   }
 
   public void updateEnvironment(EnvironmentRecord record) {
+    System.out.println("UPDATED!");
     this.penThickness = record.currPenSize();
+    activeTurtles = record.activeTurtles();
+    for (int i = 0; i < turtles.size(); i++) {
+      if (activeTurtles.contains(i)) {
+        turtles.get(i).setStyle("-fx-opacity: 1");
+      } else {
+        turtles.get(i).setStyle("-fx-opcaity: .5");
+      }
+    }
   }
 
   /**

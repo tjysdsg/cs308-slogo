@@ -34,6 +34,7 @@ public class CommandPane extends Pane {
     makeBottomPane();
     setChildrenIDs();
     getChildren().add(pane);
+    setChildrenIDs();
     pane.setTranslateX(300);
 
 

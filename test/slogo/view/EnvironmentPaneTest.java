@@ -52,6 +52,7 @@ public class EnvironmentPaneTest extends DukeApplicationTest {
 
   }
 
+
   @Test
   void testPreviousCommandList() throws InterruptedException {
     codeArea = (TextArea) commandPane.lookup("#codeArea");

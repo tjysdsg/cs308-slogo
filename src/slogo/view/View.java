@@ -3,7 +3,6 @@ package slogo.view;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -101,14 +100,14 @@ public class View {
     stage.show();
   }
 
-  public void setSettings(Preferences settings) {
+  private void setSettings(Preferences settings) {
     String lang = settings.get("language", "English");
     viewCon.setLanguage(lang);
     settingsPane.setSettings(settings);
     System.out.println(lang);
   }
 
-  public void createWorkspaceSelector(HBox topPane) {
+  private void createWorkspaceSelector(HBox topPane) {
     this.workspaceLabel = new Label("Workspace: ");
     IntegerSpinnerValueFactory spinValFac = new IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0);
     Spinner<Integer> workspacesChoice = new Spinner<>(spinValFac);
@@ -121,7 +120,7 @@ public class View {
             });
     JFXButton saveWs = new JFXButton("Save Workspace");
     saveWs.setOnAction(e -> saveWorkspace());
-    
+
     JFXButton loadWs = new JFXButton("Load Workspace");
     loadWs.setOnAction(e -> loadWorkspace());
     topPane.getChildren().addAll(workspaceLabel, workspacesChoice, saveWs, loadWs);
@@ -150,10 +149,9 @@ public class View {
         viewCon.sendAlert("Error", "Cannot read from file");
       }
     }
-
   }
 
-  public void updateWorkspace(int space) {
+  private void updateWorkspace(int space) {
     Workspace workspace = null;
     if (space > workspaces.size() - 1) {
       workspace = createWorkspace();
@@ -163,7 +161,7 @@ public class View {
     setWorkspace(workspace);
   }
 
-  public Workspace createWorkspace() {
+  private Workspace createWorkspace() {
     TrackableEnvironment environment = EnvironmentFactory.createEnvironment();
     EnvironmentPane environmentPane = new EnvironmentPane(viewCon, environment.getTracker());
     TurtleSandbox turtleSandbox = new TurtleSandbox(viewCon, environment.getTracker());

@@ -33,6 +33,7 @@ public class TurtleView extends Group {
   public static final double IMAGE_WIDTH = 200;
   public static final double IMAGE_HEIGHT = 160;
   public static final int PANE_HEIGHT = 200;
+  public static final String TURTLES = "resources/images/turtles/";
   private double currY;
   private double rotation;
   private double penThickness;
@@ -179,6 +180,12 @@ public class TurtleView extends Group {
   public void setPenColor(String penColor) {
     this.penColor = penColor;
     updateTracker();
+  }
+
+  public void setImage(String image) {
+    if (image.equals("")) return;
+    Image imageFile = new Image(getClass().getResourceAsStream(TURTLES + image));
+    turtleImage.setImage(imageFile);
   }
 
   public void update(TurtleRecord info) {

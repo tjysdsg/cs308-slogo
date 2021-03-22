@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -59,6 +60,7 @@ public class TurtleSandbox extends GridPane {
   private double penThickness;
   private Palette palette;
   private ModelTracker modelTracker;
+  private Map<Integer, String> shapeIndex;
   private EnvironmentRecord lastRecord;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
@@ -71,7 +73,12 @@ public class TurtleSandbox extends GridPane {
     this.fileChooser = new FileChooser();
     this.penThickness = 5;
     this.modelTracker = tracker;
-
+    this.shapeIndex =
+        Map.of(
+            0, "Jiyang.jpeg",
+            1, "Joshua.jpeg",
+            2, "Oliver.jpeg",
+            3, "SadTurtle.png");
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
@@ -230,15 +237,15 @@ public class TurtleSandbox extends GridPane {
   }
 
   private void setPenSize(int size) {
-    //EnvironmentRecord record =
-        //new EnvironmentRecord(
-            //lastRecord.colors(),
-            //lastRecord.currPenColor(),
-            //lastRecord.currShape(),
-            //lastRecord.currBGColor(),
-            //activeTurtles,
-            //size);
-    //modelTracker.requestEnvUpdate(record);
+    // EnvironmentRecord record =
+    // new EnvironmentRecord(
+    // lastRecord.colors(),
+    // lastRecord.currPenColor(),
+    // lastRecord.currShape(),
+    // lastRecord.currBGColor(),
+    // activeTurtles,
+    // size);
+    // modelTracker.requestEnvUpdate(record);
   }
 
   private void addTurtle() {
@@ -275,9 +282,13 @@ public class TurtleSandbox extends GridPane {
     System.out.println("UPDATED!");
     this.penThickness = record.currPenSize();
     activeTurtles = record.activeTurtles();
+    String shape = shapeIndex.get(record.currShape());
+    shape = shape == null ? "" : shape;
     for (int i = 0; i < turtles.size(); i++) {
       if (activeTurtles.contains(i)) {
+        String image = shape;
         turtles.get(i).setStyle("-fx-opacity: 1");
+        turtles.get(i).setImage(shape);
       } else {
         turtles.get(i).setStyle("-fx-opcaity: .5");
       }

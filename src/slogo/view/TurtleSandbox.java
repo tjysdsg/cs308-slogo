@@ -1,7 +1,7 @@
 package slogo.view;
 
 import slogo.model.notifiers.ModelTracker;
-import slogo.events.EnvironmentRecord;
+import slogo.records.EnvironmentRecord;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.io.IOException;

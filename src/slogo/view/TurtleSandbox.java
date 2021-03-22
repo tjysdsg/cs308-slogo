@@ -249,7 +249,8 @@ public class TurtleSandbox extends GridPane {
   }
 
   private void addTurtle() {
-    TurtleView turtle = new TurtleView();
+    int size = turtles.size();
+    TurtleView turtle = new TurtleView(size);
     turtles.add(turtle);
     turtle.setOnMouseClicked(
         e -> {
@@ -262,8 +263,11 @@ public class TurtleSandbox extends GridPane {
 
   public void setTurtle(int index) {
     if (turtles.size() > 1) viewController.setCurrTurtle(index);
-    mainTurtle = index;
+    for (int i = 0; i < turtles.size(); i++) {
+      turtles.get(i).setStyle("-fx-opacity: .6");
+    }
     turtles.get(index).setStyle("-fx-opacity: 1");
+    mainTurtle = index;
   }
 
   public void setSandboxColor(String color) {

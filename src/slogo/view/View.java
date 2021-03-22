@@ -92,10 +92,10 @@ public class View {
     createWorkspaceSelector(topPane);
     borderPane.setTop(topPane);
     Workspace mainWorkspace = createWorkspace();
+    modelCon.setModel(environment);
     setWorkspace(mainWorkspace);
 
     modelCon.setController(viewCon);
-    modelCon.setModel(environment);
     refreshBundle();
     stage.show();
   }

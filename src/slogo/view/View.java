@@ -307,6 +307,20 @@ public class View {
 
     public void changeCommand(String command, String newValue) {}
 
+    public void saveEnvironment() {
+      File file = fileChooser.showSaveDialog(scene.getWindow());
+      if (file != null) {
+        environment.save(file);
+      }
+    }
+
+    public void loadEnvironment() {
+      File file = fileChooser.showOpenDialog(scene.getWindow());
+      if (file != null) {
+        environment.load(file);
+      }
+    }
+
     public void sendCommand(String command) {
       if (command.isBlank()) return;
       boolean executed = modelCon.sendCommand(command);

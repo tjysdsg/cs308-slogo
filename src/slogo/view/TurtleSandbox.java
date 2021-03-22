@@ -148,6 +148,11 @@ public class TurtleSandbox extends GridPane {
     addTip.setShowDelay(Duration.millis(200));
     addTurtle.setTooltip(addTip);
     Button centerButton = createControlButton("Center");
+    Button saveEnvironment = createControlButton("Save Environment");
+    saveEnvironment.setOnAction( e -> viewController.saveEnvironment());
+
+    Button loadEnvironment = createControlButton("Load Environment");
+    loadEnvironment.setOnAction( e -> viewController.loadEnvironment());
 
     TranslateTransition centerSandbox = new TranslateTransition();
     centerSandbox.setDuration(Duration.seconds(1));
@@ -169,7 +174,7 @@ public class TurtleSandbox extends GridPane {
     Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
     saveImage.setOnAction((e) -> saveImage());
-    controls.getChildren().addAll(addTurtle, centerButton, saveImage, penThicknessSetting);
+    controls.getChildren().addAll(addTurtle, centerButton, saveImage, saveEnvironment, loadEnvironment, penThicknessSetting);
     return controls;
   }
 

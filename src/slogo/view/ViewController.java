@@ -52,5 +52,9 @@ public interface ViewController {
 
   void setFont(String font);
 
+  void saveEnvironment();
+
+  void loadEnvironment();
+
   ResourceBundle getResources();
 }

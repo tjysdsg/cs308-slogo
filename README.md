@@ -4,32 +4,47 @@ SLogo
 This project implements a development environment that helps users write programs to draw using a turtle.
 
 Names:
-
+Oliver Rodas,
+Joshua Petitma,
+Jiyang Tang,
+Martha Aboagye
 
 ### Timeline
 
-Start Date: 
+Start Date: March 8
 
-Finish Date: 
+Finish Date: March 22
 
-Hours Spent:
+Hours Spent: 15 * 4 = 60 hours
 
 ### Primary Roles
-
+Oliver Rodas - Designing the parser, command structure and execution, execution environment, and interface with the view.
 
 ### Resources Used
-
+Java Documentation, StackOverflow
 
 ### Running the Program
 
 Main class:
+Main.java
 
 Data files needed: 
+Resource bundles for exceptions, commands in a specific language, and UI fields in a language.
 
 Features implemented:
+* Multiple turtles
+* recursion
+* all specified commands
+* multiple workspaces
+* saving and loading workspaces
+* grouping of commands
+* running commands from files 
+* animations
+* setable image for a turtle
+* themes
 
 Extra:
-
+- User Experience things like pressing the up button to get the last command
 - Animations. Cuz they're cute.
 - Add extra turtles. Shift + Click to select turtle command affects
 - Move the sandbox around by clicking and dragging

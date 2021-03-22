@@ -23,6 +23,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.model.Color;
 import slogo.model.EnvironmentFactory;
 import slogo.model.TrackableEnvironment;
 import slogo.model.notifiers.ModelTracker;
@@ -241,6 +242,11 @@ public class View {
       turtleSandbox.setSandboxColor(color);
     }
 
+    @Override
+    public void setBackground(Color colorRecord) {
+      ;
+    }
+
     /**
      * This method sets the display language to the user's input.
      *
@@ -261,6 +267,11 @@ public class View {
     public void setPenColor(String color) {
       color = "#" + color.substring(2);
       turtleSandbox.setPenColor(color);
+    }
+
+    @Override
+    public void setPenColor(Color penColor) {
+      ;
     }
 
     /**

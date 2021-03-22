@@ -1,5 +1,6 @@
 package slogo.view;
 
+import javafx.scene.image.Image;
 import java.io.File;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -10,13 +11,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class HelpPane extends Pane {
+
   private static final int SIZE = 200;
   private VBox vbox;
   private GridPane displayWindow;
@@ -32,6 +33,7 @@ public class HelpPane extends Pane {
   private Label helpDescription = new Label();
   Button backButton;
   ImageView helpIcon;
+  private final String helpIconLocation = "resources/images/helpicon.png";
 
   public HelpPane(ResourceBundle resource) {
     this.resources = resource;
@@ -133,7 +135,7 @@ public class HelpPane extends Pane {
   private void createDisplayWindow() {
     displayWindow = new GridPane();
     helpIcon =
-        new ImageView(new Image(new File("data/images/helpicon.png").toURI().toString()));
+        new ImageView(new Image(getClass().getResourceAsStream(helpIconLocation)));
     helpIcon.setFitHeight(.3 * SIZE);
     helpIcon.setFitWidth(.4 * SIZE);
     helpLabel = new Label();
@@ -149,8 +151,7 @@ public class HelpPane extends Pane {
     createDisplayLanguages();
   }
 
-
-  private void setId(){
+  private void setId() {
     commandList.setId("commandList");
     helpLabel.setId("helpLabel");
     helpIcon.setId("helpIcon");

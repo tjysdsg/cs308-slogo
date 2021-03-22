@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -20,12 +21,12 @@ public class ASTFor extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     double ret = 0.0;
 
     // TODO: error checking
-    ASTCompoundStatement comp1 = (ASTCompoundStatement) getChildAt(0);
-    ASTCompoundStatement comp2 = (ASTCompoundStatement) getChildAt(1);
+    ASTCompoundStatement comp1 = (ASTCompoundStatement) params.get(0);
+    ASTCompoundStatement comp2 = (ASTCompoundStatement) params.get(1);
 
     String counterName = ((ASTNamed) comp1.getChildAt(0)).getName();
     double start = comp1.getChildAt(1).evaluate(info);
@@ -36,7 +37,7 @@ public class ASTFor extends ASTCommand {
     for (double i = start; i <= end; i += step) {
       // counter is set in the lookup table as a variable
       variable.setValue(i);
-      info.getVariableTable().put(counterName, variable);
+      info.setVariable(counterName, variable);
 
       ret = comp2.evaluate(info);
     }

@@ -2,7 +2,6 @@ package slogo.model.ASTNodes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
@@ -15,10 +14,10 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
   private static final int NUM_PARAMS = 2;
   private ASTNode vars; // contains a list of ASTVariable names
   private ASTNode commands;
-  private Map<String, ASTFunctionCall> functionTable;
-  private int result;
+  private InfoBundle functionTable;
+  private boolean addedCorrectly;
 
-  public ASTMakeUserInstruction(String identifier, Map<String, ASTFunctionCall> functionTable) {
+  public ASTMakeUserInstruction(String identifier, InfoBundle functionTable) {
     super(NAME, identifier, NUM_PARAMS);
     this.functionTable = functionTable;
   }
@@ -28,18 +27,18 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
    */
   public List<String> getParameterNames() {
     ArrayList<String> ret = new ArrayList<>();
-    for (int i = 0; i < vars.getNumChildren(); ++i) {
-      String name = ((ASTNamed) vars.getChildAt(i)).getName();
+    for (ASTNode child : vars.getChildren()) {
+      String name = ((ASTNamed) child).getName();
       ret.add(name);
     }
     return ret;
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     // add to runtime function table
-    info.getCommandTable().put(getIdentifier(), this);
-    return result;
+    //info.getCommandTable().put(getIdentifier(), this);
+    return addedCorrectly ? 1 : 0;
   }
 
   @Override
@@ -47,20 +46,13 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     int numChildren = super.addChild(newChild);
     if (numChildren == 1) {
       vars = newChild;
-    } else {
-      commands = newChild;
-
-      ASTNode prev = functionTable.getOrDefault(getIdentifier(), null);
-      if (prev != null) {
-        result = 0;
-      } else {
-        result = 1;
-      }
-
-      functionTable.put(getIdentifier(),
+      addedCorrectly = functionTable.setCommand(getIdentifier(),
           new ASTFunctionCall(getIdentifier(),
-              getParameterNames(),
-              commands));
+              getParameterNames()));
+    } else {
+      if (addedCorrectly) {
+        functionTable.getCommand(getIdentifier()).setBody(newChild);
+      }
     }
     return numChildren;
   }
@@ -71,13 +63,14 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     ret.append(getIdentifier()).append(" [");
 
     // parameters
-    int nParams = vars.getNumChildren();
-    for (int i = 0; i < nParams; ++i) {
-      ASTVariable variable = (ASTVariable) vars.getChildAt(i);
+    int idx = 0;
+    for (ASTNode param : vars.getChildren()) {
+      ASTVariable variable = (ASTVariable) param;
       ret.append(variable.getName());
-      if (i < vars.getNumChildren() - 1) {
+      if (idx < vars.getNumChildren() - 1) {
         ret.append(", ");
       }
+      ++idx;
     }
 
     ret.append("]");

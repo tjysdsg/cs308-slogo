@@ -1,6 +1,8 @@
 package slogo.model;
 
-import slogo.events.TurtleRecord;
+import java.io.Serializable;
+import slogo.records.TurtleRecord;
+import slogo.model.notifiers.TurtleNotifier;
 
 /**
  * Contains the information of the turtle, such as position and orientation.
@@ -9,7 +11,7 @@ import slogo.events.TurtleRecord;
  * <p>
  * NOTE: the x-coordinate used is pointing RIGHT, and the y-coordinate is pointing UP
  */
-public class Turtle {
+public class Turtle implements Serializable {
 
   private int id;
   private double x = 0;
@@ -17,16 +19,30 @@ public class Turtle {
   private boolean visible = true;
   private double rotation = 0;
   private boolean penDown = true;
-  private InfoBundle env;
 
-  public Turtle(int id, InfoBundle infoBundle) {
-    env = infoBundle;
+  private transient TurtleNotifier notifier;
+
+  public int getId() {
+    return id;
+  }
+
+  public Turtle(int id, TurtleNotifier notifier) {
+    this.notifier = notifier;
     this.id = id;
   }
 
-  private void sendUpdate() {
-    TurtleRecord record = new TurtleRecord(id, x, y, rotation, visible, penDown);
-    env.notifyTurtleUpdate(record);
+  public Turtle clone(int newId, TurtleNotifier newCallback) {
+    Turtle instance = new Turtle(newId, newCallback);
+    instance.update(createRecord());
+    return instance;
+  }
+
+  public void sendUpdate() {
+    notifier.notifyTurtleUpdate(createRecord());
+  }
+
+  private TurtleRecord createRecord() {
+    return new TurtleRecord(id, x, y, rotation, visible, penDown);
   }
 
   /**
@@ -124,5 +140,10 @@ public class Turtle {
 
   public boolean isPenDown() {
     return this.penDown;
+  }
+
+  public void update(TurtleRecord record) {
+    setPosition(record.xCoord(), record.yCoord());
+    setRotation(record.rotation());
   }
 }

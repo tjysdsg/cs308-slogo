@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 public class ASTNumberLiteral extends ASTNode {
@@ -11,6 +12,7 @@ public class ASTNumberLiteral extends ASTNode {
    */
   public ASTNumberLiteral(double value) {
     super();
+    setToken(String.valueOf(value));
     this.value = value;
   }
 
@@ -23,7 +25,7 @@ public class ASTNumberLiteral extends ASTNode {
   }
 
   @Override
-  public double doEvaluate(InfoBundle info) {
+  public double doEvaluate(InfoBundle info, List<ASTNode> params) {
     return this.value;
   }
 

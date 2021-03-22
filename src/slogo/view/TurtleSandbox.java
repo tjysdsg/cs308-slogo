@@ -1,34 +1,33 @@
 package slogo.view;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.scene.control.Tooltip;
 import java.io.File;
-import javafx.scene.layout.Priority;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.geometry.Pos;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import java.util.List;
-import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
-import slogo.events.TurtleRecord;
+import slogo.records.TurtleRecord;
 
 /**
  * @author marthaaboagye
@@ -37,8 +36,8 @@ import slogo.events.TurtleRecord;
  *     the turtle box and the status bar are both displayed when the simulation starts.
  */
 public class TurtleSandbox extends GridPane {
-  public static final double MAX_ZOOM = 5;
-  public static final double MIN_ZOOM = .2;
+  public static final double MAX_ZOOM = 3;
+  public static final double MIN_ZOOM = .1;
   public static final double ZOOM_INTENSITY = .05;
   public static final int DEFAULT_SIZE = 300;
   private List<TurtleView> turtles;
@@ -87,11 +86,6 @@ public class TurtleSandbox extends GridPane {
     GridPane.setColumnIndex(controls, 0);
     setAlignment(Pos.CENTER);
     makeDraggable(sandbox);
-    setID();
-  }
-
-  private void setID() {
-
   }
 
   private void makeDraggable(Pane pane) {
@@ -109,19 +103,20 @@ public class TurtleSandbox extends GridPane {
           dragX = e.getX();
           dragY = e.getY();
         });
-    setOnScroll( e -> {
-      if (e.getDeltaY() == 0) return;
-      double scale = 1;
-      if (e.getDeltaY() < 0) {
-        scale = sandbox.getScaleX() - ZOOM_INTENSITY;
-        if (scale < MIN_ZOOM) scale = MIN_ZOOM;
-      } else {
-        scale = sandbox.getScaleX() + ZOOM_INTENSITY;
-        if (scale > MAX_ZOOM) scale = MAX_ZOOM;
-      }
-        sandbox.setScaleX(scale);
-        sandbox.setScaleY(scale);
-    });
+    setOnScroll(
+        e -> {
+          if (e.getDeltaY() == 0) return;
+          double scale = 1;
+          if (e.getDeltaY() < 0) {
+            scale = sandbox.getScaleX() - ZOOM_INTENSITY;
+            if (scale < MIN_ZOOM) scale = MIN_ZOOM;
+          } else {
+            scale = sandbox.getScaleX() + ZOOM_INTENSITY;
+            if (scale > MAX_ZOOM) scale = MAX_ZOOM;
+          }
+          sandbox.setScaleX(scale);
+          sandbox.setScaleY(scale);
+        });
   }
 
   private HBox createControls() {
@@ -133,6 +128,7 @@ public class TurtleSandbox extends GridPane {
     addTurtle.setOnAction(
         e -> {
           addTurtle();
+          viewController.addTurtle();
         });
     Tooltip addTip = new Tooltip("Select turtle with Shift+Click");
     addTip.setShowDelay(Duration.millis(200));
@@ -156,7 +152,7 @@ public class TurtleSandbox extends GridPane {
         (e) -> {
           center.play();
         });
-    Button saveImage = createControlButton("Save");
+    Button saveImage = createControlButton("Save Image");
     saveImage.getStyleClass().add("control-button");
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
@@ -187,23 +183,23 @@ public class TurtleSandbox extends GridPane {
   private void addTurtle() {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
-    if (turtles.size() > 1) viewController.addTurtle();
-    turtle.setOnMouseClicked( e -> {
-      if (e.isShiftDown()) {
-        setTurtle(turtles.indexOf(turtle));
-      }
-    });
+    turtle.setOnMouseClicked(
+        e -> {
+          if (e.isShiftDown()) {
+            setTurtle(turtles.indexOf(turtle));
+          }
+        });
     turtle.getStyleClass().add("turtle");
     setTurtle(turtles.size() - 1);
     sandbox.getChildren().addAll(turtle);
   }
 
   public void setTurtle(int index) {
-      viewController.setCurrTurtle(index);
-      for (TurtleView turtle : turtles) {
-        turtle.setStyle("-fx-opacity: .5");
-      }
-      turtles.get(index).setStyle("-fx-opacity: 1");
+    if (turtles.size() > 1) viewController.setCurrTurtle(index);
+    for (TurtleView turtle : turtles) {
+      turtle.setStyle("-fx-opacity: .5");
+    }
+    turtles.get(index).setStyle("-fx-opacity: 1");
   }
 
   public void setSandboxColor(String color) {
@@ -224,6 +220,10 @@ public class TurtleSandbox extends GridPane {
    * @param info
    */
   public void updateTurtle(TurtleRecord info) {
+    int turtleID = info.id();
+    if (turtleID >= turtles.size()) {
+      addTurtle();
+    }
     TurtleView turtle = turtles.get(info.id());
     double tx = turtle.getCurrX();
     double ty = turtle.getCurrY();
@@ -231,6 +231,7 @@ public class TurtleSandbox extends GridPane {
     if (info.penDown() && (tx != info.xCoord() || ty != info.yCoord())) {
       Line line = new Line();
       line.setStyle("-fx-stroke:" + turtle.getPenColor());
+      line.setStrokeWidth(turtle.getPenThickness());
       line.setTranslateX(1 * tx);
       line.setTranslateY(-1 * info.yCoord());
       if (tx != info.xCoord()) {
@@ -243,7 +244,6 @@ public class TurtleSandbox extends GridPane {
       line.setStartY(ty);
       line.setEndX(-info.xCoord());
       line.setEndY(info.yCoord());
-      line.setStrokeWidth(2);
       lines.getChildren().addAll(line);
     }
   }

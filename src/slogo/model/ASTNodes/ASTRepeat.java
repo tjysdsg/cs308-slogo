@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -20,16 +21,16 @@ public class ASTRepeat extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     double ret = 0.0;
-    int count = (int) getChildAt(0).evaluate(info);
+    int count = (int) params.get(0).evaluate(info);
     ASTNumberLiteral variable = new ASTNumberLiteral(1.0);
     for (int i = 0; i < count; ++i) {
       // `:repcount` value is set in the lookup table as a variable
       variable.setValue(i + 1); // repcount starts at 1
-      info.getVariableTable().put(REPCOUNT_NAME, variable);
+      info.setVariable(REPCOUNT_NAME, variable);
 
-      ret = getChildAt(1).evaluate(info);
+      ret = params.get(1).evaluate(info);
     }
 
     return ret;

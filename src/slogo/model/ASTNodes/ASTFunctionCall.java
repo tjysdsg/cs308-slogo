@@ -1,7 +1,6 @@
 package slogo.model.ASTNodes;
 
 import java.util.List;
-import java.util.Map;
 import slogo.model.InfoBundle;
 
 /**
@@ -16,28 +15,34 @@ public class ASTFunctionCall extends ASTCommand {
 
   private List<String> parameterNames;
   private ASTNode body;
-  private static final String NAME = "FunctionCall";
 
   /**
    * Constructor
    *
    * @param identifier     Name of the function being called
    * @param parameterNames Parameter names
-   * @param body           Function body
    */
-  public ASTFunctionCall(String identifier, List<String> parameterNames,
-      ASTNode body) {
+  public ASTFunctionCall(String identifier, List<String> parameterNames) {
+    super(identifier, parameterNames.size());
+    this.parameterNames = parameterNames;
+  }
+
+  public ASTFunctionCall(String identifier, List<String> parameterNames, ASTNode body) {
     super(identifier, parameterNames.size());
     this.parameterNames = parameterNames;
     this.body = body;
   }
 
+  public void setBody(ASTNode body) {
+    this.body = body;
+  }
+
   @Override
-  protected double doEvaluate(InfoBundle info) {
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
     // insert actual parameters into the lookup table
-    Map<String, ASTNode> table = info.getVariableTable();
     for (int i = 0; i < getNumParams(); ++i) {
-      table.put(parameterNames.get(i), getChildAt(i));
+      ASTNumberLiteral value = new ASTNumberLiteral(params.get(i).evaluate(info));
+      info.setVariable(parameterNames.get(i), value);
     }
 
     return body.evaluate(info);
@@ -45,5 +50,27 @@ public class ASTFunctionCall extends ASTCommand {
 
   public ASTFunctionCall clone() {
     return new ASTFunctionCall(getName(), parameterNames, body);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder ret = new StringBuilder();
+    ret.append(getName()).append(" [");
+
+    // parameters
+    int nParams = parameterNames.size();
+    for (int i = 0; i < nParams; ++i) {
+      ret.append(parameterNames.get(i));
+      if (i < nParams - 1) {
+        ret.append(", ");
+      }
+    }
+
+    ret.append("]");
+    return ret.toString();
+  }
+
+  public ASTNode createReference() {
+    return new ASTFunctionReference(getName(), getNumParams());
   }
 }

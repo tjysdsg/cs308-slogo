@@ -4,18 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import slogo.events.CommandsRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.VariablesRecord;
-import slogo.model.ASTNodes.ASTNode;
-import slogo.model.InfoBundle;
+import slogo.model.TestBundle;
+import slogo.model.notifiers.Delegate;
 import slogo.model.Turtle;
-import slogo.model.parser.CommandClassifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
@@ -27,13 +25,32 @@ import slogo.model.parser.ProgramParser;
  */
 public class ASTNodeTest {
 
-  private Parser parser;
+  private Map<String, ASTNumberLiteral> variableTable;
+  private Map<String, ASTFunctionCall> commandTable;
   private TestBundle infoBundle;
+  private Turtle turtle;
+  private List<Turtle> turtles;
+  private List<Integer> currTurtles;
+  private Delegate delegate = new Delegate();
+  private Parser parser;
 
   @BeforeEach
   void setUp() {
-    parser = new ProgramParser("English", new HashMap<>());
-    infoBundle = new TestBundle();
+    
+    turtle = new Turtle(0, delegate);
+    turtles = new ArrayList<>(List.of(turtle));
+    currTurtles = new ArrayList<>(List.of(0));
+
+    variableTable = new HashMap<>();
+    commandTable = new HashMap<>();
+
+    infoBundle = new TestBundle(
+        turtles,
+        currTurtles, variableTable,
+        commandTable, delegate);
+
+    turtle = new Turtle(0, null);
+    parser = new ProgramParser("English", infoBundle);
   }
 
   double parseAndEvaluateCommands(String cmd) {
@@ -54,16 +71,16 @@ public class ASTNodeTest {
   }
 
   void assertTurtleXY(double x, double y) {
-    assertEquals(x, infoBundle.getTurtle().getX(), 1E-5);
-    assertEquals(y, infoBundle.getTurtle().getY(), 1E-5);
+    assertEquals(x, infoBundle.getActiveTurtles().get(0).getX(), 1E-5);
+    assertEquals(y, infoBundle.getActiveTurtles().get(0).getY(), 1E-5);
   }
 
   void assertTurtleRotation(double rotation) {
-    assertEquals(rotation, infoBundle.getTurtle().getRotation(), 1E-5);
+    assertEquals(rotation, infoBundle.getActiveTurtles().get(0).getRotation(), 1E-5);
   }
 
   void assertVariableLookUp(String name, double val) {
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(name);
+    ASTNumberLiteral literal = infoBundle.getVariable(name);
     assertNotNull(literal);
     assertEquals(val, literal.getValue(), 1E-5);
   }
@@ -73,7 +90,7 @@ public class ASTNodeTest {
     Random rand = new Random();
 
     { // FORWARD
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double a = rand.nextDouble() * 200.0 - 100.0;
       double res = parseAndEvaluateCommands("FORWARD", a);
       assertEquals(a, res, 1E-5);
@@ -81,7 +98,7 @@ public class ASTNodeTest {
     }
 
     { // BACKWARD
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double a = rand.nextDouble() * 200.0 - 100.0;
       double res = parseAndEvaluateCommands("BACK", a);
       assertEquals(a, res, 1E-5);
@@ -92,35 +109,35 @@ public class ASTNodeTest {
   @Test
   void testLeftRightCommands() {
     { // LEFT 20
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double res = parseAndEvaluateCommands("LEFT", 20);
       assertEquals(-20, res, 1E-5);
       assertTurtleRotation(-20);
     }
 
     { // LEFT -20
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double res = parseAndEvaluateCommands("LEFT", -20);
       assertEquals(20, res, 1E-5);
       assertTurtleRotation(20);
     }
 
     { // RIGHT 20
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double res = parseAndEvaluateCommands("RIGHT", 20);
       assertEquals(20, res, 1E-5);
       assertTurtleRotation(20);
     }
 
     { // RIGHT -20
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double res = parseAndEvaluateCommands("RIGHT", -20);
       assertEquals(-20, res, 1E-5);
       assertTurtleRotation(-20);
     }
 
     { // RIGHT 200
-      infoBundle.reset(); // reset turtle
+      setUp(); // reset turtle
       double res = parseAndEvaluateCommands("RIGHT", 200);
       assertEquals(200, res, 1E-5);
       assertTurtleRotation(-160);
@@ -146,7 +163,7 @@ public class ASTNodeTest {
     }
 
     { // upwards
-      infoBundle.reset(); // reset
+      setUp(); // reset
       double x = 0;
       double y = 10;
       double res = parseAndEvaluateCommands("TOWARDS", x, y);
@@ -155,7 +172,7 @@ public class ASTNodeTest {
     }
 
     { // -30 degrees
-      infoBundle.reset(); // reset
+      setUp(); // reset
       double x = -10;
       double y = 10 * Math.sqrt(3);
       double res = parseAndEvaluateCommands("TOWARDS", x, y);
@@ -248,7 +265,7 @@ public class ASTNodeTest {
   @Test
   void testMakeVariable() {
     assertEquals(308.0, parseAndEvaluateCommands("MAKE :a", 308), 1E-5);
-    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariableTable().get(":a");
+    ASTNumberLiteral literal = (ASTNumberLiteral) infoBundle.getVariable(":a");
     assertNotNull(literal);
     assertEquals(308, literal.getValue(), 1E-5);
     assertVariableLookUp(":a", 308);
@@ -351,7 +368,7 @@ public class ASTNodeTest {
     assertEquals(1, res, 1E-5);
     assertTurtleXY(0, 1);
 
-    infoBundle.reset();
+    setUp();
     res = parseAndEvaluateCommands("""
         IF 0 [fd 1]
         """);
@@ -367,72 +384,11 @@ public class ASTNodeTest {
     assertEquals(1, res, 1E-5);
     assertTurtleXY(0, 1);
 
-    infoBundle.reset();
+    setUp();
     res = parseAndEvaluateCommands("""
         IFELSE - 1 1 [fd 1] [back 1]
         """);
     assertEquals(1, res, 1E-5);
     assertTurtleXY(0, -1);
-  }
-
-  class TestBundle implements InfoBundle {
-
-    private Map<String, ASTNode> variableTable;
-    private Map<String, ASTNode> commandTable;
-    private TurtleRecord info;
-    private Turtle turtle;
-    private boolean environmentCleared = false;
-
-    public TestBundle() {
-      reset();
-    }
-
-    public void reset() {
-      variableTable = new HashMap<>();
-      commandTable = new HashMap<>();
-      info = new TurtleRecord(0, 0, 0, 0, true, true);
-      turtle = new Turtle(0, this);
-    }
-
-    @Override
-    public Turtle getTurtle() {
-      return turtle;
-    }
-
-    @Override
-    public void notifyTurtleUpdate(TurtleRecord info) {
-      this.info = info;
-    }
-
-    @Override
-    public void notifyCommandUpdate(CommandsRecord info) {
-    }
-
-    @Override
-    public void notifyVariableUpdate(VariablesRecord info) {
-    }
-
-    @Override
-    public void notifyEnvironmentClear() {
-      environmentCleared = true;
-    }
-
-    @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return variableTable;
-    }
-
-    @Override
-    public Map<String, ASTNode> getCommandTable() {
-      return commandTable;
-    }
-
-    public TurtleRecord getInfo() {
-      return info;
-    }
-
-    public boolean getEnvironmentCleared() {
-      return environmentCleared;
-    }
   }
 }

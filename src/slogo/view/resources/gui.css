@@ -5,6 +5,12 @@
   -fx-alignment: center;
 }
 
+.turtle-tracker {
+  -fx-effect: dropshadow( three-pass-box , rgba(200,255,255,0.5) , 2,2,2,0 );
+  -fx-background-color: transparent;
+  -fx-opacity: 0.7;
+}
+
 .color-picker{
  -fx-font-size: 10pt;
 }

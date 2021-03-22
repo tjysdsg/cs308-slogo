@@ -1,6 +1,6 @@
 /**
  * Use Case 1: The user sets the pen's color using the UI so
- * subsequent lines drawn
+ * subsequent tokensLeft drawn
  * when the turtle moves use that color
  */
 

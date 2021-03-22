@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -20,10 +21,11 @@ public class ASTIfElse extends ASTCommand {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    if (getChildAt(0).evaluate(info) != 0) {
-      return getChildAt(1).evaluate(info);
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    if (params.get(0).evaluate(info) != 0) {
+      return params.get(1).evaluate(info);
+    } else {
+      return params.get(2).evaluate(info);
     }
-    return getChildAt(2).evaluate(info);
   }
 }

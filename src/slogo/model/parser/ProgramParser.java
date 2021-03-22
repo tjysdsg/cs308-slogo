@@ -1,147 +1,96 @@
 package slogo.model.parser;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import slogo.exceptions.*;
 import slogo.model.ASTNodes.*;
+import slogo.model.InfoBundle;
+import slogo.model.parser.classifiers.SyntaxClassifier;
+import slogo.model.parser.factories.ClassifierFactory;
+import slogo.model.parser.factories.HandlerFactory;
+import slogo.model.parser.handlers.Handler;
 
 public class ProgramParser implements Parser {
 
-  private final TokenClassifier tc = new TokenClassifier();
-  private final CommandClassifier cc;
+  private final SyntaxClassifier tokenClassifier = ClassifierFactory.buildSyntaxClassifier();
+  private static final String NOTHING = "";
+  private static final String WHITESPACE = "\\s+";
   private static final String COMMENT_MATCHER = "#.*";
-  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=\\])|(?=\\])|\\n";
-  private Map<String, ASTFunctionCall> lookUpTable;
+  private static final String SPLITTER = "[ ]|(?<=\\[)|(?=\\[)|(?<=])|(?=])|(?<=\\()|(?=\\()|(?<=\\))|(?=\\))|\\n";
+  private final InfoBundle bundle;
 
-  public ProgramParser(String language, Map<String, ASTFunctionCall> table) {
-    cc = new CommandClassifier(language);
-    lookUpTable = table;
+  private Stack<ParsingScope> scopeStack;
+  private String currCommand;
+  private List<String> tokensLeft;
+  private HandlerFactory handlerFactory;
+  private String language;
+
+  /**
+   * Infobundle to interface (lookup table) Factories
+   */
+
+  public ProgramParser(String language, InfoBundle bundle) {
+    this.bundle = bundle;
+    this.language = language;
   }
 
   public ASTNode parseCommand(String command)
-      throws UnknownIdentifierException, InvalidSyntaxException, IncorrectParameterCountException {
+      throws
+      UnknownIdentifierException,
+      InvalidSyntaxException,
+      IncorrectParameterCountException,
+      InvalidTokenTypeException,
+      UnmatchedSquareBracketException {
 
     // remove comments
-    command = command.replaceAll(COMMENT_MATCHER, "");
+    currCommand = command.replaceAll(COMMENT_MATCHER, NOTHING);
 
-    List<String> lines = new LinkedList<>(Arrays.asList(command.split(SPLITTER)));
-    lines.removeIf(String::isBlank);
-    Stack<Scope> scopeStack = new Stack<>();
-    scopeStack.push(new Scope());
-    boolean skipNext = false;
-    int cursor  = -1;
-    for (String token : lines) {
-      cursor++;
-      // trim all whitespaces
-      // token.trim() doesn't work for symbols such as \t
-      // https://stackoverflow.com/a/15633284/7730917
-      if (skipNext) {
-        skipNext = false;
-        continue;
-      }
+    tokensLeft = new LinkedList<>(Arrays.asList(currCommand.split(SPLITTER)));
+    tokensLeft.removeIf(String::isBlank);
 
-      Scope currScope = scopeStack.peek();
+    scopeStack = new Stack<>();
+    scopeStack.push(new ParsingScope());
 
-      token = token.replaceAll("\\s+", "");
+    handlerFactory = new HandlerFactory(
+        new ParserRecord(
+        scopeStack, tokensLeft,
+        language, bundle, currCommand));
+
+    String token;
+
+    while (!tokensLeft.isEmpty()) {
+      token = tokensLeft.remove(0);
+      token = token.replaceAll(WHITESPACE, NOTHING);
+
       if (token.length() > 0) {
-        String type = tc.getSymbol(token);
+        String type;
 
-        //TODO: Try to avoid using a switch statement
-        switch (type) {
-          case "Constant" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTNumberLiteral(Double.parseDouble(token)));
-          }
-
-          case "Command" -> {
-            String commandName = cc.getSymbol(token);
-            ASTNode newCommand;
-
-            switch (commandName) {
-              case "MakeUserInstruction" -> {
-                String identifier = lines.get(cursor + 1);
-                newCommand = new ASTMakeUserInstruction(identifier, lookUpTable);
-                skipNext = true;
-              }
-
-              case "NO MATCH" -> {
-                ASTFunctionCall foundFunc = lookUpTable.get(token);
-                if (foundFunc == null) {
-                  throw new UnknownIdentifierException(token);
-                }
-                newCommand = foundFunc.clone();
-              }
-
-              default -> newCommand = ASTCommandFactory.getCommand(commandName);
-            }
-
-            currScope.push(newCommand);
-          }
-
-          case "Variable" -> {
-            assertNeedsChild(scopeStack.size(), currScope, command, token);
-            currScope.push(new ASTVariable(token));
-          }
-
-          case "ListStart" -> scopeStack.push(new Scope());
-
-          case "ListEnd" -> {
-            if (currScope.isIncomplete()) {
-              throw new IncorrectParameterCountException(currScope.peek());
-            }
-
-            Scope prevScope = scopeStack.pop();
-            currScope = scopeStack.peek();
-            currScope.push(prevScope.getCommands());
-          }
-
-          default -> throw new InvalidSyntaxException(token, command);
+        try {
+          type = tokenClassifier.getSymbol(token);
+        } catch (UnknownIdentifierException e) {
+          throw new InvalidSyntaxException(token, command);
         }
+
+        Handler handler = handlerFactory.buildHandler(type);
+        handler.handle(token);
       }
     }
 
-    Scope currScope = scopeStack.peek();
-    if (currScope.isIncomplete() || scopeStack.size() != 1) {
-      if (currScope.peek() == null) {
-        throw new InvalidSyntaxException(command, command);
-      }
-
-      ASTNode problem = currScope.peek();
-      throw new IncorrectParameterCountException(problem);
+    if (scopeStack.size() != 1) {
+      throw new UnmatchedSquareBracketException();
     }
 
-    ASTNode out = currScope.getCommands();
-    if (out.getNumChildren() == 1)
+    ASTNode out = scopeStack.pop().getCommands();
+    if (out.getNumChildren() == 1) {
       return out.getChildAt(0);
+    }
+
     return out;
   }
 
-  private void assertNeedsChild(int scopeDepth, Scope currScope, String command, String token) {
-    if (scopeDepth == 1 && !currScope.addNextAsChild())
-      throw new InvalidSyntaxException(token, command);
-  }
-
-  public void changeLanguage(String language) {
-    cc.changeLanguage(language);
-  }
-
-  public static void main(String[] args) {
-    Parser parser = new ProgramParser("English", new HashMap<>());
-    parser.parseCommand("""
-        to dash [ :count ]
-        [
-            repeat :count
-                [
-                pu fd 4 pd fd 4
-          ]      
-        ]
-
-            cs
-                home
-            dash 10""");
+  public void changeLanguage(String newLanguage) {
+    language = newLanguage;
   }
 }

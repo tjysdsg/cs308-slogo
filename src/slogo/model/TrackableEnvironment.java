@@ -1,10 +1,9 @@
 package slogo.model;
 
-import java.util.ResourceBundle;
-import slogo.events.ClearEnvironment;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import slogo.model.notifiers.ModelTracker;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.
@@ -15,28 +14,6 @@ import slogo.events.UpdateVariables;
 public interface TrackableEnvironment {
 
   /**
-   * Sets the callback is called whenever there is an update to the turtle within the environment.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnTurtleUpdate(UpdateTurtle callback);
-
-  /**
-   * Sets the callback is called whenever there is an update to the variables within the
-   * environment.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnVariableUpdate(UpdateVariables callback);
-
-  /**
-   * Sets the callback is called whenever there is an update to the userdefined commands.
-   *
-   * @param callback - The callback that is called.
-   */
-  void setOnCommandUpdate(UpdateCommands callback);
-
-  /**
    * Parses and executes a passed in command.
    *
    * @param command - The command to parse and execute.
@@ -44,8 +21,9 @@ public interface TrackableEnvironment {
   void runCommand(String command);
 
   /**
-   * Sets the bundle to use for translating commands
-   * @param bundle - The bundle to use.
+   * Sets the language to use for translating commands
+   *
+   * @param language - The language to use.
    */
   void setLanguage(String language);
 
@@ -53,5 +31,11 @@ public interface TrackableEnvironment {
 
   void setCurrTurtle(int turtle);
 
-  void setOnClear(ClearEnvironment callback);
+  void setCurrTurtle(List<Integer> turtle);
+
+  ModelTracker getTracker();
+
+  void save(File saveLocation);
+
+  void load(File loadLocation);
 }

@@ -1,5 +1,6 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
@@ -19,13 +20,13 @@ public class ASTMakeVariable extends ASTDeclaration {
   }
 
   @Override
-  protected double doEvaluate(InfoBundle info) {
-    String name = ((ASTNamed) getChildAt(0)).getName();
+  protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
+    String name = ((ASTNamed) params.get(0)).getName();
     setIdentifier(name);
 
-    double value = getChildAt(1).evaluate(info);
+    double value = params.get(1).evaluate(info);
     ASTNumberLiteral numberLiteral = new ASTNumberLiteral(value);
-    info.getVariableTable().put(name, numberLiteral);
+    info.setVariable(name, numberLiteral);
 
     return value;
   }

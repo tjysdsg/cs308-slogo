@@ -1,9 +1,9 @@
 package slogo.model;
 
 import java.util.ResourceBundle;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
+import slogo.records.UpdateCommands;
+import slogo.records.UpdateTurtle;
+import slogo.records.UpdateVariables;
 
 /**
  * An environment that can be monitored for changes that occur and execute commands.
@@ -43,8 +43,8 @@ public interface TrackableEnvironment {
   void runCommand(String command);
 
   /**
-   * Sets the bundle to use for translating commands
-   * @param bundle - The bundle to use.
+   * Sets the environmentInfo to use for translating commands
+   * @param bundle - The environmentInfo to use.
    */
   void setBundle(ResourceBundle bundle);
 }

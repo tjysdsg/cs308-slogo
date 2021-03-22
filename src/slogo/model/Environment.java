@@ -1,133 +1,127 @@
 package slogo.model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import slogo.events.ClearEnvironment;
-import slogo.events.CommandsRecord;
-import slogo.events.TurtleRecord;
-import slogo.events.UpdateCommands;
-import slogo.events.UpdateTurtle;
-import slogo.events.UpdateVariables;
-import slogo.events.VariablesRecord;
-import slogo.model.ASTNodes.ASTFunctionCall;
 import slogo.model.ASTNodes.ASTNode;
+import slogo.model.notifiers.EnvironmentNotifier;
+import slogo.model.notifiers.ModelTracker;
+import slogo.model.notifiers.Delegate;
+import slogo.model.notifiers.TurtleNotifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
-public class Environment implements TrackableEnvironment {
+public class Environment implements TrackableEnvironment, Serializable {
 
-  private List<Turtle> turtles;
-  private int currTurtle;
-  private ExecutionEnvironment executionEnvironment;
-  private Map<String, ASTNode> variableTable;
-  private Map<String, ASTNode> commandTable;
-  private UpdateTurtle updateTurtleCallback;
-  private UpdateVariables updateVariablesCallback;
-  private UpdateCommands updateCommandsCallback;
-  private Parser myParser;
-  private ClearEnvironment clearEnvironmentCallback;
+  private List<Turtle> turtles = new ArrayList<>();
+  private List<Integer> currTurtles = new ArrayList<>();
+
+  private transient Delegate delegate = new Delegate();
+  private transient TurtleNotifier turtleNotifier = delegate;
+  private transient EnvironmentNotifier envNotifier = delegate;
+
+  private ExecutionScope executionScope =
+      new ExecutionScope(turtles, currTurtles, envNotifier, turtleNotifier);
+
+  private transient Parser myParser =
+      new ProgramParser(DEFAULT_LANG, executionScope);
 
   private static final String DEFAULT_LANG = "English";
 
   public Environment() {
-    executionEnvironment = new ExecutionEnvironment();
-    myParser = new ProgramParser(DEFAULT_LANG, new HashMap<>());
-    turtles = new ArrayList<>();
-    turtles.add(new Turtle(currTurtle, executionEnvironment));
-    currTurtle = 0;
-  }
-
-  public void setOnTurtleUpdate(UpdateTurtle callback) {
-    updateTurtleCallback = callback;
-  }
-
-  public void setOnVariableUpdate(UpdateVariables callback) {
-    updateVariablesCallback = callback;
-  }
-
-  public void setOnCommandUpdate(UpdateCommands callback) {
-    updateCommandsCallback = callback;
+    turtles.add(new Turtle(0, delegate));
+    currTurtles.add(0);
   }
 
   public void runCommand(String command) {
     ASTNode commandTree = myParser.parseCommand(command);
-    commandTree.evaluate(executionEnvironment);
+    commandTree.evaluate(executionScope);
   }
 
-  public void setOnClear(ClearEnvironment callback) {
-    this.clearEnvironmentCallback = callback;
+  public ModelTracker getTracker() {
+    return delegate;
   }
+
+  @Override
+  public void save(File saveLocation) {
+    try {
+      saveLocation.createNewFile();
+      FileOutputStream fileOut = new FileOutputStream(saveLocation);
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      out.writeObject(this);
+      out.close();
+      fileOut.close();
+    } catch (FileNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not found\n", saveLocation.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void load(File loadLocation) {
+    try {
+      FileInputStream fileIn = new FileInputStream(loadLocation);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+      Environment newEnv = (Environment) in.readObject();
+      in.close();
+      fileIn.close();
+      mergeWith(newEnv);
+    } catch (FileNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not found\n", loadLocation.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      System.out.printf("DEBUG: The %s file was not read correctly.\n", loadLocation.getName());
+    }
+  }
+
+  private void mergeWith(Environment newEnv) {
+    for (var entry : newEnv.executionScope.getCommands()) {
+      executionScope.setCommand(entry.getKey(), entry.getValue());
+    }
+
+    for (var entry : newEnv.executionScope.getVariables()) {
+      executionScope.setVariable(entry.getKey(), entry.getValue());
+    }
+
+    for (Turtle currTurtle : newEnv.turtles) {
+      turtles.add(currTurtle.clone(turtles.size(), turtleNotifier));
+    }
+  }
+
+//  private void writeObject(ObjectOutputStream out) throws IOException {
+//    out.defaultWriteObject();
+//  }
+//
+//  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+//
+//  }
 
   public void setLanguage(String language) {
     myParser.changeLanguage(language);
   }
 
-  /**
-   * Add a new turtle and switch to it
-   */
   public void addTurtle() {
-    int size = turtles.size();
-    Turtle turtle = new Turtle(size, executionEnvironment);
+    Turtle turtle = new Turtle(turtles.size(), delegate);
+    currTurtles.add(turtles.size());
     turtles.add(turtle);
-    currTurtle = size;
   }
 
   public void setCurrTurtle(int currTurtle) {
-    if (currTurtle >= turtles.size()) {
-      // FIXME: exception class
-      throw new RuntimeException(
-          String.format("Unable to set current turtle index to %d", currTurtle));
-    }
-    this.currTurtle = currTurtle;
+    executionScope.setMainTurtle(currTurtle);
   }
 
-  private class ExecutionEnvironment implements InfoBundle {
-
-    public ExecutionEnvironment() {
-      variableTable = new VariableTable(this);
-      commandTable = new CommandTable(this);
-    }
-
-    @Override
-    public Turtle getTurtle() {
-      return turtles.get(currTurtle);
-    }
-
-    public void notifyTurtleUpdate(TurtleRecord info) {
-      if (updateTurtleCallback != null) {
-        updateTurtleCallback.execute(info);
-      }
-    }
-
-    public void notifyEnvironmentClear() {
-      if (clearEnvironmentCallback != null) {
-        clearEnvironmentCallback.execute();
-      }
-    }
-
-    @Override
-    public Map<String, ASTNode> getVariableTable() {
-      return variableTable;
-    }
-
-    @Override
-    public Map<String, ASTNode> getCommandTable() {
-      return commandTable;
-    }
-
-    public void notifyCommandUpdate(CommandsRecord info) {
-      if (updateCommandsCallback != null) {
-        updateCommandsCallback.execute(info);
-      }
-    }
-
-    public void notifyVariableUpdate(VariablesRecord info) {
-      if (updateVariablesCallback != null) {
-        updateVariablesCallback.execute(info);
-      }
-    }
+  public void setCurrTurtle(List<Integer> currTurtles) {
+    executionScope.setCurrTurtle(currTurtles);
   }
+
+
 }

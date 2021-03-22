@@ -1,7 +1,11 @@
 package slogo.view;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -18,7 +22,8 @@ public class CommandPane extends Pane {
   GridPane pane = new GridPane();
   private TextArea codeArea;
   private Button run;
-  private Button fileUpload;
+  private Button uploadToRun;
+  private Button uploadToTextArea;
   ResourceBundle resources;
   VBox vbox;
   FileChooser fileChooser = new FileChooser();
@@ -39,35 +44,63 @@ public class CommandPane extends Pane {
     codeArea = new TextArea();
 
     run = new Button();
-    fileUpload = new Button();
+    uploadToRun = new Button();
+    uploadToTextArea = new Button();
     run.setOnMouseClicked(e -> sendCodeArea());
     fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Word Files", "*.docx", "*.txt")
+        new ExtensionFilter("Slogo files","*.slogo", "*.logo"),
+        new ExtensionFilter("All files", "*.*" )
     );
-    fileUpload.setOnMouseClicked(e->{
+    uploadToRun.setOnMouseClicked(e->{
       File file = fileChooser.showOpenDialog(getScene().getWindow());
 
+          if (file!=null){
+            try {
+              Scanner fileReader = new Scanner(file);
+              fileReader.useDelimiter("\\Z");
+              String command = fileReader.next();
+              vcon.sendCommand(command);
 
-      if (file!=null){
+          } catch (FileNotFoundException fileNotFoundException) {
+              fileNotFoundException.printStackTrace();
+            }
 
-      }
+          }
 
 
         }
         );
+    uploadToTextArea.setOnMouseClicked(e->
+    {
+      File file = fileChooser.showOpenDialog(getScene().getWindow());
+
+      if (file!=null){
+        try {
+          Scanner fileReader = new Scanner(file);
+          fileReader.useDelimiter("\\Z");
+          String command = fileReader.next();
+          fillCodeArea(command);
+
+        } catch (FileNotFoundException fileNotFoundException) {
+          fileNotFoundException.printStackTrace();
+        }
+
+      }
+
+
+    });
 
     codeArea.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendCodeArea();
-          } else if (e.getCode() == KeyCode.UP && codeArea.getText().equals("")) {
+          } else if (codeArea.getText().equals("") && e.getCode() == KeyCode.UP) {
            //fix this.
-            // codeArea.setText(environmentPane.getPreviousCommand());
-            codeArea.end();
+            vcon.fillCommandArea("");
           }
         });
 
-    vbox = new VBox(run, fileUpload);
+    vbox = new VBox(run, uploadToRun, uploadToTextArea);
     vbox.setSpacing(10);
 
     pane.add(codeArea, 0, 0);
@@ -97,10 +130,16 @@ public class CommandPane extends Pane {
   private void createDisplayText() {
     codeArea.setPromptText(resources.getString("userCommand"));
     run.setText(resources.getString("runButton"));
-    fileUpload.setText(resources.getString("uploadFile"));
+    uploadToRun.setText(resources.getString("uploadFile"));
+    uploadToTextArea.setText(resources.getString("uploadToText"));
 
 
   }
+
+  public void fillCodeArea(String text){
+    codeArea.setText(text);
+
+  };
 
 
 }

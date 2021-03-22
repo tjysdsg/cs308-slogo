@@ -1,6 +1,6 @@
 package slogo.model.ASTNodes;
 
-public class ASTDifference extends ASTBinaryOperator {
+public class ASTDifference extends ASTReducibleBinaryOperator {
 
   private static final String NAME = "Difference";
 

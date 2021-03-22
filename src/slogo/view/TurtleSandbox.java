@@ -237,15 +237,7 @@ public class TurtleSandbox extends GridPane {
   }
 
   private void setPenSize(int size) {
-    // EnvironmentRecord record =
-    // new EnvironmentRecord(
-    // lastRecord.colors(),
-    // lastRecord.currPenColor(),
-    // lastRecord.currShape(),
-    // lastRecord.currBGColor(),
-    // activeTurtles,
-    // size);
-    // modelTracker.requestEnvUpdate(record);
+    this.penThickness = size;
   }
 
   private void addTurtle() {

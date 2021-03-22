@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import slogo.model.Color;
 
 /**
  * @author marthaaboagye
@@ -43,6 +44,7 @@ public class SettingsPane extends Pane {
   private Preferences settings;
   private ViewController vcon;
   private PopupSettings popupSettings;
+  private Color colorRecord;
 
   /**
    * This method intializes a viewController object which defines method for aspects of the GUI to
@@ -93,7 +95,11 @@ public class SettingsPane extends Pane {
     penColorPicker.setOnAction(
         e -> {
           String penColor = penColorPicker.getValue().toString();
-          vcon.setPenColor(penColor);
+          double red =penColorPicker.getValue().getRed();
+          double green = penColorPicker.getValue().getGreen();
+          double blue = penColorPicker.getValue().getBlue();
+          colorRecord = new Color(red,green,blue);
+          vcon.setPenColor(colorRecord);
           settings.put("penColor", penColor);
         });
 
@@ -107,8 +113,17 @@ public class SettingsPane extends Pane {
     backgroundColorPicker.setOnAction(
         e -> {
           String bgColor = backgroundColorPicker.getValue().toString();
-          vcon.setBackground(bgColor);
+          double red =backgroundColorPicker.getValue().getRed();
+          double green = backgroundColorPicker.getValue().getGreen();
+          double blue = backgroundColorPicker.getValue().getBlue();
+          colorRecord = new Color(red,green,blue);
+          //vcon.setBackground(bgColor);
+          vcon.setBackground(colorRecord);
           settings.put("background", bgColor);
+//          settings.put("background", red);
+//          settings.put("background", green);
+//          settings.put("background", blue);
+
         });
 
     backgroundPane = new GridPane();

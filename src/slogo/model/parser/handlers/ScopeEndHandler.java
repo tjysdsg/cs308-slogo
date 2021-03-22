@@ -2,7 +2,7 @@ package slogo.model.parser.handlers;
 
 import java.util.Stack;
 import slogo.model.ASTNodes.ASTNode;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 import slogo.model.parser.ParsingScope;
 
 public abstract class ScopeEndHandler implements Handler {

@@ -2,7 +2,7 @@ package slogo.model.parser.factories;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 import slogo.model.parser.handlers.Handler;
 
 public class HandlerFactory {

@@ -2,7 +2,7 @@ package slogo.model.parser.handlers;
 
 
 import slogo.model.parser.factories.HandlerFactory;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 
 public class GroupStartHandler extends LookAheadHandler {
 

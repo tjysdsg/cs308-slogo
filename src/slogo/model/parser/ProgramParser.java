@@ -11,6 +11,7 @@ import slogo.model.parser.classifiers.SyntaxClassifier;
 import slogo.model.parser.factories.ClassifierFactory;
 import slogo.model.parser.factories.HandlerFactory;
 import slogo.model.parser.handlers.Handler;
+import slogo.records.ParserRecord;
 
 public class ProgramParser implements Parser {
 

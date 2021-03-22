@@ -1,7 +1,7 @@
 package slogo.model.parser.handlers;
 
 import java.util.Stack;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 import slogo.model.parser.ParsingScope;
 
 public class ListStartHandler implements Handler  {

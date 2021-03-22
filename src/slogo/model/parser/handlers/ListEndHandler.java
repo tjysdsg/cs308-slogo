@@ -1,7 +1,7 @@
 package slogo.model.parser.handlers;
 
 import slogo.model.ASTNodes.ASTNode;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 
 public class ListEndHandler extends ScopeEndHandler {
 

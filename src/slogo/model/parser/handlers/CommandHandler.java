@@ -8,7 +8,7 @@ import slogo.model.InfoBundle;
 import slogo.model.parser.factories.ASTCommandFactory;
 import slogo.model.parser.factories.ClassifierFactory;
 import slogo.model.parser.classifiers.CommandClassifier;
-import slogo.model.parser.ParserRecord;
+import slogo.records.ParserRecord;
 import slogo.model.parser.ParsingScope;
 
 public class CommandHandler extends LookAheadHandler {

@@ -30,6 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
+import slogo.model.Palette;
 import slogo.model.notifiers.ModelTracker;
 import slogo.records.EnvironmentRecord;
 import slogo.records.TurtleRecord;
@@ -56,7 +57,9 @@ public class TurtleSandbox extends GridPane {
   private FileChooser fileChooser;
   private ViewController viewController;
   private double penThickness;
+  private Palette palette;
   private ModelTracker modelTracker;
+  private EnvironmentRecord lastRecord;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox(ViewController viewController, ModelTracker tracker) {
@@ -199,7 +202,7 @@ public class TurtleSandbox extends GridPane {
         .valueProperty()
         .addListener(
             (obs, old, newValue) -> {
-              turtles.get(mainTurtle).setPenThinkcess(newValue);
+              setPenSize(newValue);
             });
 
     penThicknessSetting.getChildren().addAll(penThicknessLabel, penThicknessSpinner);
@@ -226,6 +229,18 @@ public class TurtleSandbox extends GridPane {
     return button;
   }
 
+  private void setPenSize(int size) {
+    //EnvironmentRecord record =
+        //new EnvironmentRecord(
+            //lastRecord.colors(),
+            //lastRecord.currPenColor(),
+            //lastRecord.currShape(),
+            //lastRecord.currBGColor(),
+            //activeTurtles,
+            //size);
+    //modelTracker.requestEnvUpdate(record);
+  }
+
   private void addTurtle() {
     TurtleView turtle = new TurtleView();
     turtles.add(turtle);
@@ -241,9 +256,6 @@ public class TurtleSandbox extends GridPane {
   public void setTurtle(int index) {
     if (turtles.size() > 1) viewController.setCurrTurtle(index);
     mainTurtle = index;
-    for (TurtleView turtle : turtles) {
-      turtle.setStyle("-fx-opacity: .5");
-    }
     turtles.get(index).setStyle("-fx-opacity: 1");
   }
 
@@ -256,7 +268,7 @@ public class TurtleSandbox extends GridPane {
   }
 
   public void setPenColor(String color) {
-    turtles.get(0).setPenColor(color);
+    turtles.get(mainTurtle).setPenColor(color);
   }
 
   public void updateEnvironment(EnvironmentRecord record) {
@@ -270,6 +282,7 @@ public class TurtleSandbox extends GridPane {
         turtles.get(i).setStyle("-fx-opcaity: .5");
       }
     }
+    this.lastRecord = record;
   }
 
   /**
@@ -279,6 +292,7 @@ public class TurtleSandbox extends GridPane {
    */
   public void updateTurtle(TurtleRecord info) {
     int turtleID = info.id();
+    mainTurtle = info.id();
     if (turtleID >= turtles.size()) {
       addTurtle();
     }

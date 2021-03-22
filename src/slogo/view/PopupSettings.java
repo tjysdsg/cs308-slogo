@@ -150,6 +150,7 @@ public class PopupSettings extends Pane {
     titlePane.setId("titlePane");
     setId("popupSettings");
     backButton.setId("backButton");
+    gearImage.setId("gearImage");
   }
 
   private void createVboxContainer() {

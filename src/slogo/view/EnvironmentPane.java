@@ -104,6 +104,9 @@ public class EnvironmentPane extends GridPane {
 
   private void setID() {
     previousCommands.setId("prevCommands");
+    variablesTable.setId("variableTable");
+    variablesToggle.setId("varToggle");
+
 
   }
 

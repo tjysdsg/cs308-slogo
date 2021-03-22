@@ -76,8 +76,4 @@ public class SettingsPaneTest extends util.DukeApplicationTest {
 
 
 
-
-
-
-
 }

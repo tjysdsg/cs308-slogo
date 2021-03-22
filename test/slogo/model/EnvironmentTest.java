@@ -68,6 +68,7 @@ public class EnvironmentTest {
 
   @Test
   void testDeserialize() {
+    testFile.delete();
     env.addTurtle();
 
     runFile("procedures_with_parameters/face.slogo");

@@ -59,7 +59,7 @@ public class Environment implements TrackableEnvironment, Serializable {
       out.close();
       fileOut.close();
     } catch (FileNotFoundException e) {
-      System.out.printf("DEBUG: The %s file was not found\n", saveLocation.getName());
+      System.out.printf("DEBUG: Saving Failed: The %s file was not found\n", saveLocation.getName());
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -75,11 +75,11 @@ public class Environment implements TrackableEnvironment, Serializable {
       fileIn.close();
       mergeWith(newEnv);
     } catch (FileNotFoundException e) {
-      System.out.printf("DEBUG: The %s file was not found\n", loadLocation.getName());
+      System.out.printf("DEBUG: Loading Failed: The %s file was not found\n", loadLocation.getName());
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
-      System.out.printf("DEBUG: The %s file was not read correctly.\n", loadLocation.getName());
+      System.out.printf("DEBUG: Loading Failed: The %s file was not read correctly.\n", loadLocation.getName());
     }
   }
 
@@ -96,14 +96,6 @@ public class Environment implements TrackableEnvironment, Serializable {
       turtles.add(currTurtle.clone(turtles.size(), turtleNotifier));
     }
   }
-
-//  private void writeObject(ObjectOutputStream out) throws IOException {
-//    out.defaultWriteObject();
-//  }
-//
-//  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-//
-//  }
 
   public void setLanguage(String language) {
     myParser.changeLanguage(language);

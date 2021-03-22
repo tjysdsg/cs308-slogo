@@ -33,9 +33,11 @@ public class TurtleView extends Group {
   public static final double IMAGE_WIDTH = 200;
   public static final double IMAGE_HEIGHT = 160;
   public static final int PANE_HEIGHT = 200;
+  public static final String TURTLES = "resources/images/turtles/";
   private double currY;
   private double rotation;
   private double penThickness;
+  private int id;
   private ImageView turtleImage;
   private Queue<Animation> animationQueue;
   private String penColor;
@@ -46,9 +48,10 @@ public class TurtleView extends Group {
   private Label positionLabel;
   private Label rotationLabel;
   private Label penThicknessLabel;
+  private Label idLabel;
   private boolean penDown;
 
-  protected TurtleView(Image image) {
+  protected TurtleView(Image image, int id) {
     turtleImage = new ImageView(image);
     getChildren().addAll(turtleImage);
     this.currX = 0;
@@ -61,6 +64,7 @@ public class TurtleView extends Group {
     this.animationQueue = new LinkedList<>();
     this.penColor = "#009624";
     this.penThickness = 5;
+    this.id = id;
     HBox labelBox = new HBox();
     createTrackerPane();
     labelBox.setAlignment(Pos.CENTER_RIGHT);
@@ -84,16 +88,17 @@ public class TurtleView extends Group {
     penOnLabel = new Label();
     penColorLabel = new Label();
     penThicknessLabel = new Label();
+    idLabel = new Label("ID: " + this.id);
 
     items.setSpacing(IMAGE_WIDTH / 10);
-    items.getChildren().addAll(penOnLabel, penColorLabel, penThicknessLabel);
+    items.getChildren().addAll(penOnLabel, penColorLabel, penThicknessLabel, idLabel);
     trackerPane.getChildren().add(items);
     Insets insets = new Insets(10);
     items.setPadding(insets);
   }
 
-  public TurtleView() {
-    this(new Image(new File("data/images/logo.png").toURI().toString()));
+  public TurtleView(int id) {
+    this(new Image(new File("data/images/logo.png").toURI().toString()), id);
   }
 
   public void setPenThinkcess(double thickness) {
@@ -179,6 +184,12 @@ public class TurtleView extends Group {
   public void setPenColor(String penColor) {
     this.penColor = penColor;
     updateTracker();
+  }
+
+  public void setImage(String image) {
+    if (image.equals("")) return;
+    Image imageFile = new Image(getClass().getResourceAsStream(TURTLES + image));
+    turtleImage.setImage(imageFile);
   }
 
   public void update(TurtleRecord info) {

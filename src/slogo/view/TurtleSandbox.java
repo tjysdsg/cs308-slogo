@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -30,6 +31,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
+import slogo.model.Palette;
 import slogo.model.notifiers.ModelTracker;
 import slogo.records.EnvironmentRecord;
 import slogo.records.TurtleRecord;
@@ -56,7 +58,10 @@ public class TurtleSandbox extends GridPane {
   private FileChooser fileChooser;
   private ViewController viewController;
   private double penThickness;
+  private Palette palette;
   private ModelTracker modelTracker;
+  private Map<Integer, String> shapeIndex;
+  private EnvironmentRecord lastRecord;
 
   /** Constructor for TurtleSandbox. Intializes the pan class. */
   public TurtleSandbox(ViewController viewController, ModelTracker tracker) {
@@ -68,7 +73,12 @@ public class TurtleSandbox extends GridPane {
     this.fileChooser = new FileChooser();
     this.penThickness = 5;
     this.modelTracker = tracker;
-
+    this.shapeIndex =
+        Map.of(
+            0, "Jiyang.jpeg",
+            1, "Joshua.jpeg",
+            2, "Oliver.jpeg",
+            3, "SadTurtle.png");
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.png"));
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
@@ -199,7 +209,7 @@ public class TurtleSandbox extends GridPane {
         .valueProperty()
         .addListener(
             (obs, old, newValue) -> {
-              turtles.get(mainTurtle).setPenThinkcess(newValue);
+              setPenSize(newValue);
             });
 
     penThicknessSetting.getChildren().addAll(penThicknessLabel, penThicknessSpinner);
@@ -226,8 +236,13 @@ public class TurtleSandbox extends GridPane {
     return button;
   }
 
+  private void setPenSize(int size) {
+    this.penThickness = size;
+  }
+
   private void addTurtle() {
-    TurtleView turtle = new TurtleView();
+    int size = turtles.size();
+    TurtleView turtle = new TurtleView(size);
     turtles.add(turtle);
     turtle.setOnMouseClicked(
         e -> {
@@ -240,11 +255,11 @@ public class TurtleSandbox extends GridPane {
 
   public void setTurtle(int index) {
     if (turtles.size() > 1) viewController.setCurrTurtle(index);
-    mainTurtle = index;
-    for (TurtleView turtle : turtles) {
-      turtle.setStyle("-fx-opacity: .5");
+    for (int i = 0; i < turtles.size(); i++) {
+      turtles.get(i).setStyle("-fx-opacity: .6");
     }
     turtles.get(index).setStyle("-fx-opacity: 1");
+    mainTurtle = index;
   }
 
   public void setSandboxColor(String color) {
@@ -256,20 +271,25 @@ public class TurtleSandbox extends GridPane {
   }
 
   public void setPenColor(String color) {
-    turtles.get(0).setPenColor(color);
+    turtles.get(mainTurtle).setPenColor(color);
   }
 
   public void updateEnvironment(EnvironmentRecord record) {
     System.out.println("UPDATED!");
     this.penThickness = record.currPenSize();
     activeTurtles = record.activeTurtles();
+    String shape = shapeIndex.get(record.currShape());
+    shape = shape == null ? "" : shape;
     for (int i = 0; i < turtles.size(); i++) {
       if (activeTurtles.contains(i)) {
+        String image = shape;
         turtles.get(i).setStyle("-fx-opacity: 1");
+        turtles.get(i).setImage(shape);
       } else {
         turtles.get(i).setStyle("-fx-opcaity: .5");
       }
     }
+    this.lastRecord = record;
   }
 
   /**
@@ -279,6 +299,7 @@ public class TurtleSandbox extends GridPane {
    */
   public void updateTurtle(TurtleRecord info) {
     int turtleID = info.id();
+    mainTurtle = info.id();
     if (turtleID >= turtles.size()) {
       addTurtle();
     }

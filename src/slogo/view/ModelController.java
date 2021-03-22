@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import slogo.model.TrackableEnvironment;
 import slogo.exceptions.ModelException;
@@ -90,6 +92,8 @@ public class ModelController {
   }
 
   public void setCurrTurtle(int turtle) {
-    env.setCurrTurtle(turtle);
+    List<Integer> activeTurtles = new ArrayList<>();
+    activeTurtles.add(turtle);
+    env.setCurrTurtle(activeTurtles);
   }
 }

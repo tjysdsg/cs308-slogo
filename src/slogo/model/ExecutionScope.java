@@ -110,6 +110,7 @@ public class ExecutionScope implements InfoBundle, Serializable {
     currTurtles.clear();
     currTurtles.addAll(newTurtles);
 
+    notifyEnvironment();
     notifyAllTurtleUpdates();
   }
 

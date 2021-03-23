@@ -54,7 +54,8 @@ unit_testing:
         -Dglass.platform=Monocle \
         -Dprism.order=sw \
         -Dprism.fontdir=/usr/share/fonts \
-        -Dtestfx.setup.timeout=2500
+        -Dtestfx.setup.timeout=2500 \
+        -Dheadless.geometry=1600x1200
     - cat target/site/jacoco/index.html
   artifacts:
     paths:

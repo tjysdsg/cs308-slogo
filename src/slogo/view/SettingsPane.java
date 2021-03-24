@@ -117,8 +117,8 @@ public class SettingsPane extends Pane {
           double green = backgroundColorPicker.getValue().getGreen();
           double blue = backgroundColorPicker.getValue().getBlue();
           colorRecord = new Color(red,green,blue);
-          //vcon.setBackground(bgColor);
-          vcon.setBackground(colorRecord);
+          vcon.setBackground(bgColor);
+          //vcon.setBackground(colorRecord);
           settings.put("background", bgColor);
 //          settings.put("background", red);
 //          settings.put("background", green);

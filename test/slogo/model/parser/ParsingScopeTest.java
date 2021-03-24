@@ -54,12 +54,12 @@ public class ParsingScopeTest {
 
   void assertNextIsChild() {
     //assertTrue(myScope.isIncomplete());
-    assertTrue(myScope.addNextAsChild());
+    assertTrue(myScope.isNextAChild());
   }
 
   void assertNextNotChild() {
     //assertFalse(myScope.isIncomplete());
-    assertFalse(myScope.addNextAsChild());
+    assertFalse(myScope.isNextAChild());
   }
 
   @Test

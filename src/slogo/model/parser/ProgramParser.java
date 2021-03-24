@@ -13,6 +13,13 @@ import slogo.model.parser.factories.HandlerFactory;
 import slogo.model.parser.handlers.Handler;
 import slogo.records.ParserRecord;
 
+/**
+ * This class implements the Parser interface
+ *
+ * it has the same assumptions dependancies and examples as the parser interface
+ * @author Oliver Rodas
+ * @see slogo.model.parser.Parser
+ */
 public class ProgramParser implements Parser {
 
   private final SyntaxClassifier tokenClassifier = ClassifierFactory.buildSyntaxClassifier();
@@ -30,12 +37,15 @@ public class ProgramParser implements Parser {
 
   /**
    * Infobundle to interface (lookup table) Factories
+   *
+   * @param language the language to begin with
+   * @param bundle   the bundle to use as a lookup table
    */
-
   public ProgramParser(String language, InfoBundle bundle) {
     this.bundle = bundle;
     this.language = language;
   }
+
 
   public ASTNode parseCommand(String command)
       throws
@@ -43,7 +53,7 @@ public class ProgramParser implements Parser {
       InvalidSyntaxException,
       IncorrectParameterCountException,
       InvalidTokenTypeException,
-      UnmatchedSquareBracketException {
+      UnmatchedBracketException {
 
     // remove comments
     currCommand = command.replaceAll(COMMENT_MATCHER, NOTHING);
@@ -80,7 +90,7 @@ public class ProgramParser implements Parser {
     }
 
     if (scopeStack.size() != 1) {
-      throw new UnmatchedSquareBracketException();
+      throw new UnmatchedBracketException();
     }
 
     ASTNode out = scopeStack.pop().getCommands();

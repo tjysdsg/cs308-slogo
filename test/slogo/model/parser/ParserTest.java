@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import slogo.exceptions.FloatingValueException;
 import slogo.exceptions.IncorrectParameterCountException;
 import slogo.exceptions.UnknownIdentifierException;
-import slogo.exceptions.UnmatchedSquareBracketException;
+import slogo.exceptions.UnmatchedBracketException;
 import slogo.model.ASTNodes.ASTBackward;
 import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTCompoundStatement;
@@ -323,7 +323,7 @@ public class ParserTest {
   @Test
   void testScopeNotEnded() {
     String TEST_STRING = "fd [[";
-    assertThrows(UnmatchedSquareBracketException.class, () -> {
+    assertThrows(UnmatchedBracketException.class, () -> {
       parser.parseCommand(TEST_STRING);
     });
   }

@@ -238,7 +238,7 @@ public class ExecutionScope implements InfoBundle, Serializable {
     envNotifier.notifyEnvClear();
   }
 
-  private void notifyEnvironment() {
+  public void notifyEnvironment() {
     envNotifier.notifyEnvUpdate(new EnvironmentRecord(
         palette, penColorIdx,
         shapeIdx, backgroundColorIdx,

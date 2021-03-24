@@ -18,6 +18,22 @@ import slogo.model.notifiers.TurtleNotifier;
 import slogo.model.parser.Parser;
 import slogo.model.parser.ProgramParser;
 
+/**
+ * This class is the container for the model. It implements an interface that
+ * allows the view to communicate with the model and the model to respond to the view.
+ *
+ * This class assumes that parsers and InfoBundles have been defined.
+ *
+ * This class depends on the parser package, notifiers package,
+ * ASTNode package and Java's util package.
+ *
+ * This class would be created using its constructor,
+ * then a tracker can be created to set listeners
+ * and calling listeners from the model.
+ * The parent class can then call runCommand to run a command string.
+ *
+ * @author Oliver Rodas, Jiyang Tang, Joshua Petitma
+ */
 public class Environment implements TrackableEnvironment, Serializable {
 
   private List<Turtle> turtles = new ArrayList<>();
@@ -105,6 +121,7 @@ public class Environment implements TrackableEnvironment, Serializable {
     Turtle turtle = new Turtle(turtles.size(), delegate);
     currTurtles.add(turtles.size());
     turtles.add(turtle);
+    executionScope.notifyEnvironment();
   }
 
   public void setCurrTurtle(int currTurtle) {

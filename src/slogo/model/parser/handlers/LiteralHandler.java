@@ -16,7 +16,7 @@ public abstract class LiteralHandler implements Handler {
   }
 
   protected void assertScopeNeedsChild(String currentToken) {
-    if (scopeStack.size() == 1 && !currScope.addNextAsChild())
+    if (scopeStack.size() == 1 && !currScope.isNextAChild())
       throw new FloatingValueException(currentToken);
   }
 

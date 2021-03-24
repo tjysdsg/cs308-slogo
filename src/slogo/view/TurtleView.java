@@ -188,7 +188,7 @@ public class TurtleView extends Group {
 
   public void setImage(String image) {
     if (image.equals("")) return;
-    Image imageFile = new Image(getClass().getResourceAsStream(TURTLES + image));
+    Image imageFile = new Image(getClass().getResourceAsStream(TURTLES + image), IMAGE_WIDTH, IMAGE_HEIGHT, false, false);
     turtleImage.setImage(imageFile);
   }
 

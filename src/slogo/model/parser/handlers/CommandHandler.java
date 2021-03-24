@@ -11,6 +11,15 @@ import slogo.model.parser.classifiers.CommandClassifier;
 import slogo.records.ParserRecord;
 import slogo.model.parser.ParsingScope;
 
+/**
+ * The type Command handler. It is a type of lookahead handler. It has the same notes as a handler,
+ * but is dependent on more classes
+ * <p>
+ * This class depends on the ASTNode, factories, records, and parser packages
+ *
+ * @author Oliver Rodas
+ * @see Handler
+ */
 public class CommandHandler extends LookAheadHandler {
 
   private Stack<ParsingScope> scopeStack;
@@ -21,6 +30,11 @@ public class CommandHandler extends LookAheadHandler {
   private static final String EXPECTED_NEXT = "Command";
   private static final String MAKE_USER_INSTRUCTION = "MakeUserInstruction";
 
+  /**
+   * Instantiates a new Command handler.
+   *
+   * @param parserInfo the information from the parser
+   */
   public CommandHandler(ParserRecord parserInfo) {
     super(parserInfo.tokensLeft());
     scopeStack = parserInfo.scopeStack();

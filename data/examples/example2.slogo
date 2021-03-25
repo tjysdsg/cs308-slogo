@@ -1,0 +1,13 @@
+mandar [1 2 3]
+
+repetir 5 [
+  der azar 360
+  ava azar 500
+]
+
+pedir [4 5 6] [
+   ava azar 500
+   der azar 360
+]
+
+casa

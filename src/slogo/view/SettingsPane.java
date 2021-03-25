@@ -156,7 +156,7 @@ public class SettingsPane extends Pane {
             "Spanish",
             "Urdu");
     languageList.getItems().addAll(languages);
-    languageList.setValue("English");
+    languageList.setValue(settings.get("language", "English"));
     languageList.setOnAction(
         e -> {
           String lang = languageList.getValue();
@@ -168,6 +168,7 @@ public class SettingsPane extends Pane {
   protected void setSettings(Preferences settings) {
     this.settings = settings;
     popupSettings.setSettings(settings);
+    languageList.setValue(settings.get("language", "English"));
   }
 
   public void setResources(ResourceBundle resource) {

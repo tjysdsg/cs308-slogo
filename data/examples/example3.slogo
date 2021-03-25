@@ -1,7 +1,0 @@
-repeat 10 [
-  (set :r random 255 :g random 255 :b random 255)
-  setpalette 1 :r :g :b
-  setpencolor 1
-  (fd random 500)
-  (rt random 360)
-]

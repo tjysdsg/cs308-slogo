@@ -1,7 +1,8 @@
 package slogo.exceptions;
 
 /**
- * This Exception is used when a token is given the wrong number of parameters. It can greater or higher than the required amount
+ * This exception is used when an incorrect token was used when a different one was expected
+ * @author Oliver Rodas
  */
 public class InvalidTokenTypeException extends ModelException {
   private static final String name = "InvalidTokenTypeException";

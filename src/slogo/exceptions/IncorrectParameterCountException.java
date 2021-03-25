@@ -1,10 +1,13 @@
 package slogo.exceptions;
 
-import slogo.model.ASTNodes.ASTCommand;
 import slogo.model.ASTNodes.ASTNode;
 
 /**
  * This Exception is used when a token is given the wrong number of parameters. It can greater or higher than the required amount
+ *
+ * Depends only on the ASTNode class
+ *
+ * @author Oliver Rodas
  */
 public class IncorrectParameterCountException extends ModelException {
   private int expected;
@@ -14,9 +17,7 @@ public class IncorrectParameterCountException extends ModelException {
 
   /**
    * Creates a new instance of this exception.
-   * @param expected number of arguments
-   * @param actual number of arguments
-   * @param token the command that failed
+   * @param problem the node that caused a problem
    */
   public IncorrectParameterCountException(ASTNode problem) {
     super(name);

@@ -2,6 +2,7 @@ package slogo.exceptions;
 
 /**
  * This exception is thrown when there is a token in a place where it should not be. If there is a malformed statement, then this is thrown
+ * @author Oliver Rodas
  */
 public class InvalidSyntaxException extends ModelException {
   private String command;

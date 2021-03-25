@@ -1,9 +1,8 @@
 package slogo.exceptions;
 
-import slogo.model.ASTNodes.ASTNode;
-
 /**
  * This Exception is used when a token is given the wrong number of parameters. It can greater or higher than the required amount
+ * @author Oliver Rodas
  */
 public class UnmatchedBracketException extends ModelException {
   private static final String name = "UnmatchedSquareBracketException";

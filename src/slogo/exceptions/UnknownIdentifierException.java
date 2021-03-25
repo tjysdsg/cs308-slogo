@@ -2,6 +2,7 @@ package slogo.exceptions;
 
 /**
  * This exception is thrown when a token is not recognized.
+ * @author Oliver Rodas
  */
 public class UnknownIdentifierException extends ModelException {
 

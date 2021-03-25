@@ -67,19 +67,19 @@ public class EnvironmentPaneTest extends DukeApplicationTest {
     assertEquals(expected, prevCommands.getItems().get(0).getText());
   }
 
-  @Test
-  void testVariablePane(){
-    variablesTable = (TableView<DisplayVariable>) environmentPane.lookup("#variableTable");
-    DisplayVariable a = new DisplayVariable(":y", "50");
-    variablesTable.getItems().add(a);
-    assertNotNull(doubleClickOn(variablesTable));
-  }
-
-  @Test
-  void testToggle(){
-    variablesToggle = (TitledPane) environmentPane.lookup("#varToggle");
-    assertNotNull(clickOn(variablesToggle));
-  }
+//  @Test
+//  void testVariablePane(){
+//    variablesTable = (TableView<DisplayVariable>) environmentPane.lookup("#variableTable");
+//    DisplayVariable a = new DisplayVariable(":y", "50");
+//    variablesTable.getItems().add(a);
+//    assertNotNull(doubleClickOn(variablesTable));
+//  }
+//
+//  @Test
+//  void testToggle(){
+//    variablesToggle = (TitledPane) environmentPane.lookup("#varToggle");
+//    assertNotNull(clickOn(variablesToggle));
+//  }
 
 
 

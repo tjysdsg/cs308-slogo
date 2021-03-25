@@ -37,7 +37,7 @@ import slogo.model.notifiers.ModelTracker;
  */
 public class View {
 
-  private static final int WIDTH = 1500;
+  private static final int WIDTH = 1200;
   private static final int HEIGHT = 1000;
 
   private FileChooser fileChooser;

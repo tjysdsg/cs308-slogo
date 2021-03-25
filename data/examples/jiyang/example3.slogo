@@ -1,0 +1,16 @@
+# draw spiral using recursion
+make :max 80
+make :step 2
+
+to turnAndMove [:val] [
+  setps :val
+
+  left :val
+  fd * :val :val
+
+  if less? :val :max [
+    turnAndMove + :val :step
+  ]
+]
+
+turnAndMove 1

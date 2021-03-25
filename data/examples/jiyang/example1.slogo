@@ -1,0 +1,15 @@
+# color gradient
+
+setps 50
+
+# prepare palette
+for [:rep 0 25 1] [
+  (make :r * :rep 10 :g * :rep 10 :b * :rep 10)
+  setpalette :rep :r :g :b
+]
+
+# draw line
+for [:rep 0 25 1] [
+  setpc :rep
+  fd 50
+]

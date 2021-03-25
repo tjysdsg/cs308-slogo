@@ -21,12 +21,15 @@ public class ASTMakeVariable extends ASTDeclaration {
 
   @Override
   protected double doEvaluate(InfoBundle info, List<ASTNode> params) {
-    String name = ((ASTNamed) params.get(0)).getName();
-    setIdentifier(name);
+    double value = 0;
+    for (int i = 0; i < getNumChildren(); i+=getNumParams()) {
+        String name = ((ASTNamed) params.get(i)).getName();
+        setIdentifier(name);
 
-    double value = params.get(1).evaluate(info);
-    ASTNumberLiteral numberLiteral = new ASTNumberLiteral(value);
-    info.setVariable(name, numberLiteral);
+        value = params.get(i + 1).evaluate(info);
+        ASTNumberLiteral numberLiteral = new ASTNumberLiteral(value);
+        info.setVariable(name, numberLiteral);
+    }
 
     return value;
   }

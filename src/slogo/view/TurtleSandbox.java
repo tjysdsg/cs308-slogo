@@ -31,6 +31,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
+import slogo.model.Color;
+import slogo.model.PaletTable;
 import slogo.model.Palette;
 import slogo.model.notifiers.ModelTracker;
 import slogo.records.EnvironmentRecord;
@@ -58,7 +60,7 @@ public class TurtleSandbox extends GridPane {
   private FileChooser fileChooser;
   private ViewController viewController;
   private double penThickness;
-  private Palette palette;
+  private PaletTable palette;
   private ModelTracker modelTracker;
   private Map<Integer, String> shapeIndex;
   private EnvironmentRecord lastRecord;
@@ -285,6 +287,9 @@ public class TurtleSandbox extends GridPane {
         String image = shape;
         turtles.get(i).setStyle("-fx-opacity: 1");
         turtles.get(i).setImage(shape);
+        palette = record.colors();
+        Color penColor = palette.getColor(record.currPenColor());
+        turtles.get(i).setPenColor(String.format("#%02X%02X%02X", (int) penColor.r(), (int) penColor.b(), (int) penColor.g()));
       } else {
         turtles.get(i).setStyle("-fx-opcaity: .5");
       }

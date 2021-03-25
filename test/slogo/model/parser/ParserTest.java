@@ -360,6 +360,11 @@ public class ParserTest {
     assertThrows(EmptyStackException.class , () -> parser.parseCommand(TEST_STRING));
   }
 
+  @Test
+  void testGrouping() {
+    String TEST_STRING ="(set :r random 255 :g random 255 :b random 255)";
+    assertDoesNotThrow(() -> parser.parseCommand(TEST_STRING));
+  }
 
   public static void assertNodeStructure(ASTNode expected, ASTNode actual) {
     if (expected instanceof ASTNumberLiteral)

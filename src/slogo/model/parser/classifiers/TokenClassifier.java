@@ -10,10 +10,15 @@ import java.util.regex.Pattern;
 import slogo.exceptions.UnknownIdentifierException;
 
 /**
-* Simple parser based on regular expressions that matches input strings to kinds of program elements.
-*
-* @author Robert C. Duvall
-*/
+ * Simple parser based on regular expressions that matches input strings to kinds of program
+ * elements.
+ * <p>
+ * This class assumes that the resource bundles have been defined and can be used
+ * <p>
+ * This class depends on Java's util class and the exceptions class
+ *
+ * @author Robert C. Duvall, Modified slightly by Oliver Rodas
+ */
 public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
   // where to find resources specifically for this class
   private static final String RESOURCES_PACKAGE = "resources.";
@@ -30,6 +35,8 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
 
   /**
    * Adds the given resource file to this language's recognized types
+   *
+   * @param syntax the syntax to use
    */
   public void addPatterns (String syntax) {
       ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
@@ -41,13 +48,22 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
       }
   }
 
+  /**
+   * Change the patterns to use
+   *
+   * @param newSyntax the new syntax to use
+   */
   public void changePatterns (String newSyntax) {
     mySymbols.clear();
     addPatterns(newSyntax);
   }
 
   /**
-   * Returns language's type associated with the given text if one exists
+   * Get the symbol for the input text
+   *
+   * @param text The text to classify
+   * @return the input type associated with the given text if one exists
+   * @throws UnknownIdentifierException if the identifier is not found
    */
   public String getSymbol (String text) throws UnknownIdentifierException {
       for (Entry<String, Pattern> e : mySymbols) {
@@ -64,19 +80,4 @@ public class TokenClassifier implements SyntaxClassifier, CommandClassifier {
       // THIS IS THE OTHER IMPORTANT LINE
       return regex.matcher(text).matches();
   }
-
-//  public static void main(String[] args) {
-//      TokenParser pp = new TokenParser();
-//      pp.addPatterns("English");
-//      pp.addPatterns("Syntax");
-//
-//      String toTest = "fd [ fd 50 ]";
-//      List<String> tokensLeft = Arrays.asList(toTest.split(SPLITTER));
-//
-//      for (String line : tokensLeft) {
-//          if (line.trim().length() > 0) {
-//              System.out.println(pp.getSymbol(line));
-//          }
-//      }
-//  }
 }

@@ -2,6 +2,12 @@ package slogo.model.notifiers;
 
 import slogo.records.TurtleRecord;
 
+/**
+ * The Turtle notifier interface is used for a turtle to notify the environment
+ * that a turtle has changed a value.
+ *
+ * @author Oliver Rodas
+ */
 public interface TurtleNotifier {
 
   /**

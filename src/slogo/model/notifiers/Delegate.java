@@ -7,6 +7,15 @@ import slogo.records.EnvironmentRecord;
 import slogo.records.TurtleRecord;
 import slogo.records.VariablesRecord;
 
+/**
+ * This class is meant to be a way for the model and the view  to communicate without having an
+ * instance of each other. The methods sets and calls functional interfaces for each piece of the
+ * program to communicate with another
+ * <p>
+ * This class depends on the records package
+ * <p>
+ * This class can be used by both the model and the view to call and set listeners wherever needed.
+ */
 public class Delegate implements ModelTracker, EnvironmentNotifier, TurtleNotifier {
 
   private Consumer<TurtleRecord> updateTurtleCallback;
@@ -19,9 +28,12 @@ public class Delegate implements ModelTracker, EnvironmentNotifier, TurtleNotifi
   private Consumer<DisplayVariable> requestVarCallback;
   private Consumer<EnvironmentRecord> requestEnvCallback;
 
+  /**
+   * Instantiates a new Delegate.
+   */
   public Delegate() {};
 
-  public Delegate(
+  private Delegate(
       Consumer<TurtleRecord> updateTurtleCallback,
       Consumer<CommandsRecord> updateCommandsCallback,
       Consumer<EnvironmentRecord> updateEnvironmentCallback,
@@ -110,20 +122,24 @@ public class Delegate implements ModelTracker, EnvironmentNotifier, TurtleNotifi
     }
   }
 
+  @Override
   public void requestEnvUpdate(EnvironmentRecord record) {
     if (requestEnvCallback != null) {
       requestEnvCallback.accept(record);
     }
   }
 
+  @Override
   public void onRequestVarUpdate(Consumer<DisplayVariable> callback) {
     requestVarCallback = callback;
   }
 
+  @Override
   public void onRequestTurtleUpdate(Consumer<TurtleRecord> callback) {
     requestTurtleCallback = callback;
   }
 
+  @Override
   public void onRequestEnvUpdate(Consumer<EnvironmentRecord> callback) {
     requestEnvCallback = callback;
   }

@@ -5,7 +5,7 @@ package slogo.model.ASTNodes;
  *
  * @author Jiyang Tang, Oliver Rodas
  */
-public abstract class ASTDeclaration extends ASTCommand {
+public abstract class ASTDeclaration extends ASTGroupableCommand {
 
   private String identifier;
 

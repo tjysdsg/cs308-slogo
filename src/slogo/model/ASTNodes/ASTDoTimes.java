@@ -8,8 +8,9 @@ import slogo.model.InfoBundle;
  * <ol>
  *   <li>Compound statement containing {@code variable} and {@code limit}</li>
  *   <li>Compound statement containing commands</li>
- *
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTDoTimes extends ASTCommand {
 

@@ -1,7 +1,10 @@
 package slogo.model.ASTNodes;
 
-import java.util.List;
-
+/**
+ * Baseclass for variable/command declarations
+ *
+ * @author Jiyang Tang, Oliver Rodas
+ */
 public abstract class ASTDeclaration extends ASTCommand {
 
   private String identifier;
@@ -34,6 +37,9 @@ public abstract class ASTDeclaration extends ASTCommand {
     this.identifier = identifier;
   }
 
+  /**
+   * Get identifier
+   */
   public String getIdentifier() {
     return identifier;
   }

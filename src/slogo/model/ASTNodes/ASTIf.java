@@ -10,6 +10,8 @@ import slogo.model.InfoBundle;
  *   <li>Then branch</li>
  *   <li>Else branch</li>
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTIf extends ASTCommand {
 

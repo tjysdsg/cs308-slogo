@@ -8,8 +8,9 @@ import slogo.model.InfoBundle;
  * <ol>
  *   <li>Compound statement containing {@code variable}, {@code start} and {@code end}</li>
  *   <li>Compound statement containing commands</li>
- *
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTFor extends ASTCommand {
 

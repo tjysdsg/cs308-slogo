@@ -5,6 +5,13 @@ import java.util.List;
 import slogo.model.InfoBundle;
 import slogo.model.Turtle;
 
+/**
+ * Base class for commands that applies effects on the turtle(s)
+ * <p>
+ * The evaluation is done repeatedly on all active turtles
+ *
+ * @author Jiyang Tang
+ */
 public abstract class ASTTurtleCommand extends ASTGroupableCommand {
 
   public ASTTurtleCommand(String name, int numParams) {

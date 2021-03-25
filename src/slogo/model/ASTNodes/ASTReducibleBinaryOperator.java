@@ -9,6 +9,8 @@ import slogo.model.InfoBundle;
  * <p>
  * In contrast, (MAKE :x 100 :y 200) is not a reducible operator since it's a shorthand for [MAKE :x
  * 100 MAKE :y 200]
+ *
+ * @author Jiyang Tang
  */
 public abstract class ASTReducibleBinaryOperator extends ASTBinaryOperator {
 

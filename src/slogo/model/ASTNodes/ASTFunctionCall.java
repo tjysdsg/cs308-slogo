@@ -4,12 +4,16 @@ import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
+ * Represents a function call, is stored in the function table
+ * <p>
  * Children:
  * <ol>
  *   <li>Actual parameter 1</li>
  *   <li>Actual parameter 2</li>
  *   <li>...</li>
  * </ol>
+ *
+ * @author Jiyang Tang, Oliver Rodas
  */
 public class ASTFunctionCall extends ASTCommand {
 
@@ -33,6 +37,9 @@ public class ASTFunctionCall extends ASTCommand {
     this.body = body;
   }
 
+  /**
+   * Set the commands in function body
+   */
   public void setBody(ASTNode body) {
     this.body = body;
   }
@@ -70,6 +77,9 @@ public class ASTFunctionCall extends ASTCommand {
     return ret.toString();
   }
 
+  /**
+   * Create a reference of this function, so that we can implement recursion more easily
+   */
   public ASTNode createReference() {
     return new ASTFunctionReference(getName(), getNumParams());
   }

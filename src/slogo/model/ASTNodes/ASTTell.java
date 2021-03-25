@@ -9,6 +9,8 @@ import slogo.model.InfoBundle;
  * <ol>
  *   <li>Compound statement containing indices of turtles</li>
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTTell extends ASTCommand {
 

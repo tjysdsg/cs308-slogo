@@ -3,6 +3,11 @@ package slogo.model.ASTNodes;
 import java.util.List;
 import slogo.model.InfoBundle;
 
+/**
+ * Reference to a function
+ *
+ * @author Oliver Rodas
+ */
 public class ASTFunctionReference extends ASTCommand {
 
   public ASTFunctionReference(String identifier, int NUM_PARAMS) {

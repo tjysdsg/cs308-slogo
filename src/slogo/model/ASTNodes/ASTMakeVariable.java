@@ -9,6 +9,8 @@ import slogo.model.InfoBundle;
  *   <li>Variable name</li>
  *   <li>Expression</li>
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTMakeVariable extends ASTDeclaration {
 

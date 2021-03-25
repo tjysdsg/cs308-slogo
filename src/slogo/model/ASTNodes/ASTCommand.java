@@ -1,8 +1,16 @@
 package slogo.model.ASTNodes;
 
+import java.util.List;
 import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.InfoBundle;
 
+/**
+ * Base class of commands, subclasses need to implement {@link ASTCommand#doEvaluate(InfoBundle,
+ * List)}. Subclasses can also override {@link ASTCommand#preEvaluate(InfoBundle)} to include
+ * pre-evaluation checks
+ *
+ * @author Jiyang Tang, Oliver Rodas
+ */
 public abstract class ASTCommand extends ASTNamed {
 
   protected int numParams;

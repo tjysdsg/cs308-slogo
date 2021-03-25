@@ -1,4 +1,4 @@
- package slogo.model.ASTNodes;
+package slogo.model.ASTNodes;
 
 public class ASTAnd extends ASTReducibleBinaryOperator {
 

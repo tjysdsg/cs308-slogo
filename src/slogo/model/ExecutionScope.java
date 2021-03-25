@@ -103,6 +103,12 @@ public class ExecutionScope implements InfoBundle, Serializable {
 
   @Override
   public void setCurrTurtle(List<Integer> newTurtles) {
+    setCurrTurtleNoNotify(newTurtles);
+    notifyEnvironment();
+    notifyAllTurtleUpdates();
+  }
+
+  public void setCurrTurtleNoNotify(List<Integer> newTurtles) {
     for (int currTurtle : newTurtles) {
       if (currTurtle >= turtles.size()) {
         for (int i = turtles.size(); i <= currTurtle; ++i) {
@@ -114,9 +120,6 @@ public class ExecutionScope implements InfoBundle, Serializable {
 
     currTurtles.clear();
     currTurtles.addAll(newTurtles);
-
-    notifyEnvironment();
-    notifyAllTurtleUpdates();
   }
 
   /**

@@ -85,7 +85,7 @@ public class TurtleSandbox extends GridPane {
     sandbox.getChildren().add(lines);
     setSandboxColor("#03A9F4");
     getChildren().addAll(sandbox, controls);
-    addTurtle();
+    addTurtle(true);
 
     controls.setAlignment(Pos.BOTTOM_LEFT);
 
@@ -154,7 +154,7 @@ public class TurtleSandbox extends GridPane {
     Button addTurtle = createControlButton("Add Turtle");
     addTurtle.setOnAction(
         e -> {
-          addTurtle();
+          addTurtle(true);
           viewController.addTurtle();
         });
     Tooltip addTip = new Tooltip("Select turtle with Shift+Click");
@@ -242,21 +242,21 @@ public class TurtleSandbox extends GridPane {
     this.penThickness = size;
   }
 
-  private void addTurtle() {
+  private void addTurtle(boolean notifyModel) {
     int size = turtles.size();
     TurtleView turtle = new TurtleView(size);
     turtles.add(turtle);
     turtle.setOnMouseClicked(
         e -> {
-          setTurtle(turtles.indexOf(turtle));
+          setTurtle(turtles.indexOf(turtle), true);
         });
     turtle.getStyleClass().add("turtle");
-    setTurtle(turtles.size() - 1);
+    setTurtle(turtles.size() - 1, notifyModel);
     sandbox.getChildren().addAll(turtle);
   }
 
-  public void setTurtle(int index) {
-    if (turtles.size() > 1) viewController.setCurrTurtle(index);
+  public void setTurtle(int index, boolean notifyModel) {
+    if (notifyModel && turtles.size() > 1) viewController.setCurrTurtle(index);
     for (int i = 0; i < turtles.size(); i++) {
       turtles.get(i).setStyle("-fx-opacity: .6");
     }
@@ -306,7 +306,7 @@ public class TurtleSandbox extends GridPane {
     int turtleID = info.id();
     mainTurtle = info.id();
     if (turtleID >= turtles.size()) {
-      addTurtle();
+      addTurtle(false);
     }
     TurtleView turtle = turtles.get(info.id());
     double tx = turtle.getCurrX();

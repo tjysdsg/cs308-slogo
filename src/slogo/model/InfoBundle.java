@@ -18,7 +18,18 @@ public interface InfoBundle {
 
   Turtle getMainTurtle();
 
+  /**
+   * Set current active turtles
+   */
   void setCurrTurtle(List<Integer> currTurtles);
+
+  /**
+   * Set current active turtles without notifying the view
+   * <p>
+   * This avoid setCurTurtle being called multiple times when view tells the model to update
+   * turtles
+   */
+  void setCurrTurtleNoNotify(List<Integer> currTurtles);
 
   void setMainTurtle(int idx);
 
@@ -30,13 +41,6 @@ public interface InfoBundle {
    * @return Returns true if a new entry is added to the variable table, otherwise false
    */
   boolean setVariable(String name, ASTNumberLiteral value);
-
-  /**
-   * Returns the mapping of command names to command node.
-   *
-   * @return
-   */
-//  Map<String, ASTFunctionCall> getCommandTable();
 
   ASTFunctionCall getCommand(String name);
 

@@ -131,8 +131,8 @@ public class Environment implements TrackableEnvironment, Serializable {
   }
 
   public void setCurrTurtle(List<Integer> currTurtles) {
-    executionScope.setCurrTurtle(currTurtles);
+    // don't notify view since it was view who called this
+    executionScope.setCurrTurtleNoNotify(currTurtles);
   }
-
 
 }

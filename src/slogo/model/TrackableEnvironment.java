@@ -27,15 +27,43 @@ public interface TrackableEnvironment {
    */
   void setLanguage(String language);
 
+  /**
+   * Add turtle.
+   */
   void addTurtle();
 
+  /**
+   * Sets curr turtle.
+   *
+   * @param turtle the turtle
+   */
   void setCurrTurtle(int turtle);
 
+  /**
+   * Sets curr turtle.
+   *
+   * @param turtle the turtle
+   */
   void setCurrTurtle(List<Integer> turtle);
 
+  /**
+   * Gets tracker.
+   *
+   * @return the tracker
+   */
   ModelTracker getTracker();
 
+  /**
+   * Save.
+   *
+   * @param saveLocation the save location
+   */
   void save(File saveLocation);
 
+  /**
+   * Load.
+   *
+   * @param loadLocation the load location
+   */
   void load(File loadLocation);
 }

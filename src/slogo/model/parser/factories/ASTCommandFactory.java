@@ -11,23 +11,38 @@ import slogo.model.InfoBundle;
 
 /**
  * The ASTCommand factory class is used to convert a string into an ASTNode using reflection.
- *<p>
- * This class assumes that every ASTNode class is inside of the ASTNodes package. Every subclass of ASTNode must contain the NAME static field in order to be found.
- *</p>
  * <p>
- * This class depends on the ASTCommand class, but only for finding its children. It depends on the java reflection package and the file class.
+ * This class assumes that every ASTNode class is inside of the ASTNodes package. Every subclass of
+ * ASTNode must contain the NAME static field in order to be found.
  * </p>
  * <p>
- * This class is used by simply calling getCommand on the class itself to get the ASTNode corresponding to the input string.
- *</p>
+ * This class depends on the ASTCommand class, but only for finding its children. It depends on the
+ * java reflection package and the file class.
+ * </p>
+ * <p>
+ * This class is used by simply calling getCommand on the class itself to get the ASTNode
+ * corresponding to the input string.
+ * </p>
+ *
  * @author Oliver Rodas
  */
 public class ASTCommandFactory {
 
+  /**
+   * The constant packagePath.
+   */
   public static final String packagePath = ASTCommand.class.getPackageName() + ".";
+  /**
+   * The constant classPrefix.
+   */
   public static final String classPrefix = "AST";
   private InfoBundle functionTable;
 
+  /**
+   * Instantiates a new Ast command factory.
+   *
+   * @param bundle the function table to use
+   */
   public ASTCommandFactory(InfoBundle bundle) {
     functionTable = bundle;
   }
@@ -35,8 +50,10 @@ public class ASTCommandFactory {
 
   /**
    * Get the ASTNode corresponding to the input string
+   *
    * @param command The command to find the node for
-   * @return The command if found, null if not
+   * @return The command if found
+   * @throws UnknownIdentifierException if a command is not found
    */
   public ASTNode getCommand(String command) throws UnknownIdentifierException {
     try {

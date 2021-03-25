@@ -133,3 +133,8 @@ to pace myself much better so I don't end up needlessly burning myself out by
 the end of each week.
 
 ![](data/images/logo.png)
+
+
+Oliver: 
+
+I really enjoyed this project. This was a good team working experience and everyone was very enthusiastic and open to new ideas. The problem solving aspect of this project was very fun. Overall an enjoyable and good project to apply our knowledge or course concepts.

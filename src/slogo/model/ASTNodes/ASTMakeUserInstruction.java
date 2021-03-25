@@ -58,6 +58,9 @@ public class ASTMakeUserInstruction extends ASTDeclaration {
     return numChildren;
   }
 
+  /**
+   * Get function signature as a string
+   */
   @Override
   public String toString() {
     StringBuilder ret = new StringBuilder();

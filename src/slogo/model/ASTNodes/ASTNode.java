@@ -29,6 +29,9 @@ public abstract class ASTNode implements Serializable {
     children = new ArrayList<>();
   }
 
+  /**
+   * Get the number of expected parameters
+   */
   public int getNumParams() {
     return 0;
   }
@@ -94,8 +97,14 @@ public abstract class ASTNode implements Serializable {
    */
   protected abstract double doEvaluate(InfoBundle info, List<ASTNode> params);
 
+  /**
+   * Check whether the number of children is enough for the command to execute
+   */
   public abstract boolean isDone();
 
+  /**
+   * Get an immutable list of all child nodes
+   */
   public List<ASTNode> getChildren() {
     return Collections.unmodifiableList(children);
   }

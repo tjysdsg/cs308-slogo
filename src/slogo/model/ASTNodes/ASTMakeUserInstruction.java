@@ -5,8 +5,9 @@ import java.util.List;
 import slogo.model.InfoBundle;
 
 /**
- * Contains definition of a function, use {@link ASTMakeUserInstruction#getParameterNames()} to call
- * the commands in this function
+ * Contains definition of a function, can be used to create new function call
+ *
+ * @author Jiyang Tang
  */
 public class ASTMakeUserInstruction extends ASTDeclaration {
 

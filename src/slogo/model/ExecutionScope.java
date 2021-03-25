@@ -20,6 +20,11 @@ import slogo.model.ASTNodes.ASTVariable;
 import slogo.model.notifiers.EnvironmentNotifier;
 import slogo.model.notifiers.TurtleNotifier;
 
+/**
+ * Contains information needed to execute an AST
+ *
+ * @author Oliver Rodas, Jiyang Tang, Joshua Petitma
+ */
 public class ExecutionScope implements InfoBundle, Serializable {
 
   private Map<String, ASTNumberLiteral> variableTable = new HashMap<>();
@@ -210,7 +215,7 @@ public class ExecutionScope implements InfoBundle, Serializable {
     notifyEnvironment();
   }
 
-   public int getShapeIdx() {
+  public int getShapeIdx() {
     return shapeIdx;
   }
 

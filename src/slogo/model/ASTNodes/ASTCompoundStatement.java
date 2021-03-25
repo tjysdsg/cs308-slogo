@@ -3,6 +3,11 @@ package slogo.model.ASTNodes;
 import java.util.List;
 import slogo.model.InfoBundle;
 
+/**
+ * Contains a list of statements, the return value is the last command's value
+ *
+ * @author Jiyang Tang, Oliver Rodas
+ */
 public class ASTCompoundStatement extends ASTNode {
 
   public ASTCompoundStatement(List<ASTNode> children) {

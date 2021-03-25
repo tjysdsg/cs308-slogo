@@ -3,6 +3,11 @@ package slogo.model.ASTNodes;
 import java.util.List;
 import slogo.model.InfoBundle;
 
+/**
+ * Base class of all unary operators
+ *
+ * @author Jiyang Tang
+ */
 public abstract class ASTUnaryOperator extends ASTGroupableCommand {
 
   public ASTUnaryOperator(String name) {

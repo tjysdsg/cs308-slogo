@@ -10,6 +10,8 @@ import slogo.model.InfoBundle;
  * This class's purpose is to create a template for which all future ASTNodes will have to follow
  * <p>
  * This class sets up the common instance variables that each ASTNode will use.
+ *
+ * @author Jiyang Tang, Oliver Rodas
  */
 public abstract class ASTNode implements Serializable {
 

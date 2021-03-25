@@ -11,6 +11,8 @@ import slogo.model.Turtle;
  *   <li>Compound statement containing indices of turtles</li>
  *   <li>Compound statement containing commands to execute</li>
  * </ol>
+ *
+ * @author Jiyang Tang
  */
 public class ASTAsk extends ASTCommand {
 

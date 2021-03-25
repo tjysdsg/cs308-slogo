@@ -4,6 +4,12 @@ import java.util.List;
 import slogo.exceptions.IncorrectParameterCountException;
 import slogo.model.InfoBundle;
 
+/**
+ * Base class of binary operators, override {@link ASTBinaryOperator#calculate(double, double)} to
+ * create a new operator
+ *
+ * @author Jiyang Tang
+ */
 public abstract class ASTBinaryOperator extends ASTCommand {
 
   public ASTBinaryOperator(String name) {

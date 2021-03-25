@@ -11,6 +11,7 @@ import slogo.model.InfoBundle;
  * <p>
  * For example, (SETXY 100 200 300 400) is equivalent to [SETXY 100 200 SETXY 300 400]
  *
+ * @author Jiyang Tang
  * @see ASTReducibleBinaryOperator for another type of group command calls
  */
 public abstract class ASTGroupableCommand extends ASTCommand {

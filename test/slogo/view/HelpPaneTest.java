@@ -45,7 +45,7 @@ public class HelpPaneTest extends  DukeApplicationTest {
   @Test
   void testCommandListAction(){
     commandList = (ChoiceBox<String>) helpPane.lookup("#commandList");
-    itemOne = "forward|fd";
+    itemOne = "avanzar|ava";
     String forwardtext = "moves turtle forward in its current heading by pixels distance returns distance turtle moved (the value of pixels)";
     assertEquals(itemOne,commandList.getItems().get(0));
     select(commandList, itemOne);
@@ -58,7 +58,7 @@ public class HelpPaneTest extends  DukeApplicationTest {
   @Test
   void testBackButton(){
     commandList = (ChoiceBox<String>) helpPane.lookup("#commandList");
-    itemOne = "forward|fd";
+    itemOne = "avanzar|ava";
     myBackButton= (Button) helpPane.lookup("#backButton");
     assertNull(myBackButton);
     select(commandList, itemOne);

@@ -31,9 +31,9 @@ import slogo.model.notifiers.ModelTracker;
 /**
  * @author Joshua Pettima
  * @author marthaaboagye This class coordinates between all other classes from the view package. It
- *     needs to be initialized with a stage and a model controller object. It also contains a
- *     private View environmentInfo class that implements the view controller and allows the user to
- *     change the color for the pen and background.
+ * needs to be initialized with a stage and a model controller object. It also contains a private
+ * View environmentInfo class that implements the view controller and allows the user to change the
+ * color for the pen and background.
  */
 public class View {
 
@@ -58,11 +58,11 @@ public class View {
   private Preferences mainSettings;
   private Preferences settings;
   private static final String STYLESHEET = "gui.css";
-  public static final String RESOURCE_PACKAGE = "slogo.view.resources.";
+  private static final String RESOURCE_PACKAGE = "slogo.view.resources.";
 
   /**
-   * This is teh constructor for the View class. It needs to be initIalized with a stage which
-   * contains all the nodels to display and a model controller to allow the view to pass commands to
+   * This is the constructor for the View class. It needs to be initialized with a stage which
+   * contains all the nodes to display and a model controller to allow the view to pass commands to
    * the mode.
    *
    * @param stage
@@ -153,7 +153,7 @@ public class View {
   }
 
   private void updateWorkspace(int space) {
-    Workspace workspace = null;
+    Workspace workspace;
     if (space > workspaces.size() - 1) {
       workspace = createWorkspace();
     } else {
@@ -171,7 +171,6 @@ public class View {
     int workspaceID = workspaces.size();
     Workspace workspace =
         new Workspace(environment, commandPane, turtleSandbox, environmentPane, settings);
-    // Doesn't work within css for some reason :/
     commandPane.getStyleClass().add("component-pane");
     environmentPane.getStyleClass().add("component-pane");
     settingsPane.getStyleClass().add("component-pane");
@@ -201,7 +200,6 @@ public class View {
     borderPane.setCenter(turtleSandbox);
     borderPane.setBottom(commandPane);
     borderPane.setLeft(environmentPane);
-    // Have to do this so the sandbox remains on the bottom
     borderPane.setTop(null);
     borderPane.setRight(null);
     borderPane.setTop(topPane);
@@ -211,7 +209,6 @@ public class View {
   }
 
   private void refreshBundle() {
-    // TODO: Maybe say an instruction like shift+enter to run?
     helpPane.setResources(resources);
     environmentPane.setResources(resources);
     commandPane.setResources(resources);
@@ -244,7 +241,6 @@ public class View {
 
     @Override
     public void setBackground(Color colorRecord) {
-      ;
     }
 
     /**
@@ -271,7 +267,6 @@ public class View {
 
     @Override
     public void setPenColor(Color penColor) {
-      ;
     }
 
     /**
@@ -279,45 +274,98 @@ public class View {
      *
      * @param turtleLogo - the turtle logo the user picked.
      */
-    public void setTurtleLogo(int turtleLogo) {}
+    public void setTurtleLogo(int turtleLogo) {
+    }
 
-    public void setTurtleLogo(String turtleLogo) {}
+    /**
+     * Overloaded method to set the turtle logo for the view.
+     *
+     * @param turtleLogo
+     */
+    public void setTurtleLogo(String turtleLogo) {
+    }
 
+    /**
+     * Set an alert for an exception message.
+     *
+     * @param title
+     * @param message
+     */
     public void sendAlert(String title, String message) {
       Alert a = new Alert(AlertType.ERROR, message, ButtonType.CLOSE);
       a.showAndWait().ifPresent(System.out::println);
     }
 
+    /**
+     * Add a turtle to the turtle sandbox
+     */
+
     public void addTurtle() {
       modelCon.addTurtle();
     }
 
+    /**
+     * Sets clicked on turtle as the active turtle
+     *
+     * @param id
+     */
     public void setCurrTurtle(int id) {
       modelCon.setCurrTurtle(id);
     }
 
+    /**
+     * set the resources for the main view class.
+     *
+     * @return
+     */
     public ResourceBundle getResources() {
       return resources;
     }
 
+    /**
+     * Fill command area with a given test. This method is useful for reading in a text file
+     *
+     * @param text
+     */
     public void fillCommandArea(String text) {
       commandPane.fillCodeArea(environmentPane.getPreviousCommand());
     }
+
+    /**
+     * Allows users to change the value of a variable dynamically.
+     *
+     * @param variable
+     * @param newValue
+     */
 
     public void changeVariable(String variable, double newValue) {
       System.out.println(String.format("Change: %s to %.2f", variable, newValue));
     }
 
+    /**
+     * Set the font Size for the UI
+     *
+     * @param size
+     */
     public void setFontSize(int size) {
       borderPane.setStyle("-fx-font-size: " + size);
     }
 
+    /**
+     * Set the font for the UI
+     *
+     * @param font
+     */
     public void setFont(String font) {
       borderPane.setStyle("-fx-font-family: " + font);
     }
 
-    public void changeCommand(String command, String newValue) {}
+    public void changeCommand(String command, String newValue) {
+    }
 
+    /**
+     * Save the turtle environment including preferences at users request.
+     */
     public void saveEnvironment() {
       File file = fileChooser.showSaveDialog(scene.getWindow());
       if (file != null) {
@@ -325,6 +373,9 @@ public class View {
       }
     }
 
+    /**
+     * Load a previously saved environment.
+     */
     public void loadEnvironment() {
       File file = fileChooser.showOpenDialog(scene.getWindow());
       if (file != null) {
@@ -333,7 +384,9 @@ public class View {
     }
 
     public void sendCommand(String command) {
-      if (command.isBlank()) return;
+      if (command.isBlank()) {
+        return;
+      }
       boolean executed = modelCon.sendCommand(command);
       environmentPane.addPreviousCommand(command, executed);
     }
@@ -345,4 +398,6 @@ record Workspace(
     CommandPane commandPane,
     TurtleSandbox turtleSandbox,
     EnvironmentPane environmentPane,
-    Preferences settings) {}
+    Preferences settings) {
+
+}

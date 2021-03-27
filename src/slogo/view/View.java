@@ -69,10 +69,38 @@ public class View {
    * @param modelCon
    */
   public View(Stage stage, ModelController modelCon) {
-    this.fileChooser = new FileChooser();
-    this.viewCon = new ViewBundle();
+    initializeVariables();
     stage.setTitle("Turtle IDE... T-IDE");
     this.modelCon = modelCon;
+    applyStyling();
+    stage.setScene(scene);
+    stage.setMinHeight(HEIGHT);
+    stage.setMinWidth(WIDTH);
+    initializeWorkspaces();
+    stage.show();
+  }
+
+  private void initializeWorkspaces() {
+    Workspace mainWorkspace = createWorkspace();
+    modelCon.setModel(environment);
+    setWorkspace(mainWorkspace);
+    modelCon.setController(viewCon);
+    refreshBundle();
+  }
+
+  private void applyStyling() {
+    scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
+    topPane.getChildren().addAll(settingsPane);
+    topPane.getStyleClass().add("component-pane");
+    topPane.setAlignment(Pos.CENTER_LEFT);
+    createWorkspaceSelector(topPane);
+    borderPane.setTop(topPane);
+
+  }
+
+  private void initializeVariables() {
+    this.fileChooser = new FileChooser();
+    this.viewCon = new ViewBundle();
     this.resources = ResourceBundle.getBundle(RESOURCE_PACKAGE + "English");
     this.borderPane = new BorderPane();
     this.scene = new Scene(borderPane, WIDTH, HEIGHT);
@@ -82,23 +110,6 @@ public class View {
     this.mainSettings = Preferences.userRoot().node(this.getClass().getName());
     this.settings = mainSettings.node("-1");
     this.settingsPane = new SettingsPane(viewCon, settings);
-    scene.getStylesheets().add(getClass().getResource("resources/" + STYLESHEET).toExternalForm());
-    stage.setScene(scene);
-    stage.setMinHeight(HEIGHT);
-    stage.setMinWidth(WIDTH);
-
-    topPane.getChildren().addAll(settingsPane);
-    topPane.getStyleClass().add("component-pane");
-    topPane.setAlignment(Pos.CENTER_LEFT);
-    createWorkspaceSelector(topPane);
-    borderPane.setTop(topPane);
-    Workspace mainWorkspace = createWorkspace();
-    modelCon.setModel(environment);
-    setWorkspace(mainWorkspace);
-
-    modelCon.setController(viewCon);
-    refreshBundle();
-    stage.show();
   }
 
   private void setSettings(Preferences settings) {

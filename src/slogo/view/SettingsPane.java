@@ -118,11 +118,7 @@ public class SettingsPane extends Pane {
           double blue = backgroundColorPicker.getValue().getBlue();
           colorRecord = new Color(red,green,blue);
           vcon.setBackground(bgColor);
-          //vcon.setBackground(colorRecord);
           settings.put("background", bgColor);
-//          settings.put("background", red);
-//          settings.put("background", green);
-//          settings.put("background", blue);
 
         });
 
@@ -138,9 +134,7 @@ public class SettingsPane extends Pane {
     turtleList.getItems().addAll(turtles);
     turtleList.setValue("TurtleLogo");
     turtleList.setOnAction(
-        (e -> {
-          //vcon.setTurtleLogo(turtleList.getValue().toString());
-        }));
+        (e -> { }));
   }
 
   private void createLanguageList() {

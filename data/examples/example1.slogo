@@ -8,7 +8,7 @@ to createfractal [ :vertices :depth ] [
 
     if [ greater? :depth 1 ] [
       rt quotient :angle 2
-      fractal :vertices - :depth 1
+      createfractal :vertices - :depth 1
       lt quotient :angle 2
     ]
   ]

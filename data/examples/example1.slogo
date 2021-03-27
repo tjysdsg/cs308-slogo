@@ -1,0 +1,17 @@
+to createfractal [ :vertices :depth ] [
+
+  set :angle quotient 360 :vertices
+  repeat :vertices [
+
+    fd 400
+    lt :angle
+
+    if [ greater? :depth 1 ] [
+      rt quotient :angle 2
+      fractal :vertices - :depth 1
+      lt quotient :angle 2
+    ]
+  ]
+]
+
+createfractal 3 2

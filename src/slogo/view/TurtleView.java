@@ -14,8 +14,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +25,12 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import slogo.records.TurtleRecord;
 
+/**
+ * A graphical representation of a turtle.
+ *
+ * <p>This object details where an internal turtle is currently located and holds the meta data
+ * associated with that turtle such as pen color, thickness, and turtle image.
+ */
 public class TurtleView extends Group {
   private double currX;
   public static final double ANIMATION_SPEED = 10;
@@ -101,12 +105,12 @@ public class TurtleView extends Group {
     this(new Image(new File("data/images/logo.png").toURI().toString()), id);
   }
 
-  public void setPenThinkcess(double thickness) {
+  private void setPenThinkcess(double thickness) {
     this.penThickness = thickness;
     updateTracker();
   }
 
-  public void setupContextMenu() {
+  private void setupContextMenu() {
     ContextMenu menu = new ContextMenu();
     MenuItem setPen = new MenuItem("Set Pen Color");
     MenuItem setImage = new MenuItem("Set Turtle Image");
@@ -157,41 +161,56 @@ public class TurtleView extends Group {
     openTracker.setOnAction(e -> trackerPane.setVisible(true));
   }
 
+  /** The current X position of the turtle. */
   public double getCurrX() {
     return this.currX;
   }
 
+  /** The current Rotation of the turtle. */
   public double getCurrRot() {
     return this.rotation;
   }
 
+  /** The current Y position of the turtle. */
   public double getCurrY() {
     return this.currY;
   }
 
+  /** The current pen color of the turtle. */
   public String getPenColor() {
     return this.penColor;
   }
 
+  /** Whether the turtle's pen is down. */
   public boolean isPenDown() {
     return this.penDown;
   }
 
+  /** The current pen thickness for the turtle. */
   public double getPenThickness() {
     return this.penThickness;
   }
 
+  /** Set the HEX code value for the pen's color */
   public void setPenColor(String penColor) {
     this.penColor = penColor;
     updateTracker();
   }
 
+  /** Set the image for the current turtle. */
   public void setImage(String image) {
     if (image.equals("")) return;
-    Image imageFile = new Image(getClass().getResourceAsStream(TURTLES + image), IMAGE_WIDTH, IMAGE_HEIGHT, false, false);
+    Image imageFile =
+        new Image(
+            getClass().getResourceAsStream(TURTLES + image),
+            IMAGE_WIDTH,
+            IMAGE_HEIGHT,
+            false,
+            false);
     turtleImage.setImage(imageFile);
   }
 
+  /** Update the location, rotation, and pen status of the turtle. */
   public void update(TurtleRecord info) {
     penDown = info.penDown();
     turtleImage.setVisible(info.visible());
@@ -220,13 +239,13 @@ public class TurtleView extends Group {
     }
   }
 
-  public void updateTracker() {
+  private void updateTracker() {
     penOnLabel.setText("Pen Down: " + penDown);
     penColorLabel.setText("Pen Color: " + penColor);
     penThicknessLabel.setText("Pen Thickness: " + penThickness);
   }
 
-  public void addAnimation(Animation an) {
+  private void addAnimation(Animation an) {
     animationQueue.add(an);
     an.setOnFinished(
         e -> {
@@ -243,7 +262,7 @@ public class TurtleView extends Group {
     }
   }
 
-  public void updateLocationLabels() {
+  private void updateLocationLabels() {
     int x = (int) getTranslateX();
     int y = (int) getTranslateY();
     int rotation = (int) turtleImage.getRotate();

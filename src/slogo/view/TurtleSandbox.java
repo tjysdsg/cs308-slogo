@@ -255,7 +255,8 @@ public class TurtleSandbox extends GridPane {
     sandbox.getChildren().addAll(turtle);
   }
 
-  public void setTurtle(int index, boolean notifyModel) {
+  
+  private void setTurtle(int index, boolean notifyModel) {
     if (notifyModel && turtles.size() > 1) viewController.setCurrTurtle(index);
     for (int i = 0; i < turtles.size(); i++) {
       turtles.get(i).setStyle("-fx-opacity: .6");
@@ -264,18 +265,38 @@ public class TurtleSandbox extends GridPane {
     mainTurtle = index;
   }
 
+  /**
+   * Sets the color of the sandbox.
+   *
+   * @param color - The hex code of the color to set the sandbox's color to.
+   */
   public void setSandboxColor(String color) {
     setStyle("-fx-background-color: " + color);
   }
 
+  /**
+   * Removes all the lines within the
+   * sandbox.
+   */
   public void clearLines() {
     lines.getChildren().clear();
   }
 
+  /**
+   * Sets the pen color of the main turtle
+   *
+   * @param color - The hex code of the color to set the turtle's pen color to.
+   */
   public void setPenColor(String color) {
     turtles.get(mainTurtle).setPenColor(color);
   }
 
+  /**
+   * Updates the the color of the pen for turtles and the background
+   * color of the sandbox.
+   *
+   * @param record - The new state in which the environment wil update to.
+   */
   public void updateEnvironment(EnvironmentRecord record) {
     System.out.println("UPDATED!");
     this.penThickness = record.currPenSize();

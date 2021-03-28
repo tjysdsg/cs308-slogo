@@ -2,11 +2,8 @@ package slogo.view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -16,6 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * This class takes user input and allows running commands
+ * from file input.
+ */
 public class CommandPane extends Pane {
 
   ViewController vcon;
@@ -28,75 +29,66 @@ public class CommandPane extends Pane {
   VBox vbox;
   FileChooser fileChooser = new FileChooser();
 
-
-  public CommandPane(ViewController viewcon){
+  public CommandPane(ViewController viewcon) {
     vcon = viewcon;
     makeBottomPane();
     setChildrenIDs();
     getChildren().add(pane);
     setChildrenIDs();
     pane.setTranslateX(300);
-
-
   }
 
-
-  private  Pane makeBottomPane() {
+  private Pane makeBottomPane() {
     codeArea = new TextArea();
 
     run = new Button();
     uploadToRun = new Button();
     uploadToTextArea = new Button();
     run.setOnMouseClicked(e -> sendCodeArea());
-    fileChooser.getExtensionFilters().addAll(
-        new ExtensionFilter("Slogo files","*.slogo", "*.logo"),
-        new ExtensionFilter("All files", "*.*" )
-    );
-    uploadToRun.setOnMouseClicked(e->{
-      File file = fileChooser.showOpenDialog(getScene().getWindow());
+    fileChooser
+        .getExtensionFilters()
+        .addAll(
+            new ExtensionFilter("Slogo files", "*.slogo", "*.logo"),
+            new ExtensionFilter("All files", "*.*"));
+    uploadToRun.setOnMouseClicked(
+        e -> {
+          File file = fileChooser.showOpenDialog(getScene().getWindow());
 
-          if (file!=null){
+          if (file != null) {
             try {
               Scanner fileReader = new Scanner(file);
               fileReader.useDelimiter("\\Z");
               String command = fileReader.next();
               vcon.sendCommand(command);
 
-          } catch (FileNotFoundException fileNotFoundException) {
+            } catch (FileNotFoundException fileNotFoundException) {
               fileNotFoundException.printStackTrace();
             }
-
           }
+        });
+    uploadToTextArea.setOnMouseClicked(
+        e -> {
+          File file = fileChooser.showOpenDialog(getScene().getWindow());
 
+          if (file != null) {
+            try {
+              Scanner fileReader = new Scanner(file);
+              fileReader.useDelimiter("\\Z");
+              String command = fileReader.next();
+              fillCodeArea(command);
 
-        }
-        );
-    uploadToTextArea.setOnMouseClicked(e->
-    {
-      File file = fileChooser.showOpenDialog(getScene().getWindow());
-
-      if (file!=null){
-        try {
-          Scanner fileReader = new Scanner(file);
-          fileReader.useDelimiter("\\Z");
-          String command = fileReader.next();
-          fillCodeArea(command);
-
-        } catch (FileNotFoundException fileNotFoundException) {
-          fileNotFoundException.printStackTrace();
-        }
-
-      }
-
-
-    });
+            } catch (FileNotFoundException fileNotFoundException) {
+              fileNotFoundException.printStackTrace();
+            }
+          }
+        });
 
     codeArea.setOnKeyPressed(
         e -> {
           if (e.getCode() == KeyCode.ENTER && e.isShiftDown()) {
             sendCodeArea();
           } else if (codeArea.getText().equals("") && e.getCode() == KeyCode.UP) {
-           //fix this.
+            // fix this.
             vcon.fillCommandArea("");
           }
         });
@@ -115,17 +107,15 @@ public class CommandPane extends Pane {
     codeArea.clear();
   }
 
-  private void setChildrenIDs(){
+  private void setChildrenIDs() {
     run.setId("runButton");
     codeArea.setId("codeArea");
-
-    
   }
-  
-  public void setResources(ResourceBundle resource){
+
+  /** Sets the language of the components */
+  public void setResources(ResourceBundle resource) {
     this.resources = resource;
     createDisplayText();
-    
   }
 
   private void createDisplayText() {
@@ -133,14 +123,13 @@ public class CommandPane extends Pane {
     run.setText(resources.getString("runButton"));
     uploadToRun.setText(resources.getString("uploadFile"));
     uploadToTextArea.setText(resources.getString("uploadToText"));
-
-
   }
 
-  public void fillCodeArea(String text){
+  /**
+   * Fills the command text area with the specified string.
+   */
+  public void fillCodeArea(String text) {
     codeArea.setText(text);
-
-  };
-
-
+  }
+  ;
 }

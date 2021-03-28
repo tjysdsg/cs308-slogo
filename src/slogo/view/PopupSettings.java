@@ -20,6 +20,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+/**
+ * This object allows for extra configurations that the user can
+ * set and persist among workspaces.
+ */
 public class PopupSettings extends Pane {
 
   private Popup popup;
@@ -204,6 +208,9 @@ public class PopupSettings extends Pane {
   }
 
 
+  /**
+   * Sets the language of the components
+   */
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     createDisplayText();

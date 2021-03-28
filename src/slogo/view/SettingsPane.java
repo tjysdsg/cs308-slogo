@@ -171,6 +171,9 @@ public class SettingsPane extends Pane {
     languageList.setValue(settings.get("language", "English"));
   }
 
+  /**
+   * Sets the language of the components
+   */
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     popupSettings.setResources(resource);

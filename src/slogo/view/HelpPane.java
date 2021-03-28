@@ -63,7 +63,7 @@ public class HelpPane extends Pane {
     list.setMinSize(SIZE, 2 * SIZE);
   }
 
-  public void createDisplayLanguages() {
+  private void createDisplayLanguages() {
     helpLabel.setText(resources.getString("helpTitle"));
     commandList.getItems().clear();
     commandList.getItems().addAll(resources.getString("commandList").split(","));
@@ -145,6 +145,9 @@ public class HelpPane extends Pane {
   }
 
 
+  /**
+   * Sets the language of the components
+   */
   public void setResources(ResourceBundle resource) {
     this.resources = resource;
     addDefaultChoiceBoxTest();

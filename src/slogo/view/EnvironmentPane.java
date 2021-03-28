@@ -1,6 +1,5 @@
 package slogo.view;
 
-import slogo.model.notifiers.ModelTracker;
 import com.jfoenix.controls.JFXListView;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -15,11 +14,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import slogo.model.notifiers.ModelTracker;
 import slogo.records.CommandsRecord;
 import slogo.records.DisplayCommand;
 import slogo.records.DisplayVariable;
 import slogo.records.VariablesRecord;
 
+/** This class keeps track of the state of commands and variables within the model. */
 public class EnvironmentPane extends GridPane {
 
   public static final int TABLE_SIZE = 200;
@@ -106,10 +107,11 @@ public class EnvironmentPane extends GridPane {
     previousCommands.setId("prevCommands");
     variablesTable.setId("variableTable");
     variablesToggle.setId("varToggle");
-
-
   }
 
+  /**
+   * Sets the language of the components.
+   */
   public void setResources(ResourceBundle resources) {
     this.resources = resources;
     commandsToggle.setText(resources.getString("command"));
@@ -117,7 +119,7 @@ public class EnvironmentPane extends GridPane {
     prevCommands.setText(resources.getString("prevCommand"));
   }
 
-  public void createTableViews() {
+  private void createTableViews() {
     TableColumn<DisplayCommand, String> comNameCol = new TableColumn<>("Name");
     TableColumn<DisplayCommand, String> comValueCol = new TableColumn<>("Command");
 
@@ -163,10 +165,20 @@ public class EnvironmentPane extends GridPane {
     varValueCol.setCellValueFactory(item -> new ReadOnlyStringWrapper(item.getValue().value()));
   }
 
+  /**
+   * Synchronizes the current list of variables.
+   *
+   * @param records - The updated list of variables within the model.
+   */
   public void updateVariables(VariablesRecord records) {
     variablesTable.getItems().setAll(records.variables());
   }
 
+  /**
+   * Synchronizes the current list of commands.
+   *
+   * @param commands - The updated list of commands within the model.
+   */
   public void updateCommands(CommandsRecord records) {
     commandsTable.getItems().setAll(records.commands());
     int index = records.commands().size();
@@ -182,9 +194,14 @@ public class EnvironmentPane extends GridPane {
     ;
     keycodeUpCount = 0;
     return "";
-
   }
 
+  /**
+   * Add a command to the list of previously run command.
+   *
+   * @param command - The new command to add.
+   * @param successful - False to add error styling, true for no styling.
+   */
   public void addPreviousCommand(String command, boolean successful) {
     lastRanCommand = new Label(command);
     if (!successful) {

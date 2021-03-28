@@ -239,7 +239,10 @@ public class View {
       turtleSandbox.setSandboxColor(color);
     }
 
-    @Override
+    /**
+     * Set the background of the sandbox based of off a color record
+     * which contains RGB values.
+     */
     public void setBackground(Color colorRecord) {
     }
 

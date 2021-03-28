@@ -37,6 +37,10 @@ public class ModelController {
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE + "exceptions.English");
   }
 
+  /**
+   * Set the view controller that the modelcontroller can use to
+   * send alerts to.
+   */
   public void setController(ViewController vc) {
     this.vc = vc;
   }
@@ -87,10 +91,18 @@ public class ModelController {
     env.setLanguage(language);
   }
 
+  /**
+   * Request the controller to add a new turtle
+   * to the environment.
+   */
   public void addTurtle() {
     env.addTurtle();
   }
 
+  /**
+   * Request the controller to set the main turtle
+   * within the environment.
+   */
   public void setCurrTurtle(int turtle) {
     List<Integer> activeTurtles = new ArrayList<>();
     activeTurtles.add(turtle);
